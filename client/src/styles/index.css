@@ -1,0 +1,66 @@
+/*
+ * CampusNest — Global Stylesheet
+ * ───────────────────────────────
+ * Tailwind CSS v4 uses @import instead of @tailwind directives.
+ * Custom design tokens and base resets are defined here.
+ */
+
+@import "tailwindcss";
+
+/* ── Base Resets ──────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #020617; /* slate-950 */
+  color: #f8fafc;            /* slate-50  */
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ── Custom Scrollbar ─────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ── Focus Ring Accessibility ─────────────────────────── */
+:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* ── Selection Colour ─────────────────────────────────── */
+::selection {
+  background: rgba(16, 185, 129, 0.25);
+  color: #ecfdf5;
+}
