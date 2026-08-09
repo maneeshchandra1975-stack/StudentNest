@@ -95,7 +95,7 @@ export default function Dashboard() {
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Welcome back, <span className="text-emerald-400">{user?.name}</span>! 👋
+              Welcome back, <span className="text-emerald-400">{user?.name}</span>!
             </h1>
 
             <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">

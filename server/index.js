@@ -46,7 +46,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.get('/api/health', (_req, res) => {
   res.status(200).json({
     success:     true,
-    message:     'CampusNest API is running 🚀',
+    message:     'CampusNest API is running',
     environment: process.env.NODE_ENV || 'development',
     timestamp:   new Date().toISOString(),
   });
@@ -77,9 +77,9 @@ app.use((err, _req, res, _next) => {
 
 // ── Start Server ───────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n✅  CampusNest server running on http://localhost:${PORT}`);
-  console.log(`📋  Environment : ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔎  Health check: http://localhost:${PORT}/api/health\n`);
+  console.log(`\n  CampusNest server running on http://localhost:${PORT}`);
+  console.log(`  Environment : ${process.env.NODE_ENV || 'development'}`);
+  console.log(`  Health check: http://localhost:${PORT}/api/health\n`);
 });
 
 module.exports = app;

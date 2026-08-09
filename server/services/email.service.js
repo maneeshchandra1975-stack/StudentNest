@@ -23,7 +23,7 @@ const sendOTPEmail = async (toEmail, otp, name) => {
   const mailOptions = {
     from:    process.env.SMTP_FROM,
     to:      toEmail,
-    subject: '🔐 CampusNest — Verify Your Email',
+    subject: 'CampusNest - Verify Your Email',
     html: `
       <!DOCTYPE html>
       <html>
@@ -44,21 +44,21 @@ const sendOTPEmail = async (toEmail, otp, name) => {
         <body>
           <div class="container">
             <div class="header">
-              <h1>🏠 CampusNest</h1>
+              <h1>CampusNest</h1>
             </div>
             <div class="body">
               <p>Hi <strong>${name}</strong>,</p>
               <p>Welcome to CampusNest! Please use the OTP below to verify your VIT-AP student email address.</p>
               <div class="otp-box">
                 <div class="otp-code">${otp}</div>
-                <div class="expires">⏳ This OTP expires in <strong>10 minutes</strong></div>
+                <div class="expires">This OTP expires in <strong>10 minutes</strong></div>
               </div>
               <p>If you did not create an account, please ignore this email.</p>
-              <p>— The CampusNest Team</p>
+              <p>- The CampusNest Team</p>
             </div>
             <div class="footer">
               This is an automated email. Please do not reply.<br/>
-              CampusNest — VIT-AP University
+              CampusNest - VIT-AP University
             </div>
           </div>
         </body>
