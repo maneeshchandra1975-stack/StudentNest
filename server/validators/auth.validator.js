@@ -52,4 +52,23 @@ const otpValidator = [
     .isNumeric().withMessage('OTP must be numeric'),
 ];
 
-module.exports = { registerValidator, loginValidator, otpValidator };
+// ── Reset Password Validator ────────────────────────────────
+const resetPasswordValidator = [
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Enter a valid email address'),
+
+  body('otp')
+    .trim()
+    .notEmpty().withMessage('OTP is required')
+    .isLength({ min: 6, max: 6 }).withMessage('OTP must be exactly 6 digits'),
+
+  body('newPassword')
+    .notEmpty().withMessage('New password is required')
+    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+    .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+    .matches(/[0-9]/).withMessage('Password must contain at least one number'),
+];
+
+module.exports = { registerValidator, loginValidator, otpValidator, resetPasswordValidator };

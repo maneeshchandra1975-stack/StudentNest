@@ -265,4 +265,78 @@ const getMe = async (req, res, next) => {
   }
 };
 
-module.exports = { register, verifyOtp, resendOtp, login, refreshToken, logout, getMe };
+// ── FORGOT PASSWORD ─────────────────────────────────────────
+/**
+ * POST /api/v1/auth/forgot-password
+ * Sends a password reset OTP to the student's email
+ */
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new ApiError(404, 'No user found with this email address.');
+    }
+
+    const { otp, hashedOTP } = await generateOTP();
+    await OTP.deleteMany({ email });
+
+    const expiresAt = new Date(
+      Date.now() + parseInt(process.env.OTP_EXPIRES_MINUTES || '10', 10) * 60 * 1000
+    );
+    await OTP.create({ email, otp: hashedOTP, expiresAt });
+
+    await sendOTPEmail(email, otp, user.name);
+
+    res.status(200).json(
+      new ApiResponse(200, `Password reset OTP sent to ${email}.`)
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ── RESET PASSWORD ──────────────────────────────────────────
+/**
+ * POST /api/v1/auth/reset-password
+ * Resets user password after verifying OTP
+ */
+const resetPassword = async (req, res, next) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    const otpRecord = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    if (!otpRecord) {
+      throw new ApiError(400, 'OTP not found or expired. Request a new OTP.');
+    }
+
+    if (otpRecord.expiresAt < new Date()) {
+      await OTP.deleteMany({ email });
+      throw new ApiError(400, 'OTP has expired. Please request a new one.');
+    }
+
+    const isValid = await verifyOTP(otp, otpRecord.otp);
+    if (!isValid) {
+      throw new ApiError(400, 'Invalid OTP code.');
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new ApiError(404, 'User not found.');
+    }
+
+    user.password = newPassword; // pre('save') hook will hash it automatically
+    await user.save();
+
+    await OTP.deleteMany({ email });
+
+    res.status(200).json(
+      new ApiResponse(200, 'Password reset successful. You can now login with your new password.')
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, verifyOtp, resendOtp, login, refreshToken, logout, getMe, forgotPassword, resetPassword };
