@@ -1,85 +1,76 @@
 @import "tailwindcss";
 
-/* ── Custom Typography & Font Families ────────────────────────────── */
+/* ── Typography Tokens ────────────────────────────────────────────── */
 :root {
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #020617; /* slate-950 */
-  color: #f8fafc;            /* slate-50 */
-  line-height: 1.6;
+  background-color: #F8FAFC;
+  color: #111827;
+  line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, .font-heading {
+h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-heading);
+  letter-spacing: -0.02em;
 }
 
-/* ── Ambient Background Mesh & Grid Patterns ───────────────────────── */
-.bg-grid-pattern {
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 3rem 3rem;
+/* ── Startup Card Primitive ───────────────────────────────────────── */
+.sn-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.bg-radial-glow {
-  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
-}
-
-/* ── Glassmorphism Card System ────────────────────────────────────── */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-}
-
-.glass-card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card-hover:hover {
-  background: rgba(30, 41, 59, 0.85);
-  border-color: rgba(16, 185, 129, 0.3);
+.sn-card-hover:hover {
+  border-color: #CBD5E1;
   transform: translateY(-2px);
-  box-shadow: 0 20px 30px -10px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 }
 
-/* ── Inputs & Form Controls ───────────────────────────────────────── */
-.input-field {
-  background: rgba(2, 6, 23, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
-  transition: all 0.2s ease-in-out;
+/* ── Clean Form Control Inputs ────────────────────────────────────── */
+.sn-input {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  color: #111827;
+  font-size: 14px;
+  transition: all 0.15s ease-in-out;
 }
 
-.input-field:focus {
+.sn-input::placeholder {
+  color: #94A3B8;
+}
+
+.sn-input:focus {
   outline: none;
-  border-color: rgba(16, 185, 129, 0.6);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-  background: rgba(2, 6, 23, 0.95);
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 /* ── Custom Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: #F8FAFC;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #10b981;
+  background: #94A3B8;
 }
