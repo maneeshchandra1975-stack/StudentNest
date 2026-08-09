@@ -1,66 +1,85 @@
-/*
- * CampusNest — Global Stylesheet
- * ───────────────────────────────
- * Tailwind CSS v4 uses @import instead of @tailwind directives.
- * Custom design tokens and base resets are defined here.
- */
-
 @import "tailwindcss";
 
-/* ── Base Resets ──────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
+/* ── Custom Typography & Font Families ────────────────────────────── */
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   background-color: #020617; /* slate-950 */
-  color: #f8fafc;            /* slate-50  */
+  color: #f8fafc;            /* slate-50 */
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  min-height: 100vh;
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading);
 }
 
-/* ── Custom Scrollbar ─────────────────────────────────── */
+/* ── Ambient Background Mesh & Grid Patterns ───────────────────────── */
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+}
+
+.bg-radial-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+}
+
+/* ── Glassmorphism Card System ────────────────────────────────────── */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 30px -10px rgba(16, 185, 129, 0.15);
+}
+
+/* ── Inputs & Form Controls ───────────────────────────────────────── */
+.input-field {
+  background: rgba(2, 6, 23, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: rgba(16, 185, 129, 0.6);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  background: rgba(2, 6, 23, 0.95);
+}
+
+/* ── Custom Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #020617;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 3px;
+  background: #1e293b;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-
-/* ── Focus Ring Accessibility ─────────────────────────── */
-:focus-visible {
-  outline: 2px solid #10b981;
-  outline-offset: 2px;
-}
-
-/* ── Selection Colour ─────────────────────────────────── */
-::selection {
-  background: rgba(16, 185, 129, 0.25);
-  color: #ecfdf5;
+  background: #10b981;
 }

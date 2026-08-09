@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { verifyOtp, resendOtp } from '../../redux/slices/authSlice';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
-import { KeyRound, ArrowRight, RotateCw, Loader2, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { KeyRound, RotateCw, Loader2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
 
 export default function VerifyOtp() {
   const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
@@ -26,7 +26,6 @@ export default function VerifyOtp() {
     return () => clearInterval(interval);
   }, [timer]);
 
-  // Focus first input on mount
   useEffect(() => {
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus();
@@ -35,12 +34,10 @@ export default function VerifyOtp() {
 
   const handleChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
-
     const newOtp = [...otpValues];
-    newOtp[index] = value.slice(-1); // Only keep last digit
+    newOtp[index] = value.slice(-1);
     setOtpValues(newOtp);
 
-    // Move to next input
     if (value && index < 5) {
       inputRefs.current[index + 1].focus();
     }
@@ -74,7 +71,7 @@ export default function VerifyOtp() {
 
     const emailToUse = otpEmail || sessionStorage.getItem('otpEmail');
     if (!emailToUse) {
-      toast.error('Session expired. Please register or login again.');
+      toast.error('Session expired. Please register again.');
       navigate('/register');
       return;
     }
@@ -82,10 +79,9 @@ export default function VerifyOtp() {
     try {
       const res = await dispatch(verifyOtp({ email: emailToUse, otp: fullOtp })).unwrap();
 
-      // Launch Confetti Celebration!
       confetti({
-        particleCount: 100,
-        spread: 70,
+        particleCount: 120,
+        spread: 80,
         origin: { y: 0.6 },
         colors: ['#10b981', '#14b8a6', '#06b6d4', '#f59e0b'],
       });
@@ -123,28 +119,33 @@ export default function VerifyOtp() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
-        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center mb-3">
-          <KeyRound className="w-6 h-6" />
+      <div className="text-center space-y-2">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-emerald-400 mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/10">
+          <KeyRound className="w-7 h-7" />
         </div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">
-          Verify Your Email
-        </h2>
-        <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
-          We sent a 6-digit OTP code to <br />
-          <strong className="text-emerald-400 font-mono">{displayEmail}</strong>
-        </p>
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-1">
+            <Sparkles className="w-3.5 h-3.5" /> Step 2 of 2
+          </div>
+          <h2 className="text-2xl font-extrabold text-white tracking-tight font-heading">
+            Verify Your Email
+          </h2>
+          <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+            We sent a 6-digit OTP code to <br />
+            <strong className="text-emerald-400 font-mono text-xs">{displayEmail}</strong>
+          </p>
+        </div>
       </div>
 
       {error && (
-        <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-3 text-red-400 text-xs">
-          <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
+        <div className="p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-start gap-3 text-red-400 text-xs shadow-lg">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
       <form onSubmit={handleVerify} className="space-y-6">
-        {/* 6 Digit Input Boxes */}
+        {/* 6 Digit Box Grid */}
         <div className="flex items-center justify-center gap-2 sm:gap-3" onPaste={handlePaste}>
           {otpValues.map((digit, idx) => (
             <input
@@ -156,16 +157,15 @@ export default function VerifyOtp() {
               value={digit}
               onChange={(e) => handleChange(idx, e.target.value)}
               onKeyDown={(e) => handleKeyDown(idx, e)}
-              className="w-11 h-13 sm:w-12 sm:h-14 bg-slate-950/90 border border-slate-800 rounded-xl text-center text-xl font-bold text-emerald-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 transition-all shadow-inner"
+              className="w-12 h-14 sm:w-13 sm:h-15 bg-slate-950/90 border border-slate-800 rounded-2xl text-center text-2xl font-bold text-emerald-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 transition-all shadow-inner font-mono"
             />
           ))}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={isLoading || otpValues.join('').length !== 6}
-          className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.01] active:scale-[0.99]"
+          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-sm shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99]"
         >
           {isLoading ? (
             <>
@@ -181,16 +181,14 @@ export default function VerifyOtp() {
         </button>
       </form>
 
-      {/* Resend OTP Section */}
+      {/* Resend Timer */}
       <div className="pt-2 text-center text-xs text-slate-400 space-y-2">
-        <p>
-          Didn't receive the email? Check spam folder or resend.
-        </p>
+        <p>Didn't receive the email? Check spam folder or resend.</p>
         <button
           type="button"
           onClick={handleResend}
           disabled={!canResend || isLoading}
-          className="inline-flex items-center gap-1.5 font-semibold text-emerald-400 hover:underline disabled:text-slate-600 disabled:no-underline transition-colors"
+          className="inline-flex items-center gap-1.5 font-bold text-emerald-400 hover:underline disabled:text-slate-600 disabled:no-underline transition-colors"
         >
           <RotateCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           {canResend ? 'Resend New OTP' : `Resend OTP in ${timer}s`}
@@ -199,7 +197,7 @@ export default function VerifyOtp() {
 
       <div className="text-center pt-2 text-xs">
         <Link to="/register" className="text-slate-500 hover:text-slate-300 transition-colors">
-          ← Wrong email? Register again
+          &larr; Wrong email? Register again
         </Link>
       </div>
     </div>
