@@ -7,7 +7,7 @@ const initialState = {
   accessToken: localStorage.getItem('accessToken') || null,
   isAuthenticated: !!localStorage.getItem('accessToken'),
   isLoading: false,
-  isInitializing: true, // for initial /me check
+  isInitializing: !!localStorage.getItem('accessToken'), // only true if token exists initially
   error: null,
   otpEmail: sessionStorage.getItem('otpEmail') || null, // email waiting for OTP verification
 };
@@ -197,6 +197,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.isInitializing = false;
         state.accessToken = action.payload.data.accessToken;
         state.user = action.payload.data.user;
         state.isAuthenticated = true;

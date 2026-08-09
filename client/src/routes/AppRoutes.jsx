@@ -21,10 +21,10 @@ export default function AppRoutes() {
 
   // Check initial session if token exists
   useEffect(() => {
-    if (accessToken && !isAuthenticated) {
+    if (accessToken) {
       dispatch(fetchMe());
     }
-  }, [dispatch, accessToken, isAuthenticated]);
+  }, [dispatch, accessToken]);
 
   return (
     <Routes>
