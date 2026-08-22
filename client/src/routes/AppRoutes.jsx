@@ -11,6 +11,8 @@ import ProtectedRoutes from './ProtectedRoutes';
 // Pages
 import Home from '../pages/Home';
 import Housing from '../pages/Housing';
+import NearbyPGs from '../pages/NearbyPGs';
+import Roommates from '../pages/Roommates';
 import Marketplace from '../pages/Marketplace';
 import Dashboard from '../pages/Dashboard';
 import Chat from '../pages/Chat';
@@ -48,6 +50,8 @@ export default function AppRoutes() {
       <Route element={<StartupLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/housing" element={<Housing />} />
+        <Route path="/nearby-pgs" element={<NearbyPGs />} />
+        <Route path="/roommates" element={<Roommates />} />
         <Route path="/marketplace" element={<Marketplace />} />
 
         {/* Protected Student Routes */}

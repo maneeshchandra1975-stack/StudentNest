@@ -1,85 +1,62 @@
-'use strict';
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
-const express      = require('express');
-const cors         = require('cors');
-const helmet       = require('helmet');
-const morgan       = require('morgan');
-const cookieParser = require('cookie-parser');
-const path         = require('path');
-require('dotenv').config();
+import connectDB from './config/db.js';
+import authRoutes from './routes/auth.routes.js';
+import marketplaceRoutes from './routes/marketplace.routes.js';
+import roommateRoutes from './routes/roommate.routes.js';
+import interestRoutes from './routes/interest.routes.js';
+import nearbyRoutes from './routes/nearby.routes.js';
+import { errorHandler, notFound } from './middleware/error.middleware.js';
 
-const connectDB  = require('./config/db');
-const ApiError   = require('./utils/ApiError');
+// Load environment variables
+dotenv.config();
 
-// ── Connect to MongoDB ─────────────────────────────────────
+// Initialize Express app
+const app = express();
+
+// Connect to MongoDB
 connectDB();
 
-// ── App Initialisation ─────────────────────────────────────
-const app  = express();
-const PORT = process.env.PORT || 5000;
-
-// ── Security Middleware ────────────────────────────────────
+// Core Middleware
 app.use(helmet());
-
-// ── CORS ───────────────────────────────────────────────────
+app.use(morgan('dev'));
 app.use(
   cors({
-    origin:      process.env.CLIENT_URL || 'http://localhost:5173',
-    credentials: true, // needed for cookie-based refresh tokens
+    origin: process.env.CLIENT_URL || 'http://localhost:5174',
+    credentials: true,
   })
 );
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// ── Request Parsing ────────────────────────────────────────
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(cookieParser()); // parse refresh token cookie
-
-// ── HTTP Request Logger ────────────────────────────────────
-if (process.env.NODE_ENV !== 'production') {
-  app.use(morgan('dev'));
-}
-
-// ── Static Files ───────────────────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// ── Health-Check Route ─────────────────────────────────────
-app.get('/api/health', (_req, res) => {
+// Health Check Endpoint
+app.get('/health', (req, res) => {
   res.status(200).json({
-    success:     true,
-    message:     'CampusNest API is running',
-    environment: process.env.NODE_ENV || 'development',
-    timestamp:   new Date().toISOString(),
+    status: 'OK',
+    message: 'CampusNest API Server is running smoothly',
+    timestamp: new Date().toISOString(),
   });
 });
 
-// ── API Route Groups ───────────────────────────────────────
-app.use('/api/v1/auth', require('./routes/auth.routes'));
+// API v1 Routes
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/marketplace', marketplaceRoutes);
+app.use('/api/v1/roommates', roommateRoutes);
+app.use('/api/v1/interests', interestRoutes);
+app.use('/api/v1/nearby-pgs', nearbyRoutes);
 
-// Future routes (uncommented as phases are built):
-// app.use('/api/v1/users',   require('./routes/user.routes'));
-// app.use('/api/v1/housing', require('./routes/housing.routes'));
-// app.use('/api/v1/market',  require('./routes/market.routes'));
-// app.use('/api/v1/chat',    require('./routes/chat.routes'));
+// Error Handling Middleware
+app.use(notFound);
+app.use(errorHandler);
 
-// ── 404 Handler ────────────────────────────────────────────
-app.use((_req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found.' });
-});
-
-// ── Global Error Handler ───────────────────────────────────
-// eslint-disable-next-line no-unused-vars
-app.use((err, _req, res, _next) => {
-  const statusCode = err.statusCode || 500;
-  const message    = err.message    || 'Internal Server Error';
-  console.error(`[Error ${statusCode}]`, message);
-  res.status(statusCode).json({ success: false, message });
-});
-
-// ── Start Server ───────────────────────────────────────────
+// Start Server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`\n  CampusNest server running on http://localhost:${PORT}`);
-  console.log(`  Environment : ${process.env.NODE_ENV || 'development'}`);
-  console.log(`  Health check: http://localhost:${PORT}/api/health\n`);
+  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
-
-module.exports = app;

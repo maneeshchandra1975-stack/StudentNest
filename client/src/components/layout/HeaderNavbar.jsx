@@ -7,6 +7,8 @@ import {
   Home,
   ShoppingBag,
   MessageSquare,
+  Users,
+  MapPin,
   Bell,
   User,
   LogOut,
@@ -33,6 +35,8 @@ export default function HeaderNavbar() {
   const navLinks = [
     { label: 'Home', path: '/' },
     { label: 'Housing', path: '/housing' },
+    { label: 'Nearby PGs', path: '/nearby-pgs' },
+    { label: 'Roommates', path: '/roommates' },
     { label: 'Marketplace', path: '/marketplace' },
     { label: 'Messages', path: '/messages' },
   ];

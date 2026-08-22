@@ -3,52 +3,48 @@ import {
   MessageSquare,
   Search,
   Send,
-  Paperclip,
-  CheckCheck,
+  Lock,
   ShieldCheck,
   Phone,
-  MoreVertical,
+  CheckCircle2,
+  Inbox,
+  AlertCircle,
 } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
+import InterestRequestsModal from '../components/ui/InterestRequestsModal';
 import { toast } from 'sonner';
 
 const mockConversations = [
   {
     id: 1,
-    name: 'Suresh Kumar',
-    role: 'PG Owner (Gate 2)',
-    lastMessage: 'Yes, the 2BHK room is available for immediate move-in.',
+    name: 'Kavya M.',
+    role: 'Accepted Flatmate Request',
+    lastMessage: 'I accepted your roommate interest request! When can we meet?',
     time: '10:42 AM',
-    unread: 2,
+    unread: 1,
     online: true,
+    chatPermission: 'Accepted', // 'Accepted' | 'Pending' | 'Locked'
   },
   {
     id: 2,
     name: 'Rahul Sharma',
-    role: 'CSE 3rd Year',
-    lastMessage: 'Can you sell the CLRS Book for ₹600?',
+    role: 'CLRS Book Seller',
+    lastMessage: 'Waiting for seller to accept your interest request...',
     time: 'Yesterday',
     unread: 0,
     online: false,
-  },
-  {
-    id: 3,
-    name: 'Priya K.',
-    role: 'ECE 4th Year',
-    lastMessage: 'The cycle gear has been serviced recently.',
-    time: 'Aug 8',
-    unread: 0,
-    online: true,
+    chatPermission: 'Pending',
   },
 ];
 
 export default function Chat() {
   const [activeChat, setActiveChat] = useState(mockConversations[0]);
+  const [requestsModalOpen, setRequestsModalOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: 'them', text: 'Hello Maneesh! Are you still interested in the 2BHK Shared Apartment near Gate 2?', time: '10:30 AM' },
-    { sender: 'me', text: 'Hi Suresh! Yes, what is the monthly rent including maintenance?', time: '10:35 AM' },
-    { sender: 'them', text: 'Yes, the 2BHK room is available for immediate move-in at ₹8,500/month all included.', time: '10:42 AM' },
+    { sender: 'them', text: 'Hi Maneesh! I saw your roommate interest request for the 2BHK flat share and accepted it.', time: '10:30 AM' },
+    { sender: 'me', text: 'Awesome Kavya! Is the room available for move-in next month?', time: '10:35 AM' },
+    { sender: 'them', text: 'Yes! Let’s meet near the central library tomorrow to finalize.', time: '10:42 AM' },
   ]);
   const [input, setInput] = useState('');
 
@@ -66,14 +62,30 @@ export default function Chat() {
 
   return (
     <div className="space-y-4 py-2">
-      <div className="border-b border-[#E2E8F0] pb-4">
-        <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] mb-1">
-          <MessageSquare className="w-4 h-4" />
-          <span>Verified Student Messaging</span>
+      <InterestRequestsModal
+        isOpen={requestsModalOpen}
+        onClose={() => setRequestsModalOpen(false)}
+      />
+
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-4">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] mb-1">
+            <MessageSquare className="w-4 h-4" />
+            <span>Verified Student Messaging</span>
+          </div>
+          <h1 className="text-2xl font-extrabold text-[#111827] font-heading">
+            Student Messages &amp; Chat
+          </h1>
         </div>
-        <h1 className="text-2xl font-extrabold text-[#111827] font-heading">
-          Student Messages &amp; Inquiries
-        </h1>
+
+        <Button
+          variant="secondary"
+          size="sm"
+          icon={Inbox}
+          onClick={() => setRequestsModalOpen(true)}
+        >
+          Manage Interest Requests
+        </Button>
       </div>
 
       {/* 2-Column Chat Box */}
@@ -94,6 +106,8 @@ export default function Chat() {
           <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
             {mockConversations.map((conv) => {
               const isActive = activeChat.id === conv.id;
+              const isLocked = conv.chatPermission !== 'Accepted';
+
               return (
                 <div
                   key={conv.id}
@@ -113,7 +127,10 @@ export default function Chat() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-[#111827] truncate">{conv.name}</h4>
+                      <h4 className="text-xs font-bold text-[#111827] truncate flex items-center gap-1">
+                        <span>{conv.name}</span>
+                        {isLocked && <Lock className="w-3 h-3 text-amber-500 shrink-0" />}
+                      </h4>
                       <span className="text-[10px] text-slate-400">{conv.time}</span>
                     </div>
                     <div className="text-[11px] text-[#64748B] truncate">{conv.role}</div>
@@ -142,45 +159,75 @@ export default function Chat() {
               </div>
             </div>
 
-            <Button variant="ghost" size="sm" icon={Phone} onClick={() => toast.info('Initiating secure audio call...')}>
-              Call
-            </Button>
+            {activeChat.chatPermission === 'Accepted' && (
+              <Button variant="ghost" size="sm" icon={Phone} onClick={() => toast.info('Initiating call...')}>
+                Call
+              </Button>
+            )}
           </div>
 
-          {/* Messages Feed */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/30">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`flex flex-col ${msg.sender === 'me' ? 'items-end' : 'items-start'}`}
-              >
-                <div
-                  className={`max-w-md p-3 rounded-2xl text-xs leading-relaxed ${
-                    msg.sender === 'me'
-                      ? 'bg-[#2563EB] text-white rounded-br-none shadow-xs'
-                      : 'bg-white text-[#111827] border border-[#E2E8F0] rounded-bl-none shadow-xs'
-                  }`}
-                >
-                  {msg.text}
-                </div>
-                <span className="text-[10px] text-slate-400 mt-1 px-1">{msg.time}</span>
+          {/* Locked Notice OR Messages Feed */}
+          {activeChat.chatPermission !== 'Accepted' ? (
+            <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 bg-slate-50/50">
+              <div className="p-3.5 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200">
+                <Lock className="w-8 h-8" />
               </div>
-            ))}
-          </div>
+              <div className="space-y-1 max-w-sm">
+                <h4 className="text-base font-bold text-[#111827] font-heading">
+                  Chat Access Protected
+                </h4>
+                <p className="text-xs text-[#64748B]">
+                  Direct messaging with <strong className="text-[#111827]">{activeChat.name}</strong> will unlock automatically once the seller accepts your interest request.
+                </p>
+              </div>
 
-          {/* Input Box */}
-          <form onSubmit={handleSend} className="p-3 border-t border-[#E2E8F0] bg-white flex items-center gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              className="sn-input flex-1 px-4 py-2 text-xs"
-            />
-            <Button type="submit" variant="primary" size="sm" icon={Send}>
-              Send
-            </Button>
-          </form>
+              <Button
+                variant="primary"
+                size="sm"
+                icon={Inbox}
+                onClick={() => setRequestsModalOpen(true)}
+              >
+                View Interest Requests
+              </Button>
+            </div>
+          ) : (
+            <>
+              {/* Messages Feed */}
+              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/30">
+                {messages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex flex-col ${msg.sender === 'me' ? 'items-end' : 'items-start'}`}
+                  >
+                    <div
+                      className={`max-w-md p-3 rounded-2xl text-xs leading-relaxed ${
+                        msg.sender === 'me'
+                          ? 'bg-[#2563EB] text-white rounded-br-none shadow-2xs'
+                          : 'bg-white text-[#111827] border border-[#E2E8F0] rounded-bl-none shadow-2xs'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                    <span className="text-[10px] text-slate-400 mt-1 px-1">{msg.time}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Input Box */}
+              <form onSubmit={handleSend} className="p-3 border-t border-[#E2E8F0] bg-white flex items-center gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..."
+                  className="sn-input flex-1 px-4 py-2 text-xs"
+                />
+                <Button type="submit" variant="primary" size="sm" icon={Send}>
+                  Send
+                </Button>
+              </form>
+            </>
+          )}
         </div>
       </div>
     </div>
