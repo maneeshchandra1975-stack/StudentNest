@@ -79,6 +79,8 @@ const getSentRequests = async (req, res, next) => {
   }
 };
 
+const Conversation     = require('../models/Conversation.model');
+
 const respondToInterest = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -100,12 +102,29 @@ const respondToInterest = async (req, res, next) => {
     request.status = action;
     await request.save();
 
-    if (action === 'Accepted' && request.listingType === 'Marketplace' && request.marketplaceItem) {
-      await MarketplaceItem.findByIdAndUpdate(request.marketplaceItem, { status: 'Reserved' });
+    let conversation = null;
+    if (action === 'Accepted') {
+      if (request.listingType === 'Marketplace' && request.marketplaceItem) {
+        await MarketplaceItem.findByIdAndUpdate(request.marketplaceItem, { status: 'Reserved' });
+      }
+
+      // Automatically create unique conversation for this accepted request if not already present
+      conversation = await Conversation.findOne({ interestRequest: request._id });
+      if (!conversation) {
+        conversation = await Conversation.create({
+          participants: [request.sender, request.recipient],
+          interestRequest: request._id,
+          lastMessage: 'Conversation started. Say hello!',
+          lastMessageAt: new Date(),
+        });
+      }
     }
 
     return res.status(200).json(
-      new ApiResponse(200, `Interest request ${action.toLowerCase()}`, request)
+      new ApiResponse(200, `Interest request ${action.toLowerCase()}`, {
+        request,
+        conversationId: conversation ? conversation._id : null,
+      })
     );
   } catch (error) {
     next(error);
