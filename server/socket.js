@@ -40,8 +40,12 @@ const setupSocket = (server) => {
     }
   });
 
+const { createAndSendNotification } = require('./services/notification.service');
+
   io.on('connection', (socket) => {
-    console.log(`[SOCKET CONNECTED] User ${socket.user.name} (${socket.user._id}) connected.`);
+    const userRoom = `user_${socket.user._id.toString()}`;
+    socket.join(userRoom);
+    console.log(`[SOCKET CONNECTED] User ${socket.user.name} (${socket.user._id}) connected & joined room ${userRoom}.`);
 
     // Join conversation room with strict authorization check
     socket.on('join_conversation', async ({ conversationId }, callback) => {
@@ -128,6 +132,23 @@ const setupSocket = (server) => {
         // 3. Broadcast to all users in the conversation room
         const roomName = `conversation_${conversationId}`;
         io.to(roomName).emit('receive_message', populatedMessage);
+
+        // 4. Trigger real-time NEW_MESSAGE notification to recipient participant
+        const recipientId = conversation.participants.find(
+          (p) => p.toString() !== socket.user._id.toString()
+        );
+
+        if (recipientId) {
+          await createAndSendNotification({ get: () => io }, {
+            recipient: recipientId,
+            sender: socket.user._id,
+            type: 'NEW_MESSAGE',
+            title: `Message from ${socket.user.name}`,
+            message: text.trim().length > 45 ? `${text.trim().substring(0, 45)}...` : text.trim(),
+            relatedEntityType: 'Conversation',
+            relatedEntityId: conversation._id,
+          });
+        }
 
         if (callback) callback({ success: true, message: populatedMessage });
       } catch (err) {

@@ -14,6 +14,7 @@ import HousingHub from '../pages/HousingHub';
 import Dashboard from '../pages/Dashboard';
 import Chat from '../pages/Chat';
 import Profile from '../pages/Profile';
+import Notifications from '../pages/Notifications';
 
 // Auth Pages
 import Register from '../pages/auth/Register';
@@ -57,6 +58,7 @@ export default function AppRoutes() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/messages" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/notifications" element={<Notifications />} />
         </Route>
       </Route>
 

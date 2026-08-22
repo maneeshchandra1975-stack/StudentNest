@@ -16,6 +16,7 @@ const roommateRoutes = require('./routes/roommate.routes');
 const interestRoutes = require('./routes/interest.routes');
 const nearbyRoutes = require('./routes/nearby.routes');
 const conversationRoutes = require('./routes/conversation.routes');
+const notificationRoutes = require('./routes/notification.routes');
 const { errorHandler, notFound } = require('./middleware/error.middleware');
 
 // Load environment variables
@@ -61,6 +62,7 @@ app.use('/api/v1/roommates', roommateRoutes);
 app.use('/api/v1/interests', interestRoutes);
 app.use('/api/v1/nearby-pgs', nearbyRoutes);
 app.use('/api/v1/conversations', conversationRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
 
 // Error Handling Middleware
 app.use(notFound);

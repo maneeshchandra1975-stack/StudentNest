@@ -127,6 +127,8 @@ const getMessages = async (req, res, next) => {
   }
 };
 
+const { createAndSendNotification } = require('../services/notification.service');
+
 /**
  * POST /api/v1/conversations/:id/messages
  * Send a message REST endpoint
@@ -176,6 +178,23 @@ const sendMessage = async (req, res, next) => {
     // Emit to socket room if socket server is attached
     if (req.app.get('io')) {
       req.app.get('io').to(`conversation_${id}`).emit('receive_message', populatedMessage);
+    }
+
+    // Identify recipient participant
+    const recipientId = conversation.participants.find(
+      (p) => p.toString() !== userId.toString()
+    );
+
+    if (recipientId) {
+      await createAndSendNotification(req.app, {
+        recipient: recipientId,
+        sender: userId,
+        type: 'NEW_MESSAGE',
+        title: `Message from ${req.user.name}`,
+        message: text.trim().length > 45 ? `${text.trim().substring(0, 45)}...` : text.trim(),
+        relatedEntityType: 'Conversation',
+        relatedEntityId: conversation._id,
+      });
     }
 
     return res.status(201).json(

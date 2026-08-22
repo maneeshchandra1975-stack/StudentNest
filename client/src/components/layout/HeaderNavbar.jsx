@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/slices/authSlice';
+import NotificationDropdown from './NotificationDropdown';
 import {
   Building2,
   Home,
@@ -81,6 +82,8 @@ export default function HeaderNavbar() {
 
         {/* Right Actions & Profile */}
         <div className="flex items-center gap-3">
+          <NotificationDropdown />
+
           <Button
             variant="primary"
             size="sm"

@@ -1,10 +1,12 @@
 'use strict';
 
-const InterestRequest = require('../models/InterestRequest.model');
-const MarketplaceItem = require('../models/MarketplaceItem.model');
-const RoommatePost    = require('../models/RoommatePost.model');
-const ApiResponse     = require('../utils/ApiResponse');
-const ApiError        = require('../utils/ApiError');
+const InterestRequest              = require('../models/InterestRequest.model');
+const MarketplaceItem              = require('../models/MarketplaceItem.model');
+const RoommatePost                 = require('../models/RoommatePost.model');
+const Conversation                 = require('../models/Conversation.model');
+const ApiResponse                  = require('../utils/ApiResponse');
+const ApiError                     = require('../utils/ApiError');
+const { createAndSendNotification } = require('../services/notification.service');
 
 const sendInterestRequest = async (req, res, next) => {
   try {
@@ -37,6 +39,27 @@ const sendInterestRequest = async (req, res, next) => {
       sender: req.user._id,
       recipient: recipientId,
       message: message || 'I am interested in your listing.',
+    });
+
+    // Fetch listing title for notification
+    let listingTitle = 'your listing';
+    if (listingType === 'Marketplace') {
+      const item = await MarketplaceItem.findById(listingId);
+      if (item) listingTitle = item.title;
+    } else if (listingType === 'Roommate') {
+      const post = await RoommatePost.findById(listingId);
+      if (post) listingTitle = post.title;
+    }
+
+    // Trigger INTEREST_RECEIVED notification to seller/owner
+    await createAndSendNotification(req.app, {
+      recipient: recipientId,
+      sender: req.user._id,
+      type: 'INTEREST_RECEIVED',
+      title: `${req.user.name} expressed interest`,
+      message: `${req.user.name} is interested in "${listingTitle}".`,
+      relatedEntityType: listingType,
+      relatedEntityId: request._id,
     });
 
     return res.status(201).json(
@@ -79,8 +102,6 @@ const getSentRequests = async (req, res, next) => {
   }
 };
 
-const Conversation     = require('../models/Conversation.model');
-
 const respondToInterest = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -118,6 +139,28 @@ const respondToInterest = async (req, res, next) => {
           lastMessageAt: new Date(),
         });
       }
+
+      // Trigger INTEREST_ACCEPTED notification to buyer
+      await createAndSendNotification(req.app, {
+        recipient: request.sender,
+        sender: req.user._id,
+        type: 'INTEREST_ACCEPTED',
+        title: 'Interest Request Accepted!',
+        message: `${req.user.name} accepted your interest request. You can now chat!`,
+        relatedEntityType: 'Conversation',
+        relatedEntityId: conversation._id,
+      });
+    } else if (action === 'Rejected') {
+      // Trigger INTEREST_REJECTED notification to buyer
+      await createAndSendNotification(req.app, {
+        recipient: request.sender,
+        sender: req.user._id,
+        type: 'INTEREST_REJECTED',
+        title: 'Interest Request Update',
+        message: `${req.user.name} declined your interest request.`,
+        relatedEntityType: 'InterestRequest',
+        relatedEntityId: request._id,
+      });
     }
 
     return res.status(200).json(
@@ -146,6 +189,17 @@ const cancelInterestRequest = async (req, res, next) => {
 
     request.status = 'Cancelled';
     await request.save();
+
+    // Trigger INTEREST_CANCELLED notification to seller/owner
+    await createAndSendNotification(req.app, {
+      recipient: request.recipient,
+      sender: req.user._id,
+      type: 'INTEREST_CANCELLED',
+      title: 'Interest Request Cancelled',
+      message: `${req.user.name} cancelled their interest request.`,
+      relatedEntityType: 'InterestRequest',
+      relatedEntityId: request._id,
+    });
 
     return res.status(200).json(
       new ApiResponse(200, 'Interest request cancelled', request)
