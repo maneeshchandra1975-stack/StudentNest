@@ -135,22 +135,18 @@ export default function Register() {
               type="email"
               placeholder="yourname@vitapstudent.ac.in"
               {...register('email', {
-                required: 'College Email is required',
+                required: 'Email address is required',
                 pattern: {
-                  value: /^[^\s@]+@vitapstudent\.ac\.in$/,
-                  message: 'Only @vitapstudent.ac.in emails are permitted',
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Enter a valid email address',
                 },
               })}
               className="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-slate-600 font-mono text-xs"
             />
           </div>
-          {errors.email ? (
+          {errors.email && (
             <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" /> {errors.email.message}
-            </p>
-          ) : (
-            <p className="text-[11px] text-slate-400 mt-1">
-              Must end with <code className="text-emerald-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">@vitapstudent.ac.in</code>
             </p>
           )}
         </div>

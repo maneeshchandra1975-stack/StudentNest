@@ -12,13 +12,7 @@ const registerValidator = [
   body('email')
     .trim()
     .notEmpty().withMessage('Email is required')
-    .isEmail().withMessage('Enter a valid email address')
-    .custom((value) => {
-      if (!value.endsWith('@vitapstudent.ac.in')) {
-        throw new Error('Only VIT-AP student emails are allowed (@vitapstudent.ac.in)');
-      }
-      return true;
-    }),
+    .isEmail().withMessage('Enter a valid email address'),
 
   body('password')
     .notEmpty().withMessage('Password is required')

@@ -20,8 +20,8 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim:      true,
       match: [
-        /^[^\s@]+@vitapstudent\.ac\.in$/,
-        'Only VIT-AP student email addresses are allowed (@vitapstudent.ac.in)',
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        'Please enter a valid email address',
       ],
     },
 
