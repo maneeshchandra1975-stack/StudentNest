@@ -17,6 +17,7 @@ import {
   X,
   ShieldCheck,
   ChevronDown,
+  Grid,
 } from 'lucide-react';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
@@ -34,10 +35,7 @@ export default function HeaderNavbar() {
 
   const navLinks = [
     { label: 'Home', path: '/' },
-    { label: 'Housing', path: '/housing' },
-    { label: 'Nearby PGs', path: '/nearby-pgs' },
-    { label: 'Roommates', path: '/roommates' },
-    { label: 'Marketplace', path: '/marketplace' },
+    { label: 'Student Hub (Housing, PGs, Roommates & Market)', path: '/housing' },
     { label: 'Messages', path: '/messages' },
   ];
 
@@ -83,7 +81,6 @@ export default function HeaderNavbar() {
 
         {/* Right Actions & Profile */}
         <div className="flex items-center gap-3">
-          {/* Post Listing CTA */}
           <Button
             variant="primary"
             size="sm"
@@ -96,7 +93,6 @@ export default function HeaderNavbar() {
 
           {isAuthenticated ? (
             <div className="relative">
-              {/* Profile Dropdown Button */}
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-200"
@@ -113,7 +109,6 @@ export default function HeaderNavbar() {
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />
               </button>
 
-              {/* User Dropdown Menu */}
               {userDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white border border-[#E2E8F0] rounded-2xl shadow-lg p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="p-2 border-b border-slate-100 space-y-0.5">
@@ -163,7 +158,6 @@ export default function HeaderNavbar() {
             </div>
           )}
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 md:hidden"
@@ -173,7 +167,6 @@ export default function HeaderNavbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation Dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-[#E2E8F0] bg-white p-4 space-y-3">
           <nav className="space-y-1">
@@ -188,20 +181,6 @@ export default function HeaderNavbar() {
               </Link>
             ))}
           </nav>
-          <div className="pt-2">
-            <Button
-              variant="primary"
-              size="sm"
-              fullWidth
-              icon={Plus}
-              onClick={() => {
-                setMobileMenuOpen(false);
-                navigate('/housing');
-              }}
-            >
-              Post Listing
-            </Button>
-          </div>
         </div>
       )}
     </header>
