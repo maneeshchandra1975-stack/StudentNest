@@ -1,17 +1,19 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
+'use strict';
 
-import connectDB from './config/db.js';
-import authRoutes from './routes/auth.routes.js';
-import marketplaceRoutes from './routes/marketplace.routes.js';
-import roommateRoutes from './routes/roommate.routes.js';
-import interestRoutes from './routes/interest.routes.js';
-import nearbyRoutes from './routes/nearby.routes.js';
-import { errorHandler, notFound } from './middleware/error.middleware.js';
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/auth.routes');
+const marketplaceRoutes = require('./routes/marketplace.routes');
+const roommateRoutes = require('./routes/roommate.routes');
+const interestRoutes = require('./routes/interest.routes');
+const nearbyRoutes = require('./routes/nearby.routes');
+const { errorHandler, notFound } = require('./middleware/error.middleware');
 
 // Load environment variables
 dotenv.config();

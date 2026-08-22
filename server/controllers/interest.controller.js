@@ -1,10 +1,12 @@
-import { InterestRequest } from '../models/InterestRequest.model.js';
-import { MarketplaceItem } from '../models/MarketplaceItem.model.js';
-import { RoommatePost } from '../models/RoommatePost.model.js';
-import { ApiResponse } from '../utils/ApiResponse.js';
-import { ApiError } from '../utils/ApiError.js';
+'use strict';
 
-export const sendInterestRequest = async (req, res, next) => {
+const InterestRequest = require('../models/InterestRequest.model');
+const MarketplaceItem = require('../models/MarketplaceItem.model');
+const RoommatePost    = require('../models/RoommatePost.model');
+const ApiResponse     = require('../utils/ApiResponse');
+const ApiError        = require('../utils/ApiError');
+
+const sendInterestRequest = async (req, res, next) => {
   try {
     const { listingType, listingId, recipientId, message } = req.body;
 
@@ -16,7 +18,6 @@ export const sendInterestRequest = async (req, res, next) => {
       throw new ApiError(400, 'You cannot express interest in your own listing');
     }
 
-    // Check if an active interest request already exists
     const existing = await InterestRequest.findOne({
       listingType,
       sender: req.user._id,
@@ -39,14 +40,14 @@ export const sendInterestRequest = async (req, res, next) => {
     });
 
     return res.status(201).json(
-      new ApiResponse(201, request, 'Interest request sent successfully')
+      new ApiResponse(201, 'Interest request sent successfully', request)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const getReceivedRequests = async (req, res, next) => {
+const getReceivedRequests = async (req, res, next) => {
   try {
     const requests = await InterestRequest.find({ recipient: req.user._id })
       .populate('sender', 'name email')
@@ -55,14 +56,14 @@ export const getReceivedRequests = async (req, res, next) => {
       .sort({ createdAt: -1 });
 
     return res.status(200).json(
-      new ApiResponse(200, requests, 'Received interest requests fetched')
+      new ApiResponse(200, 'Received interest requests fetched', requests)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const getSentRequests = async (req, res, next) => {
+const getSentRequests = async (req, res, next) => {
   try {
     const requests = await InterestRequest.find({ sender: req.user._id })
       .populate('recipient', 'name email')
@@ -71,14 +72,14 @@ export const getSentRequests = async (req, res, next) => {
       .sort({ createdAt: -1 });
 
     return res.status(200).json(
-      new ApiResponse(200, requests, 'Sent interest requests fetched')
+      new ApiResponse(200, 'Sent interest requests fetched', requests)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const respondToInterest = async (req, res, next) => {
+const respondToInterest = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { action } = req.body; // 'Accepted' | 'Rejected'
@@ -99,20 +100,19 @@ export const respondToInterest = async (req, res, next) => {
     request.status = action;
     await request.save();
 
-    // If accepted, set item status to Reserved automatically
     if (action === 'Accepted' && request.listingType === 'Marketplace' && request.marketplaceItem) {
       await MarketplaceItem.findByIdAndUpdate(request.marketplaceItem, { status: 'Reserved' });
     }
 
     return res.status(200).json(
-      new ApiResponse(200, request, `Interest request ${action.toLowerCase()}`)
+      new ApiResponse(200, `Interest request ${action.toLowerCase()}`, request)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const cancelInterestRequest = async (req, res, next) => {
+const cancelInterestRequest = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -129,15 +129,14 @@ export const cancelInterestRequest = async (req, res, next) => {
     await request.save();
 
     return res.status(200).json(
-      new ApiResponse(200, request, 'Interest request cancelled')
+      new ApiResponse(200, 'Interest request cancelled', request)
     );
   } catch (error) {
     next(error);
   }
 };
 
-// Check if chat access is permitted between current user and target user
-export const checkChatPermission = async (req, res, next) => {
+const checkChatPermission = async (req, res, next) => {
   try {
     const { targetUserId } = req.params;
 
@@ -149,9 +148,18 @@ export const checkChatPermission = async (req, res, next) => {
     });
 
     return res.status(200).json(
-      new ApiResponse(200, { isAllowed: !!acceptedRequest }, 'Chat permission status')
+      new ApiResponse(200, 'Chat permission status', { isAllowed: !!acceptedRequest })
     );
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  sendInterestRequest,
+  getReceivedRequests,
+  getSentRequests,
+  respondToInterest,
+  cancelInterestRequest,
+  checkChatPermission,
 };

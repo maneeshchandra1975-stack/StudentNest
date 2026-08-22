@@ -1,8 +1,10 @@
-import express from 'express';
-import { getNearbyPGs } from '../controllers/nearby.controller.js';
+'use strict';
 
-const router = express.Router();
+const express = require('express');
+const router  = express.Router();
+
+const { getNearbyPGs } = require('../controllers/nearby.controller');
 
 router.get('/', getNearbyPGs);
 
-export default router;
+module.exports = router;

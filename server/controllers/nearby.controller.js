@@ -1,9 +1,11 @@
-import { NearbyPG } from '../models/NearbyPG.model.js';
-import { ApiResponse } from '../utils/ApiResponse.js';
+'use strict';
+
+const NearbyPG    = require('../models/NearbyPG.model');
+const ApiResponse = require('../utils/ApiResponse');
 
 const defaultNearbyPGs = [
   {
-    name: 'Anand Luxury Student PG',
+    name: 'Anand Executive Student PG',
     type: 'Gents PG',
     rentStarting: 8500,
     distanceFromCampus: 0.8,
@@ -43,19 +45,20 @@ const defaultNearbyPGs = [
   },
 ];
 
-export const getNearbyPGs = async (req, res, next) => {
+const getNearbyPGs = async (req, res, next) => {
   try {
     let pgs = await NearbyPG.find().sort({ distanceFromCampus: 1 });
 
-    // Seed default verified PGs if collection is empty
     if (pgs.length === 0) {
       pgs = await NearbyPG.insertMany(defaultNearbyPGs);
     }
 
     return res.status(200).json(
-      new ApiResponse(200, pgs, 'Nearby PGs and accommodations fetched successfully')
+      new ApiResponse(200, 'Nearby PGs and accommodations fetched successfully', pgs)
     );
   } catch (error) {
     next(error);
   }
 };
+
+module.exports = { getNearbyPGs };

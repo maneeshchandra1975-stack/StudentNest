@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+'use strict';
+
+const mongoose = require('mongoose');
 
 const roommatePostSchema = new mongoose.Schema(
   {
@@ -48,4 +50,4 @@ const roommatePostSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const RoommatePost = mongoose.model('RoommatePost', roommatePostSchema);
+module.exports = mongoose.model('RoommatePost', roommatePostSchema);

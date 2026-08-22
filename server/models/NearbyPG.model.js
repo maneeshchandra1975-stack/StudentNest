@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+'use strict';
+
+const mongoose = require('mongoose');
 
 const nearbyPGSchema = new mongoose.Schema(
   {
@@ -52,4 +54,4 @@ const nearbyPGSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const NearbyPG = mongoose.model('NearbyPG', nearbyPGSchema);
+module.exports = mongoose.model('NearbyPG', nearbyPGSchema);

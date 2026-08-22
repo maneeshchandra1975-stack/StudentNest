@@ -1,15 +1,18 @@
-import express from 'express';
-import {
+'use strict';
+
+const express = require('express');
+const router  = express.Router();
+
+const {
   createRoommatePost,
   getRoommatePosts,
   updateRoommateStatus,
-} from '../controllers/roommate.controller.js';
-import { protect } from '../middleware/auth.middleware.js';
+} = require('../controllers/roommate.controller');
 
-const router = express.Router();
+const { protect } = require('../middleware/auth.middleware');
 
 router.get('/', getRoommatePosts);
 router.post('/', protect, createRoommatePost);
 router.patch('/:id/status', protect, updateRoommateStatus);
 
-export default router;
+module.exports = router;

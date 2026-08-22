@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+'use strict';
+
+const mongoose = require('mongoose');
 
 const interestRequestSchema = new mongoose.Schema(
   {
@@ -38,4 +40,4 @@ const interestRequestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const InterestRequest = mongoose.model('InterestRequest', interestRequestSchema);
+module.exports = mongoose.model('InterestRequest', interestRequestSchema);

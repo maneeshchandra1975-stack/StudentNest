@@ -1,8 +1,10 @@
-import { MarketplaceItem } from '../models/MarketplaceItem.model.js';
-import { ApiResponse } from '../utils/ApiResponse.js';
-import { ApiError } from '../utils/ApiError.js';
+'use strict';
 
-export const createMarketplaceItem = async (req, res, next) => {
+const MarketplaceItem = require('../models/MarketplaceItem.model');
+const ApiResponse     = require('../utils/ApiResponse');
+const ApiError        = require('../utils/ApiError');
+
+const createMarketplaceItem = async (req, res, next) => {
   try {
     const { title, category, price, condition, description, images, location } = req.body;
 
@@ -24,14 +26,14 @@ export const createMarketplaceItem = async (req, res, next) => {
     const populatedItem = await MarketplaceItem.findById(item._id).populate('seller', 'name email');
 
     return res.status(201).json(
-      new ApiResponse(201, populatedItem, 'Marketplace item listed successfully')
+      new ApiResponse(201, 'Marketplace item listed successfully', populatedItem)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const getMarketplaceItems = async (req, res, next) => {
+const getMarketplaceItems = async (req, res, next) => {
   try {
     const { category, minPrice, maxPrice, condition, search } = req.query;
     const filter = {};
@@ -59,14 +61,14 @@ export const getMarketplaceItems = async (req, res, next) => {
       .sort({ createdAt: -1 });
 
     return res.status(200).json(
-      new ApiResponse(200, items, 'Marketplace items fetched successfully')
+      new ApiResponse(200, 'Marketplace items fetched successfully', items)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const updateItemStatus = async (req, res, next) => {
+const updateItemStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -88,14 +90,14 @@ export const updateItemStatus = async (req, res, next) => {
     await item.save();
 
     return res.status(200).json(
-      new ApiResponse(200, item, `Item status updated to ${status}`)
+      new ApiResponse(200, `Item status updated to ${status}`, item)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const reportItem = async (req, res, next) => {
+const reportItem = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { reason } = req.body;
@@ -113,9 +115,16 @@ export const reportItem = async (req, res, next) => {
     await item.save();
 
     return res.status(200).json(
-      new ApiResponse(200, null, 'Listing reported successfully')
+      new ApiResponse(200, 'Listing reported successfully', null)
     );
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  createMarketplaceItem,
+  getMarketplaceItems,
+  updateItemStatus,
+  reportItem,
 };

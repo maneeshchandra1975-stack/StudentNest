@@ -1,8 +1,10 @@
-import { RoommatePost } from '../models/RoommatePost.model.js';
-import { ApiResponse } from '../utils/ApiResponse.js';
-import { ApiError } from '../utils/ApiError.js';
+'use strict';
 
-export const createRoommatePost = async (req, res, next) => {
+const RoommatePost = require('../models/RoommatePost.model');
+const ApiResponse   = require('../utils/ApiResponse');
+const ApiError      = require('../utils/ApiError');
+
+const createRoommatePost = async (req, res, next) => {
   try {
     const { title, roomType, vacancy, rentShare, location, description, preferences } = req.body;
 
@@ -24,14 +26,14 @@ export const createRoommatePost = async (req, res, next) => {
     const populatedPost = await RoommatePost.findById(post._id).populate('author', 'name email');
 
     return res.status(201).json(
-      new ApiResponse(201, populatedPost, 'Roommate vacancy posted successfully')
+      new ApiResponse(201, 'Roommate vacancy posted successfully', populatedPost)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const getRoommatePosts = async (req, res, next) => {
+const getRoommatePosts = async (req, res, next) => {
   try {
     const { roomType, maxRent, search } = req.query;
     const filter = {};
@@ -53,14 +55,14 @@ export const getRoommatePosts = async (req, res, next) => {
       .sort({ createdAt: -1 });
 
     return res.status(200).json(
-      new ApiResponse(200, posts, 'Roommate posts fetched successfully')
+      new ApiResponse(200, 'Roommate posts fetched successfully', posts)
     );
   } catch (error) {
     next(error);
   }
 };
 
-export const updateRoommateStatus = async (req, res, next) => {
+const updateRoommateStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -82,9 +84,15 @@ export const updateRoommateStatus = async (req, res, next) => {
     await post.save();
 
     return res.status(200).json(
-      new ApiResponse(200, post, `Status updated to ${status}`)
+      new ApiResponse(200, `Status updated to ${status}`, post)
     );
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  createRoommatePost,
+  getRoommatePosts,
+  updateRoommateStatus,
 };

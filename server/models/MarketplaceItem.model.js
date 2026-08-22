@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+'use strict';
+
+const mongoose = require('mongoose');
 
 const marketplaceItemSchema = new mongoose.Schema(
   {
@@ -56,4 +58,4 @@ const marketplaceItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const MarketplaceItem = mongoose.model('MarketplaceItem', marketplaceItemSchema);
+module.exports = mongoose.model('MarketplaceItem', marketplaceItemSchema);
