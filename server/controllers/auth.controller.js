@@ -17,33 +17,34 @@ const { sendOTPEmail }                         = require('../services/email.serv
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
+    const normalizedEmail = email.toLowerCase().trim();
 
     // 1. Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
-      throw new ApiError(409, 'An account with this email already exists.');
+      throw new ApiError(409, 'An account with this email already exists. Please log in instead.');
     }
 
     // 2. Create user (password auto-hashed via pre-save hook)
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email: normalizedEmail, password });
 
     // 3. Generate OTP
     const { otp, hashedOTP } = await generateOTP();
 
     // 4. Delete any previous OTP for this email
-    await OTP.deleteMany({ email });
+    await OTP.deleteMany({ email: normalizedEmail });
 
     // 5. Store hashed OTP in DB with expiry
     const expiresAt = new Date(
-      Date.now() + parseInt(process.env.OTP_EXPIRES_MINUTES, 10) * 60 * 1000
+      Date.now() + parseInt(process.env.OTP_EXPIRES_MINUTES || '10', 10) * 60 * 1000
     );
-    await OTP.create({ email, otp: hashedOTP, expiresAt });
+    await OTP.create({ email: normalizedEmail, otp: hashedOTP, expiresAt });
 
     // 6. Send OTP via email
-    await sendOTPEmail(email, otp, name);
+    await sendOTPEmail(normalizedEmail, otp, name);
 
     res.status(201).json(
-      new ApiResponse(201, `Account created. An OTP has been sent to ${email}. Please verify your email.`, {
+      new ApiResponse(201, `Account created. An OTP has been sent to ${normalizedEmail}. Please verify your email.`, {
         userId: user._id,
         email:  user.email,
         name:   user.name,
@@ -62,16 +63,17 @@ const register = async (req, res, next) => {
 const verifyOtp = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
+    const normalizedEmail = email.toLowerCase().trim();
 
     // 1. Find the latest OTP record for this email
-    const otpRecord = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    const otpRecord = await OTP.findOne({ email: normalizedEmail }).sort({ createdAt: -1 });
     if (!otpRecord) {
       throw new ApiError(400, 'OTP not found or has expired. Please request a new OTP.');
     }
 
     // 2. Check if OTP has expired
     if (otpRecord.expiresAt < new Date()) {
-      await OTP.deleteMany({ email });
+      await OTP.deleteMany({ email: normalizedEmail });
       throw new ApiError(400, 'OTP has expired. Please request a new one.');
     }
 
@@ -82,10 +84,10 @@ const verifyOtp = async (req, res, next) => {
     }
 
     // 4. Mark user as verified
-    await User.findOneAndUpdate({ email }, { isVerified: true });
+    await User.findOneAndUpdate({ email: normalizedEmail }, { isVerified: true });
 
     // 5. Delete used OTP
-    await OTP.deleteMany({ email });
+    await OTP.deleteMany({ email: normalizedEmail });
 
     res.status(200).json(
       new ApiResponse(200, 'Email verified successfully. You can now log in.')
@@ -103,9 +105,10 @@ const verifyOtp = async (req, res, next) => {
 const resendOtp = async (req, res, next) => {
   try {
     const { email } = req.body;
+    const normalizedEmail = email.toLowerCase().trim();
 
     // 1. Check if user exists
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       throw new ApiError(404, 'No account found with this email.');
     }
@@ -118,19 +121,19 @@ const resendOtp = async (req, res, next) => {
     const { otp, hashedOTP } = await generateOTP();
 
     // 3. Delete old OTPs
-    await OTP.deleteMany({ email });
+    await OTP.deleteMany({ email: normalizedEmail });
 
     // 4. Store new hashed OTP
     const expiresAt = new Date(
-      Date.now() + parseInt(process.env.OTP_EXPIRES_MINUTES, 10) * 60 * 1000
+      Date.now() + parseInt(process.env.OTP_EXPIRES_MINUTES || '10', 10) * 60 * 1000
     );
-    await OTP.create({ email, otp: hashedOTP, expiresAt });
+    await OTP.create({ email: normalizedEmail, otp: hashedOTP, expiresAt });
 
     // 5. Send OTP email
-    await sendOTPEmail(email, otp, user.name);
+    await sendOTPEmail(normalizedEmail, otp, user.name);
 
     res.status(200).json(
-      new ApiResponse(200, `A new OTP has been sent to ${email}.`)
+      new ApiResponse(200, `A new OTP has been sent to ${normalizedEmail}.`)
     );
   } catch (error) {
     next(error);
@@ -145,9 +148,10 @@ const resendOtp = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = email.toLowerCase().trim();
 
     // 1. Find user (include password for comparison)
-    const user = await User.findOne({ email }).select('+password +refreshToken');
+    const user = await User.findOne({ email: normalizedEmail }).select('+password +refreshToken');
     if (!user) {
       throw new ApiError(401, 'Invalid email or password.');
     }
@@ -274,23 +278,29 @@ const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    const user = await User.findOne({ email });
+    if (!email) {
+      throw new ApiError(400, 'Email address is required.');
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    let user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-      throw new ApiError(404, 'No user found with this email address.');
+      throw new ApiError(404, `No account found with ${normalizedEmail}. Please register first.`);
     }
 
     const { otp, hashedOTP } = await generateOTP();
-    await OTP.deleteMany({ email });
+    await OTP.deleteMany({ email: normalizedEmail });
 
     const expiresAt = new Date(
       Date.now() + parseInt(process.env.OTP_EXPIRES_MINUTES || '10', 10) * 60 * 1000
     );
-    await OTP.create({ email, otp: hashedOTP, expiresAt });
+    await OTP.create({ email: normalizedEmail, otp: hashedOTP, expiresAt });
 
-    await sendOTPEmail(email, otp, user.name);
+    await sendOTPEmail(normalizedEmail, otp, user.name);
 
     res.status(200).json(
-      new ApiResponse(200, `Password reset OTP sent to ${email}.`)
+      new ApiResponse(200, `Password reset OTP sent to ${normalizedEmail}.`)
     );
   } catch (error) {
     next(error);
@@ -306,13 +316,19 @@ const resetPassword = async (req, res, next) => {
   try {
     const { email, otp, newPassword } = req.body;
 
-    const otpRecord = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    if (!email || !otp || !newPassword) {
+      throw new ApiError(400, 'Email, OTP, and new password are required.');
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const otpRecord = await OTP.findOne({ email: normalizedEmail }).sort({ createdAt: -1 });
     if (!otpRecord) {
       throw new ApiError(400, 'OTP not found or expired. Request a new OTP.');
     }
 
     if (otpRecord.expiresAt < new Date()) {
-      await OTP.deleteMany({ email });
+      await OTP.deleteMany({ email: normalizedEmail });
       throw new ApiError(400, 'OTP has expired. Please request a new one.');
     }
 
@@ -321,7 +337,7 @@ const resetPassword = async (req, res, next) => {
       throw new ApiError(400, 'Invalid OTP code.');
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       throw new ApiError(404, 'User not found.');
     }
@@ -329,7 +345,7 @@ const resetPassword = async (req, res, next) => {
     user.password = newPassword; // pre('save') hook will hash it automatically
     await user.save();
 
-    await OTP.deleteMany({ email });
+    await OTP.deleteMany({ email: normalizedEmail });
 
     res.status(200).json(
       new ApiResponse(200, 'Password reset successful. You can now login with your new password.')
