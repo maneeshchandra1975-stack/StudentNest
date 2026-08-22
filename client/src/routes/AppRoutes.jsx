@@ -45,16 +45,15 @@ export default function AppRoutes() {
 
       {/* ── Main Platform Pages (StartupLayout) ──────────────────── */}
       <Route element={<StartupLayout />}>
+        {/* Landing Page */}
         <Route path="/" element={<Home />} />
         
-        {/* Unified All-In-One Hub for Housing, Nearby PGs, Roommates & Marketplace */}
-        <Route path="/housing" element={<HousingHub />} />
-        <Route path="/nearby-pgs" element={<HousingHub />} />
-        <Route path="/roommates" element={<HousingHub />} />
-        <Route path="/marketplace" element={<HousingHub />} />
-
-        {/* Protected Student Routes */}
+        {/* Protected Student Routes — Requires Login */}
         <Route element={<ProtectedRoutes />}>
+          <Route path="/housing" element={<HousingHub />} />
+          <Route path="/nearby-pgs" element={<HousingHub />} />
+          <Route path="/roommates" element={<HousingHub />} />
+          <Route path="/marketplace" element={<HousingHub />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/messages" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
