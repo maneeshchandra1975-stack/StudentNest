@@ -70,6 +70,10 @@ const sendOTPEmail = async (toEmail, otp, name) => {
     console.log(`[EMAIL SUCCESS] OTP email sent successfully to ${toEmail}`);
   } catch (error) {
     console.error(`[EMAIL WARNING] Could not deliver email via SMTP: ${error.message}`);
+    if (process.env.NODE_ENV === 'production') {
+      // In production, we MUST throw so the user knows it failed (and they don't get stuck)
+      throw new Error(`Failed to send OTP email: ${error.message}`);
+    }
     console.log(`===================================================`);
     console.log(`>>> VERIFICATION OTP FOR [${toEmail}]: ${otp} <<<`);
     console.log(`===================================================`);
