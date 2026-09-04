@@ -1,8 +1,9 @@
 'use strict';
 
 const nodemailer = require('nodemailer');
+const axios = require('axios');
 
-// ── Create reusable transporter ─────────────────────────────
+// ── Create reusable transporter (Local / Fallback) ─────────
 const transporter = nodemailer.createTransport({
   host:   process.env.SMTP_HOST || 'smtp.gmail.com',
   port:   parseInt(process.env.SMTP_PORT || '587', 10),
@@ -20,11 +21,9 @@ const transporter = nodemailer.createTransport({
  * @param {string} name     - student's name
  */
 const sendOTPEmail = async (toEmail, otp, name) => {
-  const mailOptions = {
-    from:    process.env.SMTP_FROM || 'maneeshchandra1975@gmail.com',
-    to:      toEmail,
-    subject: 'CampusNest - Your OTP Code',
-    html: `
+  const subject = 'CampusNest - Your OTP Code';
+  const senderEmail = process.env.SMTP_FROM || 'maneeshchandra1975@gmail.com';
+  const htmlContent = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -62,18 +61,47 @@ const sendOTPEmail = async (toEmail, otp, name) => {
           </div>
         </body>
       </html>
-    `,
-  };
+    `;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`[EMAIL SUCCESS] OTP email sent successfully to ${toEmail}`);
-  } catch (error) {
-    console.error(`[EMAIL WARNING] Could not deliver email via SMTP: ${error.message}`);
-    if (process.env.NODE_ENV === 'production') {
-      // In production, we MUST throw so the user knows it failed (and they don't get stuck)
-      throw new Error(`Failed to send OTP email: ${error.message}`);
+    // 1. If we have a Brevo API Key, use HTTP API (Bypasses Render Port 587 Block)
+    if (process.env.BREVO_API_KEY) {
+      await axios.post('https://api.brevo.com/v3/smtp/email', {
+        sender: { email: senderEmail, name: 'CampusNest' },
+        to: [{ email: toEmail }],
+        subject: subject,
+        htmlContent: htmlContent
+      }, {
+        headers: {
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(`[EMAIL SUCCESS] OTP email sent via Brevo API to ${toEmail}`);
+      return;
     }
+
+    // 2. Fallback to Nodemailer SMTP (Works locally, blocked on Render Free)
+    await transporter.sendMail({
+      from: senderEmail,
+      to: toEmail,
+      subject: subject,
+      html: htmlContent
+    });
+    console.log(`[EMAIL SUCCESS] OTP email sent via SMTP to ${toEmail}`);
+
+  } catch (error) {
+    const errorMsg = error.response && error.response.data 
+      ? JSON.stringify(error.response.data) 
+      : error.message;
+
+    console.error(`[EMAIL WARNING] Could not deliver email: ${errorMsg}`);
+    
+    // Always throw an error if the HTTP API fails, or if we are in production
+    if (process.env.NODE_ENV === 'production' || process.env.BREVO_API_KEY) {
+      throw new Error(`Failed to send OTP email: ${errorMsg}`);
+    }
+    
     console.log(`===================================================`);
     console.log(`>>> VERIFICATION OTP FOR [${toEmail}]: ${otp} <<<`);
     console.log(`===================================================`);
