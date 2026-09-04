@@ -11,7 +11,8 @@ export const initSocket = (token) => {
     socket.disconnect();
   }
 
-  socket = io('http://localhost:5000', {
+  const socketUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  socket = io(socketUrl, {
     auth: {
       token: token || localStorage.getItem('accessToken'),
     },
