@@ -167,15 +167,20 @@ const login = async (req, res, next) => {
       throw new ApiError(403, 'Please verify your email address before logging in.');
     }
 
-    // 4. Generate tokens
+    // 4. Check if account is active
+    if (user.status !== 'ACTIVE') {
+      throw new ApiError(403, `Account is ${user.status.toLowerCase()}. Please contact support.`);
+    }
+
+    // 5. Generate tokens
     const accessToken  = generateAccessToken(user._id, user.role);
     const refreshToken = generateRefreshToken(user._id);
 
-    // 5. Save refresh token in DB (hashed storage optional — storing plain for now)
+    // 6. Save refresh token in DB (hashed storage optional — storing plain for now)
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
-    // 6. Set refresh token in httpOnly cookie
+    // 7. Set refresh token in httpOnly cookie
     res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
 
     res.status(200).json(
@@ -343,6 +348,7 @@ const resetPassword = async (req, res, next) => {
     }
 
     user.password = newPassword; // pre('save') hook will hash it automatically
+    user.isVerified = true; // Since they proved ownership via OTP, verify them
     await user.save();
 
     await OTP.deleteMany({ email: normalizedEmail });

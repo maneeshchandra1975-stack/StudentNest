@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   MessageSquare,
   Search,
@@ -12,9 +12,14 @@ import {
   AlertCircle,
   Loader2,
   User,
+  Star,
+  CheckCircle2,
+  Flag,
 } from 'lucide-react';
 import Button from '../components/ui/Button';
 import InterestRequestsModal from '../components/ui/InterestRequestsModal';
+import ReviewModal from '../components/ui/ReviewModal';
+import ReportModal from '../components/ui/ReportModal';
 import { toast } from 'sonner';
 import {
   fetchConversations,
@@ -26,12 +31,15 @@ import {
   addMessage,
 } from '../redux/slices/chatSlice';
 import { initSocket, getSocket } from '../services/socket';
+import api from '../services/api';
 
 export default function Chat() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const interestIdParam = searchParams.get('interestId');
   const conversationIdParam = searchParams.get('conversationId');
+  const openRequestsParam = searchParams.get('openRequests');
 
   const { user: currentUser, accessToken } = useSelector((state) => state.auth);
   const {
@@ -48,6 +56,9 @@ export default function Chat() {
   const [requestsModalOpen, setRequestsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [typingUser, setTypingUser] = useState(null);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewTarget, setReviewTarget] = useState(null); // { interestRequestId, partnerName }
+  const [reportModalOpen, setReportModalOpen] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -58,16 +69,39 @@ export default function Chat() {
     if (accessToken) {
       initSocket(accessToken);
     }
-  }, [dispatch, accessToken]);
 
-  // 2. Handle URL parameters for direct conversation navigation
+    const handleTokenRefresh = (e) => {
+      console.log('[CHAT] Token refreshed, re-initializing socket...');
+      initSocket(e.detail);
+      if (activeConversation) {
+        // Re-join the conversation room if we were in one
+        const socket = getSocket();
+        if (socket) {
+          socket.emit('join_conversation', { conversationId: activeConversation._id });
+        }
+      }
+    };
+
+    window.addEventListener('token_refreshed', handleTokenRefresh);
+    return () => window.removeEventListener('token_refreshed', handleTokenRefresh);
+  }, [dispatch, accessToken, activeConversation]);
+
+  // 2. Handle URL parameters for direct conversation navigation and opening requests
   useEffect(() => {
     if (interestIdParam) {
       dispatch(fetchOrCreateByInterest(interestIdParam));
     } else if (conversationIdParam) {
       dispatch(fetchConversationById(conversationIdParam));
     }
-  }, [interestIdParam, conversationIdParam, dispatch]);
+    
+    if (openRequestsParam === 'true') {
+      setRequestsModalOpen(true);
+      // Clean up the URL to prevent reopening on refresh
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('openRequests');
+      navigate(`/messages?${newParams.toString()}`, { replace: true });
+    }
+  }, [interestIdParam, conversationIdParam, openRequestsParam, dispatch, navigate, searchParams]);
 
   // 3. When activeConversation changes, join room and fetch messages
   useEffect(() => {
@@ -84,9 +118,8 @@ export default function Chat() {
       });
 
       socket.on('receive_message', (newMsg) => {
-        if (newMsg.conversation === activeConversation._id) {
-          dispatch(addMessage(newMsg));
-        }
+        // Reducer will automatically handle updating the sidebar and/or active chat feed
+        dispatch(addMessage(newMsg));
       });
 
       socket.on('user_typing', ({ name, isTyping }) => {
@@ -171,6 +204,26 @@ export default function Chat() {
         isOpen={requestsModalOpen}
         onClose={() => setRequestsModalOpen(false)}
       />
+      <ReviewModal
+        isOpen={reviewModalOpen}
+        onClose={() => setReviewModalOpen(false)}
+        interestRequestId={reviewTarget?.interestRequestId}
+        revieweeName={reviewTarget?.partnerName}
+        onReviewSuccess={() => {
+          toast.success('Rating submitted successfully!');
+          setReviewModalOpen(false);
+        }}
+      />
+      
+      {/* Report Modal */}
+      {activeConversation && partner && (
+        <ReportModal
+          isOpen={reportModalOpen}
+          onClose={() => setReportModalOpen(false)}
+          targetType="User"
+          targetId={partner._id}
+        />
+      )}
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-4">
         <div>
@@ -178,7 +231,7 @@ export default function Chat() {
             <MessageSquare className="w-4 h-4" />
             <span>Controlled Real-Time Chat</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-[#111827] font-heading">
+          <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
             Student Messages &amp; Direct Chat
           </h1>
         </div>
@@ -202,9 +255,9 @@ export default function Chat() {
       )}
 
       {/* 2-Column Chat Box */}
-      <div className="sn-card h-[600px] grid grid-cols-1 md:grid-cols-12 overflow-hidden bg-white">
+      <div className="sn-card h-[600px] grid grid-cols-1 md:grid-cols-12 overflow-hidden bg-[var(--bg-card)]">
         {/* Left Column: Conversation List */}
-        <div className="md:col-span-4 border-r border-[#E2E8F0] flex flex-col bg-slate-50/50">
+        <div className="md:col-span-4 border-r border-[#E2E8F0] flex flex-col bg-[var(--bg-body)]/50">
           <div className="p-3.5 border-b border-[#E2E8F0]">
             <div className="relative">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -227,7 +280,7 @@ export default function Chat() {
             ) : filteredConversations.length === 0 ? (
               <div className="p-8 text-center space-y-2">
                 <Inbox className="w-8 h-8 text-slate-300 mx-auto" />
-                <p className="text-xs text-slate-500 font-medium">No active accepted chats</p>
+                <p className="text-xs text-[var(--text-muted)] font-medium">No active accepted chats</p>
                 <p className="text-[11px] text-slate-400">
                   Chat unlocks automatically when an interest request is accepted.
                 </p>
@@ -251,7 +304,7 @@ export default function Chat() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-bold text-[#111827] truncate">
+                        <h4 className="text-xs font-bold text-[var(--text-main)] truncate">
                           {convPartner.name}
                         </h4>
                         <span className="text-[10px] text-slate-400">
@@ -263,7 +316,7 @@ export default function Chat() {
                       <div className="text-[11px] text-[#2563EB] truncate font-medium">
                         {getListingTitle(conv)}
                       </div>
-                      <p className="text-xs text-slate-500 truncate mt-0.5">
+                      <p className="text-xs text-[var(--text-muted)] truncate mt-0.5">
                         {conv.lastMessage || 'No messages yet'}
                       </p>
                     </div>
@@ -275,14 +328,14 @@ export default function Chat() {
         </div>
 
         {/* Right Column: Chat Thread */}
-        <div className="md:col-span-8 flex flex-col h-full bg-white">
+        <div className="md:col-span-8 flex flex-col h-full bg-[var(--bg-card)]">
           {!activeConversation || error ? (
-            <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 bg-slate-50/50">
+            <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 bg-[var(--bg-body)]/50">
               <div className="p-3.5 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200">
                 <Lock className="w-8 h-8" />
               </div>
               <div className="space-y-1 max-w-sm">
-                <h4 className="text-base font-bold text-[#111827] font-heading">
+                <h4 className="text-base font-bold text-[var(--text-main)] font-heading">
                   Chat Access Protected
                 </h4>
                 <p className="text-xs text-[#64748B]">
@@ -302,13 +355,13 @@ export default function Chat() {
           ) : (
             <>
               {/* Header */}
-              <div className="p-3.5 border-b border-[#E2E8F0] flex items-center justify-between bg-white shrink-0">
+              <div className="p-3.5 border-b border-[#E2E8F0] flex items-center justify-between bg-[var(--bg-card)] shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-blue-100 text-[#2563EB] font-bold flex items-center justify-center text-xs">
                     {partner.name ? partner.name.charAt(0).toUpperCase() : 'S'}
                   </div>
                   <div>
-                    <h3 className="text-xs font-bold text-[#111827] flex items-center gap-1">
+                    <h3 className="text-xs font-bold text-[var(--text-main)] flex items-center gap-1">
                       <span>{partner.name}</span>
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                     </h3>
@@ -318,18 +371,72 @@ export default function Chat() {
                   </div>
                 </div>
 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon={Phone}
-                  onClick={() => toast.info(`Contact phone: ${partner.phone || 'Available in profile'}`)}
-                >
-                  Contact Info
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon={Phone}
+                    onClick={() => toast.info(`Contact: ${partner.email || 'Available in profile'}`)}
+                  >
+                    Contact Info
+                  </Button>
+
+                  {/* Mark as Sold Button (Seller Only) */}
+                  {activeConversation?.interestRequest && activeConversation.interestRequest.recipient === currentUser?._id && activeConversation.interestRequest.status === 'Accepted' && (
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                      onClick={async () => {
+                        try {
+                          await api.patch(`/interests/${activeConversation.interestRequest._id}/complete`);
+                          toast.success('Interaction completed! The buyer can now review you.');
+                          dispatch(fetchConversations()); // Refresh so status updates
+                        } catch (e) {
+                          toast.error('Failed to complete interaction');
+                        }
+                      }}
+                    >
+                      <CheckCircle2 className="w-4 h-4 mr-1 text-emerald-600" />
+                      Mark Completed / Sold
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="border-yellow-300 text-yellow-700 hover:bg-yellow-50"
+                    onClick={() => {
+                      const req = activeConversation?.interestRequest;
+                      if (!req) {
+                        toast.error('Could not find interaction details');
+                        return;
+                      }
+                      setReviewTarget({
+                        interestRequestId: req._id,
+                        partnerName: partner.name,
+                      });
+                      setReviewModalOpen(true);
+                    }}
+                  >
+                    <Star className="w-4 h-4 mr-1 fill-yellow-400 text-yellow-400" />
+                    Rate User
+                  </Button>
+                  
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+                    title="Report User"
+                    onClick={() => setReportModalOpen(true)}
+                  >
+                    <Flag className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
 
               {/* Messages Feed */}
-              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/30">
+              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[var(--bg-body)]/30">
                 {isLoadingMessages ? (
                   <div className="p-8 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin text-[#2563EB]" />
@@ -337,7 +444,7 @@ export default function Chat() {
                   </div>
                 ) : messages.length === 0 ? (
                   <div className="p-8 text-center space-y-1">
-                    <p className="text-xs text-slate-500 font-medium">This is the start of your conversation.</p>
+                    <p className="text-xs text-[var(--text-muted)] font-medium">This is the start of your conversation.</p>
                     <p className="text-[11px] text-slate-400">Say hello to coordinate details!</p>
                   </div>
                 ) : (
@@ -353,7 +460,7 @@ export default function Chat() {
                           className={`max-w-md p-3 rounded-2xl text-xs leading-relaxed ${
                             isMe
                               ? 'bg-[#2563EB] text-white rounded-br-none shadow-2xs'
-                              : 'bg-white text-[#111827] border border-[#E2E8F0] rounded-bl-none shadow-2xs'
+                              : 'bg-[var(--bg-card)] text-[var(--text-main)] border border-[#E2E8F0] rounded-bl-none shadow-2xs'
                           }`}
                         >
                           {msg.text}
@@ -374,7 +481,7 @@ export default function Chat() {
               </div>
 
               {/* Input Form */}
-              <form onSubmit={handleSend} className="p-3 border-t border-[#E2E8F0] bg-white flex items-center gap-2 shrink-0">
+              <form onSubmit={handleSend} className="p-3 border-t border-[#E2E8F0] bg-[var(--bg-card)] flex items-center gap-2 shrink-0">
                 <input
                   type="text"
                   value={input}

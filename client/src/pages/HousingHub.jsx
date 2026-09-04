@@ -1,405 +1,239 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   Building2,
   MapPin,
   Users,
-  ShoppingBag,
   Search,
   Plus,
   Inbox,
-  Heart,
   ShieldCheck,
-  Phone,
-  ExternalLink,
-  MessageSquare,
-  Filter,
-  CheckCircle2,
   Flag,
-  X,
-  AlertTriangle,
 } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
+import NearbyPGs from './NearbyPGs';
 import EmptyState from '../components/ui/EmptyState';
 import InterestRequestsModal from '../components/ui/InterestRequestsModal';
+import ReportModal from '../components/ui/ReportModal';
+import CreateHousingModal from '../components/modals/CreateHousingModal';
+import { fetchRoommatePosts, toggleRoommateInterest } from '../redux/slices/roommateSlice';
 import { toast } from 'sonner';
-
-// --- MOCK DATA ---
-const mockHousing = [
-  {
-    id: 1,
-    title: '2BHK Shared Apartment near VIT-AP Gate 2',
-    rent: 8500,
-    distance: 1.2,
-    type: 'Shared Room',
-    amenities: ['Wi-Fi', 'Furnished', 'AC', 'Power Backup'],
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80',
-    owner: 'Suresh Kumar',
-    location: 'Inavolu Road, Vijayawada',
-    verified: true,
-  },
-  {
-    id: 2,
-    title: 'Single Private Room in Executive Student PG',
-    rent: 11000,
-    distance: 0.8,
-    type: 'Private Room',
-    amenities: ['Food Included', 'Wi-Fi', 'Laundry', 'Housekeeping'],
-    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80',
-    owner: 'Anand PG Services',
-    location: 'Near VIT-AP North Gate',
-    verified: true,
-  },
-  {
-    id: 3,
-    title: '3BHK Flatmates Wanted (CSE Senior Flat)',
-    rent: 7200,
-    distance: 1.5,
-    type: 'Flatmate',
-    amenities: ['Power Backup', 'Gym', 'Kitchen', 'Balcony'],
-    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80',
-    owner: 'Maneesh C.',
-    location: 'Capital Heights, Amaravati',
-    verified: true,
-  },
-];
-
-const mockNearbyPGs = [
-  {
-    id: 101,
-    name: 'Anand Executive Student PG',
-    type: 'Gents PG',
-    rentStarting: 8500,
-    distanceFromCampus: 0.8,
-    ownerName: 'Anand Kumar (Owner)',
-    ownerPhone: '+91 98765 43210',
-    address: 'Near VIT-AP North Gate, Inavolu Road',
-    amenities: ['3 Times Meals', 'Wi-Fi', 'Daily Housekeeping', 'Power Backup', 'AC Rooms'],
-    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 102,
-    name: 'Sri Sai Women’s Luxury Hostel',
-    type: 'Ladies PG',
-    rentStarting: 9000,
-    distanceFromCampus: 1.1,
-    ownerName: 'Smt. Lakshmi Reddy (Owner)',
-    ownerPhone: '+91 91234 56789',
-    address: 'Opposite Amaravati Main Arch, Inavolu',
-    amenities: ['CCTV Security', 'Biometric Entry', 'Home Cooked Food', 'Washing Machine'],
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80',
-  },
-];
-
-const mockRoommates = [
-  {
-    id: 201,
-    title: 'Looking for 1 Roommate in 2BHK Flat (Inavolu Road)',
-    author: 'Maneesh C. (CSE 3rd Year)',
-    roomType: 'Shared Room',
-    vacancy: 1,
-    rentShare: 4500,
-    location: 'Inavolu Main Road (1.2 km from VIT-AP)',
-    description: 'Spacious ventilated room with attached bathroom, Wi-Fi, and kitchen setup.',
-    preferences: ['Non-smoker', 'Quiet Study', 'Early Riser'],
-  },
-  {
-    id: 202,
-    title: 'Private Room Vacancy in 3BHK Gated Apartment',
-    author: 'Priya Verma (ECE 4th Year)',
-    roomType: 'Private Room',
-    vacancy: 2,
-    rentShare: 6500,
-    location: 'Capital Heights, Amaravati (1.8 km)',
-    description: 'Fully furnished private bedroom with AC, balcony, and power backup.',
-    preferences: ['Vegetarian', 'Clean & Organized', 'Night Owl'],
-  },
-];
-
-const mockMarketplace = [
-  {
-    id: 301,
-    title: 'CLRS Introduction to Algorithms (3rd Ed.)',
-    category: 'Books',
-    price: 650,
-    condition: 'Like New',
-    seller: 'Rahul S. (CSE 3rd Year)',
-    sellerId: 'user_123',
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 302,
-    title: 'Hero Sprint 21-Speed Mountain Gear Bicycle',
-    category: 'Cycles',
-    price: 4200,
-    condition: 'Good',
-    seller: 'Priya K. (ECE 4th Year)',
-    sellerId: 'user_456',
-    status: 'Reserved',
-    image: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80',
-  },
-];
 
 export default function HousingHub() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('housing'); // 'housing' | 'nearby' | 'roommates' | 'marketplace'
-  const [search, setSearch] = useState('');
-  const [savedIds, setSavedIds] = useState([]);
-  const [interestedIds, setInterestedIds] = useState([]);
-  const [requestsModalOpen, setRequestsModalOpen] = useState(false);
+  const dispatch = useDispatch();
 
-  const toggleSave = (id) => {
-    if (savedIds.includes(id)) {
-      setSavedIds(savedIds.filter((item) => item !== id));
-      toast.info('Removed from saved items');
-    } else {
-      setSavedIds([...savedIds, id]);
-      toast.success('Saved to your student workspace');
+  const { user } = useSelector((state) => state.auth);
+  const { posts, isLoading } = useSelector((state) => state.roommate);
+
+  const [activeTab, setActiveTab] = useState('roommates'); // 'roommates' | 'pgs'
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Modals state
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isRequestsModalOpen, setIsRequestsModalOpen] = useState(false);
+  const [reportTarget, setReportTarget] = useState(null);
+
+  useEffect(() => {
+    if (activeTab === 'roommates') {
+      dispatch(fetchRoommatePosts({ search: searchQuery }));
+    }
+  }, [dispatch, activeTab, searchQuery]);
+
+  const toggleInterest = async (postId) => {
+    const res = await dispatch(toggleRoommateInterest(postId));
+    if (res.meta.requestStatus === 'fulfilled') {
+      toast.success(res.payload.message);
+      dispatch(fetchRoommatePosts({ search: searchQuery }));
     }
   };
 
-  const toggleInterest = (id, name) => {
-    if (interestedIds.includes(id)) {
-      setInterestedIds(interestedIds.filter((item) => item !== id));
-      toast.info('Interest request cancelled');
-    } else {
-      setInterestedIds([...interestedIds, id]);
-      toast.success(`Interest request sent to ${name}! Waiting for acceptance.`);
-    }
-  };
+  const tabs = [
+    { id: 'roommates', label: 'Roommate Finder', icon: Users },
+    { id: 'pgs', label: 'Nearby PGs & Hostels', icon: Building2 },
+  ];
 
   return (
-    <div className="space-y-6 py-2">
-      <InterestRequestsModal
-        isOpen={requestsModalOpen}
-        onClose={() => setRequestsModalOpen(false)}
-        onSelectChat={() => navigate('/messages')}
-      />
-
-      {/* ── 1. Unified Hub Top Header ───────────────────────── */}
-      <div className="sn-card p-6 bg-white space-y-4 border-[#E2E8F0]">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] mb-1">
-              <Building2 className="w-4 h-4" />
-              <span>All-In-One VIT-AP Student Hub</span>
-            </div>
-            <h1 className="text-3xl font-extrabold text-[#111827] font-heading">
-              Student Housing &amp; Marketplace Hub
-            </h1>
-            <p className="text-xs text-[#64748B] mt-0.5">
-              Campus flats, nearby verified PGs, roommate matching, and peer-to-peer marketplace in one unified space.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              size="md"
-              icon={Inbox}
-              onClick={() => setRequestsModalOpen(true)}
-            >
-              Interest Requests
-            </Button>
-            <Button
-              variant="primary"
-              size="md"
-              icon={Plus}
-              onClick={() => toast.success('Open Add Listing Panel')}
-            >
-              Post Listing
-            </Button>
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-main)] font-heading">Housing Hub</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Find roommates or discover verified PGs near campus.</p>
         </div>
-
-        {/* Unified Search Input */}
-        <div className="relative max-w-2xl">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search flats, PGs, roommates, textbooks, or bicycles across all modules..."
-            className="sn-input pl-10 pr-4 py-2.5 w-full text-xs"
-          />
-        </div>
-
-        {/* ── 2. Unified Navigation Tabs ─────────────────────── */}
-        <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-slate-100 scrollbar-none">
-          {[
-            { id: 'housing', label: 'Campus Housing & Flats', icon: Building2, count: mockHousing.length },
-            { id: 'nearby', label: 'Nearby PGs & Hostels', icon: MapPin, count: mockNearbyPGs.length },
-            { id: 'roommates', label: 'Roommate Finder', icon: Users, count: mockRoommates.length },
-            { id: 'marketplace', label: 'Student Marketplace', icon: ShoppingBag, count: mockMarketplace.length },
-          ].map((tab) => {
-            const isActive = activeTab === tab.id;
-            const TabIcon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shrink-0 transition-all ${
-                  isActive
-                    ? 'bg-[#2563EB] text-white shadow-xs'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/80'
-                }`}
+        <div className="flex gap-2 w-full sm:w-auto">
+          {activeTab === 'roommates' && (
+            <>
+              <Button
+                variant="secondary"
+                className="flex-1 sm:flex-none"
+                onClick={() => setIsRequestsModalOpen(true)}
               >
-                <TabIcon className="w-4 h-4" />
-                <span>{tab.label}</span>
-                <span
-                  className={`px-1.5 py-0.5 rounded-full text-[10px] ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
+                <Inbox className="w-4 h-4 mr-2" />
+                Requests
+              </Button>
+              <Button
+                variant="primary"
+                className="flex-1 sm:flex-none"
+                onClick={() => setIsCreateModalOpen(true)}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Post Vacancy
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
-      {/* ── 3. Tab Module Content ────────────────────────────── */}
+      {/* Tabs */}
+      <div className="bg-[var(--bg-body)] p-1 rounded-xl inline-flex w-full sm:w-auto border border-[var(--border-light)] overflow-x-auto scrollbar-hide">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                isActive
+                  ? 'bg-[var(--bg-card)] text-[#2563EB] shadow-sm'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
 
-      {/* TAB 1: CAMPUS HOUSING */}
-      {activeTab === 'housing' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {mockHousing.map((prop) => (
-            <Card key={prop.id} hover className="overflow-hidden flex flex-col justify-between">
-              <div>
-                <div className="relative h-48 w-full overflow-hidden bg-slate-100">
-                  <img src={prop.image} alt={prop.title} className="w-full h-full object-cover" />
-                  <div className="absolute top-3 left-3">
-                    <Badge variant="verified" />
-                  </div>
-                  <button
-                    onClick={() => toggleSave(prop.id)}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-white/90 text-slate-600 hover:text-rose-500 shadow-xs"
-                  >
-                    <Heart className={`w-4 h-4 ${savedIds.includes(prop.id) ? 'fill-rose-500 text-rose-500' : ''}`} />
-                  </button>
-                </div>
+      {activeTab === 'roommates' ? (
+        <div className="space-y-6">
+          {/* Search Bar */}
+          <div className="relative w-full md:max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+            <input
+              type="text"
+              placeholder="Search by location or description..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-[var(--bg-body)] border border-[var(--border-light)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] outline-none transition-all"
+            />
+          </div>
 
-                <div className="p-5 space-y-3">
-                  <div className="text-xs font-semibold text-slate-500 flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded bg-blue-50 text-[#2563EB] font-bold">{prop.type}</span>
-                    <span>{prop.distance} km from campus</span>
-                  </div>
-                  <h3 className="text-base font-bold text-[#111827] font-heading line-clamp-2">{prop.title}</h3>
-                  <div className="flex flex-wrap gap-1">
-                    {prop.amenities.map((a, i) => (
-                      <span key={i} className="px-2 py-0.5 rounded bg-slate-100 text-[10px] text-slate-600">{a}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+          {/* Posts Grid */}
+          {isLoading ? (
+            <div className="flex justify-center py-20 text-[var(--text-muted)]">Loading posts...</div>
+          ) : posts.length === 0 ? (
+            <EmptyState
+              icon={Users}
+              title="No roommates found"
+              description="Be the first to post a vacancy or roommate requirement!"
+              actionLabel="Clear Search"
+              onAction={() => setSearchQuery('')}
+            />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts.map((post) => {
+                const isOwner = user?.id === post.author?._id;
+                const hasInterested = post.interestedUsers?.includes(user?.id);
 
-              <div className="p-5 pt-3 border-t border-slate-100 flex items-center justify-between">
-                <div>
-                  <div className="text-lg font-extrabold text-[#111827] font-heading">₹{prop.rent.toLocaleString()} / mo</div>
-                  <div className="text-[10px] text-slate-400">{prop.owner}</div>
-                </div>
-                <Button variant="primary" size="sm" onClick={() => toggleInterest(prop.id, prop.owner)}>
-                  {interestedIds.includes(prop.id) ? 'Cancel Interest' : 'Interested'}
-                </Button>
-              </div>
-            </Card>
-          ))}
+                return (
+                  <Card key={post._id} hover className="p-5 flex flex-col justify-between space-y-4">
+                    <div>
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#2563EB] text-[11px] font-bold">
+                            {post.roomType}
+                          </span>
+                          {post.status && post.status !== 'Available' && (
+                            <Badge variant="secondary" label={post.status} />
+                          )}
+                          <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded">{post.vacancy} Vacancy</span>
+                        </div>
+                        {!isOwner && (
+                          <button
+                            onClick={() => setReportTarget({ type: 'RoommatePost', id: post._id })}
+                            className="p-1.5 rounded-full text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition-colors"
+                            title="Report this post"
+                          >
+                            <Flag className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+
+                      <h3 className="text-base font-bold text-[var(--text-main)] font-heading leading-tight">{post.title}</h3>
+                      <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] mt-2">
+                        <MapPin className="w-3.5 h-3.5" />
+                        {post.location}
+                      </div>
+
+                      <p className="text-xs text-[var(--text-muted)] leading-relaxed mt-3 line-clamp-3">
+                        {post.description}
+                      </p>
+                      
+                      <div className="flex items-center gap-2 mt-3">
+                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md font-medium">Gender: {post.genderPreference}</span>
+                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md font-medium">Status: {post.status}</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-[var(--border-light)] flex justify-between items-center">
+                      <div>
+                        <div className="text-sm text-[var(--text-muted)]">Rent Share</div>
+                        <div className="text-lg font-bold text-[#2563EB]">₹{post.rentShare.toLocaleString()} <span className="text-xs font-normal text-[var(--text-muted)]">/ mo</span></div>
+                      </div>
+                      
+                      {post.status === 'Available' ? (
+                        !isOwner && (
+                          <Button
+                            variant={hasInterested ? 'secondary' : 'primary'}
+                            size="sm"
+                            onClick={() => toggleInterest(post._id)}
+                          >
+                            {hasInterested ? 'Interest Sent' : 'Show Interest'}
+                          </Button>
+                        )
+                      ) : (
+                        <Button variant="secondary" size="sm" disabled>
+                          {post.status}
+                        </Button>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1 mt-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      <div className="text-[10px] text-[var(--text-muted)]">Posted by {post.author?.name || 'Student'}</div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
+      ) : (
+        <NearbyPGs />
       )}
 
-      {/* TAB 2: NEARBY PGS */}
-      {activeTab === 'nearby' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockNearbyPGs.map((pg) => (
-            <Card key={pg.id} hover className="overflow-hidden flex flex-col justify-between">
-              <div>
-                <div className="relative h-48 w-full overflow-hidden bg-slate-100">
-                  <img src={pg.image} alt={pg.name} className="w-full h-full object-cover" />
-                  <div className="absolute top-3 left-3"><Badge variant="verified" /></div>
-                  <div className="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded text-xs font-bold text-[#2563EB]">{pg.type}</div>
-                </div>
-                <div className="p-5 space-y-2">
-                  <h3 className="text-base font-bold text-[#111827] font-heading">{pg.name}</h3>
-                  <p className="text-xs text-slate-500">{pg.address} • {pg.distanceFromCampus} km from campus</p>
-                  <div className="flex flex-wrap gap-1 pt-1">
-                    {pg.amenities.map((a, i) => (
-                      <span key={i} className="px-2 py-0.5 rounded bg-slate-100 text-[10px] text-slate-600">{a}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="p-5 pt-3 border-t border-slate-100 flex items-center justify-between">
-                <div>
-                  <div className="text-base font-bold text-[#111827]">₹{pg.rentStarting.toLocaleString()} / mo</div>
-                  <div className="text-[10px] text-emerald-600 font-semibold">{pg.ownerName}</div>
-                </div>
-                <Button variant="primary" size="sm" icon={Phone} onClick={() => toast.info(`Call ${pg.ownerPhone}`)}>
-                  {pg.ownerPhone}
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
+      {/* Modals */}
+      {isCreateModalOpen && (
+        <CreateHousingModal onClose={() => setIsCreateModalOpen(false)} />
       )}
 
-      {/* TAB 3: ROOMMATE FINDER */}
-      {activeTab === 'roommates' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockRoommates.map((post) => (
-            <Card key={post.id} hover className="p-5 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded bg-blue-50 text-[#2563EB] text-xs font-bold">{post.roomType}</span>
-                  <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{post.vacancy} Vacancy</span>
-                </div>
-                <h3 className="text-base font-bold text-[#111827] font-heading">{post.title}</h3>
-                <p className="text-xs text-slate-500">{post.location}</p>
-                <p className="text-xs text-slate-600 leading-relaxed">{post.description}</p>
-              </div>
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                <div>
-                  <div className="text-lg font-bold text-[#2563EB]">₹{post.rentShare.toLocaleString()} / mo</div>
-                  <div className="text-[10px] text-slate-400">{post.author}</div>
-                </div>
-                <Button variant={interestedIds.includes(post.id) ? 'secondary' : 'primary'} size="sm" onClick={() => toggleInterest(post.id, post.author)}>
-                  {interestedIds.includes(post.id) ? 'Cancel Interest' : 'Interested'}
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
+      <InterestRequestsModal
+        isOpen={isRequestsModalOpen}
+        onClose={() => setIsRequestsModalOpen(false)}
+      />
 
-      {/* TAB 4: MARKETPLACE */}
-      {activeTab === 'marketplace' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockMarketplace.map((item) => (
-            <Card key={item.id} hover className="overflow-hidden flex flex-col justify-between">
-              <div>
-                <div className="relative h-44 w-full bg-slate-100">
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                  <div className="absolute top-3 left-3 bg-white/90 px-2 py-1 rounded text-xs font-bold text-slate-700">{item.condition}</div>
-                </div>
-                <div className="p-4 space-y-1">
-                  <span className="text-[10px] font-bold text-[#2563EB] uppercase">{item.category}</span>
-                  <h3 className="text-base font-bold text-[#111827] font-heading">{item.title}</h3>
-                  <div className="text-xs text-slate-500">Seller: {item.seller}</div>
-                </div>
-              </div>
-              <div className="p-4 pt-2 border-t border-slate-100 flex items-center justify-between">
-                <div className="text-lg font-bold text-[#111827]">₹{item.price.toLocaleString()}</div>
-                <Button variant={interestedIds.includes(item.id) ? 'secondary' : 'primary'} size="sm" onClick={() => toggleInterest(item.id, item.seller)}>
-                  {interestedIds.includes(item.id) ? 'Cancel Interest' : 'Interested'}
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
+      <ReportModal
+        isOpen={!!reportTarget}
+        onClose={() => setReportTarget(null)}
+        targetId={reportTarget?.id}
+        targetType={reportTarget?.type}
+      />
     </div>
   );
 }

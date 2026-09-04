@@ -1,19 +1,50 @@
 @import "tailwindcss";
 
-/* ── Typography Tokens ────────────────────────────────────────────── */
+/* Typography Tokens */
 :root {
   --font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+
+  /* Light Theme (Default) */
+  --bg-body: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --text-main: #111827;
+  --text-muted: #64748B;
+  --border-light: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --input-bg: #FFFFFF;
+  --input-border: #E2E8F0;
+  --input-placeholder: #94A3B8;
+  --scrollbar-bg: #F8FAFC;
+  --scrollbar-thumb: #CBD5E1;
+  --scrollbar-thumb-hover: #94A3B8;
+}
+
+.dark {
+  /* Dark Theme */
+  --bg-body: #020617;      /* slate-950 */
+  --bg-card: #0F172A;      /* slate-900 */
+  --text-main: #F8FAFC;    /* slate-50 */
+  --text-muted: #94A3B8;   /* slate-400 */
+  --border-light: #1E293B; /* slate-800 */
+  --border-hover: #334155; /* slate-700 */
+  --input-bg: #0F172A;     /* slate-900 */
+  --input-border: #1E293B; /* slate-800 */
+  --input-placeholder: #475569; /* slate-600 */
+  --scrollbar-bg: #020617;
+  --scrollbar-thumb: #334155;
+  --scrollbar-thumb-hover: #475569;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #F8FAFC;
-  color: #111827;
+  background-color: var(--bg-body);
+  color: var(--text-main);
   line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
@@ -21,33 +52,33 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   letter-spacing: -0.02em;
 }
 
-/* ── Startup Card Primitive ───────────────────────────────────────── */
+/* Startup Card Primitive */
 .sn-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
   border-radius: 16px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sn-card-hover:hover {
-  border-color: #CBD5E1;
+  border-color: var(--border-hover);
   transform: translateY(-2px);
   box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 }
 
-/* ── Clean Form Control Inputs ────────────────────────────────────── */
+/* Clean Form Control Inputs */
 .sn-input {
-  background-color: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 12px;
-  color: #111827;
+  color: var(--text-main);
   font-size: 14px;
   transition: all 0.15s ease-in-out;
 }
 
 .sn-input::placeholder {
-  color: #94A3B8;
+  color: var(--input-placeholder);
 }
 
 .sn-input:focus {
@@ -56,21 +87,21 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* ── Custom Scrollbar ─────────────────────────────────────────────── */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F8FAFC;
+  background: var(--scrollbar-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: var(--scrollbar-thumb);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: var(--scrollbar-thumb-hover);
 }

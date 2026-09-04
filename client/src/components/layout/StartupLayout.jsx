@@ -6,7 +6,7 @@ import { Toaster } from 'sonner';
 
 export default function StartupLayout() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#111827] flex flex-col font-sans">
+    <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 bg-[var(--bg-body)] text-[var(--text-main)]">
       <Toaster position="top-right" richColors closeButton />
       <HeaderNavbar />
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 py-8">

@@ -215,13 +215,59 @@ const checkChatPermission = async (req, res, next) => {
 
     const acceptedRequest = await InterestRequest.findOne({
       $or: [
-        { sender: req.user._id, recipient: targetUserId, status: 'Accepted' },
-        { sender: targetUserId, recipient: req.user._id, status: 'Accepted' },
+        { sender: req.user._id, recipient: targetUserId, status: { $in: ['Accepted', 'Completed'] } },
+        { sender: targetUserId, recipient: req.user._id, status: { $in: ['Accepted', 'Completed'] } },
       ],
     });
 
     return res.status(200).json(
       new ApiResponse(200, 'Chat permission status', { isAllowed: !!acceptedRequest })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+const markInteractionCompleted = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const request = await InterestRequest.findById(id);
+
+    if (!request) {
+      throw new ApiError(404, 'Request not found');
+    }
+
+    if (request.recipient.toString() !== req.user._id.toString()) {
+      throw new ApiError(403, 'Unauthorized to complete this request. Only the seller/owner can mark as completed.');
+    }
+
+    if (request.status !== 'Accepted') {
+      throw new ApiError(400, 'Only accepted requests can be marked as completed.');
+    }
+
+    request.status = 'Completed';
+    await request.save();
+
+    // Mark the actual listing as sold/filled
+    if (request.listingType === 'Marketplace' && request.marketplaceItem) {
+      await MarketplaceItem.findByIdAndUpdate(request.marketplaceItem, { status: 'Sold' });
+    } else if (request.listingType === 'Roommate' && request.roommatePost) {
+      await RoommatePost.findByIdAndUpdate(request.roommatePost, { status: 'Filled' });
+    }
+
+    // Trigger INTERACTION_COMPLETED notification to buyer so they know they can review
+    await createAndSendNotification(req.app, {
+      recipient: request.sender,
+      sender: req.user._id,
+      type: 'INTEREST_ACCEPTED', // reusing an existing type or we can add a new one, but let's stick to existing enums or generic if we can't. Wait, the enum for type is restricted.
+      title: 'Interaction Completed!',
+      message: `${req.user.name} marked your interaction as completed. You can now leave a review!`,
+      relatedEntityType: 'InterestRequest',
+      relatedEntityId: request._id,
+    });
+
+    return res.status(200).json(
+      new ApiResponse(200, 'Interaction marked as completed', request)
     );
   } catch (error) {
     next(error);
@@ -235,4 +281,5 @@ module.exports = {
   respondToInterest,
   cancelInterestRequest,
   checkChatPermission,
+  markInteractionCompleted,
 };

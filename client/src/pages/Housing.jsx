@@ -106,7 +106,7 @@ export default function Housing() {
             <Building2 className="w-4 h-4" />
             <span>Campus Housing &amp; Accommodations</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-[#111827] font-heading">
+          <h1 className="text-3xl font-extrabold text-[var(--text-main)] font-heading">
             Student Housing &amp; PGs
           </h1>
           <p className="text-xs text-[#64748B] mt-1">
@@ -120,8 +120,8 @@ export default function Housing() {
             onClick={() => setViewMode('list')}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
               viewMode === 'list'
-                ? 'bg-white text-[#2563EB] shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[var(--bg-card)] text-[#2563EB] shadow-xs'
+                : 'text-slate-600 hover:text-[var(--text-main)]'
             }`}
           >
             <List className="w-3.5 h-3.5" /> List View
@@ -130,8 +130,8 @@ export default function Housing() {
             onClick={() => setViewMode('map')}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
               viewMode === 'map'
-                ? 'bg-white text-[#2563EB] shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[var(--bg-card)] text-[#2563EB] shadow-xs'
+                : 'text-slate-600 hover:text-[var(--text-main)]'
             }`}
           >
             <Map className="w-3.5 h-3.5" /> Interactive Map
@@ -158,7 +158,7 @@ export default function Housing() {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="sn-input px-3 py-2 w-full text-xs font-medium text-[#111827]"
+            className="sn-input px-3 py-2 w-full text-xs font-medium text-[var(--text-main)]"
           >
             <option value="all">All Property Types</option>
             <option value="Shared Room">Shared Room</option>
@@ -188,15 +188,15 @@ export default function Housing() {
 
       {/* Results View */}
       {viewMode === 'map' ? (
-        <div className="sn-card p-8 text-center space-y-3 bg-slate-50 border-dashed">
+        <div className="sn-card p-8 text-center space-y-3 bg-[var(--bg-body)] border-dashed">
           <MapPin className="w-8 h-8 text-[#2563EB] mx-auto" />
-          <h3 className="text-base font-bold text-[#111827] font-heading">
+          <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
             VIT-AP Interactive Map View
           </h3>
           <p className="text-xs text-[#64748B] max-w-md mx-auto">
             Showing properties surrounding VIT-AP University campus within a 3km radius.
           </p>
-          <div className="h-64 rounded-2xl bg-slate-200 flex items-center justify-center text-xs text-slate-500 font-medium">
+          <div className="h-64 rounded-2xl bg-slate-200 flex items-center justify-center text-xs text-[var(--text-muted)] font-medium">
             [ Leaflet OpenStreetMap Container — VIT-AP Coordinates: 16.4971° N, 80.5002° E ]
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function Housing() {
                   </div>
                   <button
                     onClick={() => toggleSave(prop.id)}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-white/90 text-slate-600 hover:text-rose-500 shadow-xs transition-colors"
+                    className="absolute top-3 right-3 p-2 rounded-full bg-[var(--bg-card)]/90 text-slate-600 hover:text-rose-500 shadow-xs transition-colors"
                   >
                     <Heart
                       className={`w-4 h-4 ${savedIds.includes(prop.id) ? 'fill-rose-500 text-rose-500' : ''}`}
@@ -240,12 +240,12 @@ export default function Housing() {
                     <span className="px-2 py-0.5 rounded bg-blue-50 text-[#2563EB] font-bold">
                       {prop.type}
                     </span>
-                    <span className="flex items-center gap-1 text-slate-500">
+                    <span className="flex items-center gap-1 text-[var(--text-muted)]">
                       <MapPin className="w-3.5 h-3.5" /> {prop.distance} km from campus
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-[#111827] line-clamp-2 font-heading">
+                  <h3 className="text-base font-bold text-[var(--text-main)] line-clamp-2 font-heading">
                     {prop.title}
                   </h3>
 
@@ -261,7 +261,7 @@ export default function Housing() {
 
               <div className="p-5 pt-3 border-t border-slate-100 flex items-center justify-between mt-2">
                 <div>
-                  <div className="text-lg font-extrabold text-[#111827] font-heading">
+                  <div className="text-lg font-extrabold text-[var(--text-main)] font-heading">
                     ₹{prop.rent.toLocaleString()} <span className="text-xs font-normal text-slate-400">/ mo</span>
                   </div>
                   <div className="text-[10px] text-slate-400 truncate">{prop.location}</div>

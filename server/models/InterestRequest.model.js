@@ -33,7 +33,7 @@ const interestRequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Accepted', 'Rejected', 'Cancelled'],
+      enum: ['Pending', 'Accepted', 'Rejected', 'Cancelled', 'Completed'],
       default: 'Pending',
     },
   },

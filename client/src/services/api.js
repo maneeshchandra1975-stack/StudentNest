@@ -73,6 +73,11 @@ api.interceptors.response.use(
         const newAccessToken = data.data.accessToken;
         localStorage.setItem('accessToken', newAccessToken);
         api.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        
+        // Notify other parts of the app (like socket.io) that the token was refreshed
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('token_refreshed', { detail: newAccessToken }));
+        }
 
         processQueue(null, newAccessToken);
         isRefreshing = false;
@@ -86,6 +91,12 @@ api.interceptors.response.use(
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
+    }
+
+    // Force logout if account is suspended/banned (403 Forbidden from auth.middleware)
+    if (error.response?.status === 403 && error.response?.data?.message?.includes('Account is')) {
+      localStorage.removeItem('accessToken');
+      window.location.href = '/login';
     }
 
     return Promise.reject(error);

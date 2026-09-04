@@ -11,7 +11,7 @@ const badgeVariants = {
   upcoming: 'bg-indigo-50 text-indigo-700 border-indigo-200',
   high: 'bg-rose-50 text-rose-700 border-rose-200',
   medium: 'bg-amber-50 text-amber-700 border-amber-200',
-  low: 'bg-slate-100 text-slate-600 border-slate-200',
+  low: 'bg-slate-100 text-slate-600 border-[var(--border-light)]',
 };
 
 export default function Badge({ children, variant = 'verified', className }) {

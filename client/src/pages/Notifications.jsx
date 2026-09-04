@@ -41,6 +41,8 @@ export default function Notifications() {
 
     if (notif.type === 'INTEREST_ACCEPTED' || notif.type === 'NEW_MESSAGE') {
       navigate(`/messages?conversationId=${notif.relatedEntityId}`);
+    } else if (notif.type === 'INTEREST_RECEIVED') {
+      navigate('/messages?openRequests=true');
     } else {
       navigate('/housing');
     }
@@ -73,7 +75,7 @@ export default function Notifications() {
       case 'NEW_MESSAGE':
         return <MessageSquare className="w-5 h-5 text-[#2563EB]" />;
       default:
-        return <Bell className="w-5 h-5 text-slate-500" />;
+        return <Bell className="w-5 h-5 text-[var(--text-muted)]" />;
     }
   };
 
@@ -86,7 +88,7 @@ export default function Notifications() {
             <Bell className="w-4 h-4" />
             <span>Activity &amp; Real-Time Alerts</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-[#111827] font-heading">
+          <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
             Student Notifications
           </h1>
         </div>
@@ -104,7 +106,7 @@ export default function Notifications() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center justify-between gap-4 bg-white p-1.5 rounded-2xl border border-[#E2E8F0] shadow-2xs">
+      <div className="flex items-center justify-between gap-4 bg-[var(--bg-card)] p-1.5 rounded-2xl border border-[#E2E8F0] shadow-2xs">
         <div className="flex items-center gap-1">
           <button
             onClick={() => setFilter('all')}
@@ -141,15 +143,15 @@ export default function Notifications() {
             <span>Loading notifications...</span>
           </div>
         ) : filteredNotifications.length === 0 ? (
-          <div className="sn-card p-12 text-center space-y-3 bg-white">
+          <div className="sn-card p-12 text-center space-y-3 bg-[var(--bg-card)]">
             <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2563EB] mx-auto flex items-center justify-center">
               <Bell className="w-6 h-6" />
             </div>
             <div className="space-y-1 max-w-sm mx-auto">
-              <h3 className="text-base font-bold text-[#111827]">
+              <h3 className="text-base font-bold text-[var(--text-main)]">
                 {filter === 'unread' ? 'No unread notifications' : 'No notifications yet'}
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[var(--text-muted)]">
                 When students express interest in your posts or send you messages, alerts will appear here.
               </p>
             </div>
@@ -162,10 +164,10 @@ export default function Notifications() {
               className={`sn-card p-4 flex items-start gap-4 cursor-pointer transition-all hover:shadow-md ${
                 !notif.isRead
                   ? 'bg-blue-50/40 border-l-4 border-l-[#2563EB] border-[#E2E8F0]'
-                  : 'bg-white border-[#E2E8F0]'
+                  : 'bg-[var(--bg-card)] border-[#E2E8F0]'
               }`}
             >
-              <div className="p-2.5 rounded-2xl bg-white border border-slate-200 shadow-2xs shrink-0 mt-0.5">
+              <div className="p-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] shadow-2xs shrink-0 mt-0.5">
                 {getNotificationIcon(notif.type)}
               </div>
 
@@ -173,7 +175,7 @@ export default function Notifications() {
                 <div className="flex items-center justify-between gap-2">
                   <h4
                     className={`text-sm ${
-                      !notif.isRead ? 'font-extrabold text-[#111827]' : 'font-bold text-slate-800'
+                      !notif.isRead ? 'font-extrabold text-[var(--text-main)]' : 'font-bold text-slate-800'
                     }`}
                   >
                     {notif.title}

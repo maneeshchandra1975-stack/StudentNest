@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema(
       default: 'student',
     },
 
+    status: {
+      type:    String,
+      enum:    ['ACTIVE', 'SUSPENDED', 'BANNED'],
+      default: 'ACTIVE',
+    },
+
     isVerified: {
       type:    Boolean,
       default: false,

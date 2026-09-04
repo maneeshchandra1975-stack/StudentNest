@@ -3,6 +3,10 @@ import { io } from 'socket.io-client';
 let socket = null;
 
 export const initSocket = (token) => {
+  if (socket && socket.connected) {
+    return socket; // already connected, don't duplicate
+  }
+
   if (socket) {
     socket.disconnect();
   }
@@ -12,6 +16,10 @@ export const initSocket = (token) => {
       token: token || localStorage.getItem('accessToken'),
     },
     transports: ['websocket', 'polling'],
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
   });
 
   socket.on('connect', () => {

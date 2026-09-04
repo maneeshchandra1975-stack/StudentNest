@@ -1,8 +1,11 @@
 'use strict';
 
+const dotenv = require('dotenv');
+// Load environment variables immediately
+dotenv.config();
+
 const http = require('http');
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -17,10 +20,9 @@ const interestRoutes = require('./routes/interest.routes');
 const nearbyRoutes = require('./routes/nearby.routes');
 const conversationRoutes = require('./routes/conversation.routes');
 const notificationRoutes = require('./routes/notification.routes');
+const reviewRoutes = require('./routes/review.routes');
+const reportRoutes = require('./routes/report.routes');
 const { errorHandler, notFound } = require('./middleware/error.middleware');
-
-// Load environment variables
-dotenv.config();
 
 // Initialize Express app & HTTP Server
 const app = express();
@@ -63,6 +65,9 @@ app.use('/api/v1/interests', interestRoutes);
 app.use('/api/v1/nearby-pgs', nearbyRoutes);
 app.use('/api/v1/conversations', conversationRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
+app.use('/api/v1/reports', reportRoutes);
+app.use('/api/v1/admin', require('./routes/admin.route'));
 
 // Error Handling Middleware
 app.use(notFound);

@@ -70,7 +70,9 @@ export default function NotificationDropdown() {
     // Actionable Navigation logic
     if (notif.type === 'INTEREST_ACCEPTED' || notif.type === 'NEW_MESSAGE') {
       navigate(`/messages?conversationId=${notif.relatedEntityId}`);
-    } else if (notif.type === 'INTEREST_RECEIVED' || notif.type === 'INTEREST_REJECTED' || notif.type === 'INTEREST_CANCELLED') {
+    } else if (notif.type === 'INTEREST_RECEIVED') {
+      navigate('/messages?openRequests=true');
+    } else if (notif.type === 'INTEREST_REJECTED' || notif.type === 'INTEREST_CANCELLED') {
       navigate('/housing');
     } else {
       navigate('/notifications');
@@ -95,7 +97,7 @@ export default function NotificationDropdown() {
       case 'NEW_MESSAGE':
         return <MessageSquare className="w-4 h-4 text-[#2563EB]" />;
       default:
-        return <Bell className="w-4 h-4 text-slate-500" />;
+        return <Bell className="w-4 h-4 text-[var(--text-muted)]" />;
     }
   };
 
@@ -119,11 +121,11 @@ export default function NotificationDropdown() {
 
       {/* Animated Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-[#E2E8F0] rounded-2xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[var(--bg-card)] border border-[#E2E8F0] rounded-2xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
           {/* Header */}
-          <div className="p-3.5 border-b border-[#E2E8F0] flex items-center justify-between bg-slate-50">
+          <div className="p-3.5 border-b border-[#E2E8F0] flex items-center justify-between bg-[var(--bg-body)]">
             <div className="flex items-center gap-2">
-              <h3 className="text-xs font-bold text-[#111827] font-heading">Notifications</h3>
+              <h3 className="text-xs font-bold text-[var(--text-main)] font-heading">Notifications</h3>
               {unreadCount > 0 && (
                 <span className="text-[10px] font-extrabold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
                   {unreadCount} new
@@ -149,7 +151,7 @@ export default function NotificationDropdown() {
             ) : notifications.length === 0 ? (
               <div className="p-8 text-center space-y-1">
                 <Bell className="w-6 h-6 text-slate-300 mx-auto mb-1" />
-                <p className="text-xs font-medium text-slate-500">No notifications yet</p>
+                <p className="text-xs font-medium text-[var(--text-muted)]">No notifications yet</p>
                 <p className="text-[11px] text-slate-400">Updates on interest requests &amp; chats appear here.</p>
               </div>
             ) : (
@@ -158,7 +160,7 @@ export default function NotificationDropdown() {
                   key={notif._id}
                   onClick={() => handleNotificationClick(notif)}
                   className={`p-3 flex items-start gap-3 cursor-pointer transition-colors ${
-                    !notif.isRead ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-slate-50'
+                    !notif.isRead ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-[var(--bg-body)]'
                   }`}
                 >
                   <div className="p-2 rounded-xl bg-slate-100 shrink-0 mt-0.5">
@@ -167,14 +169,14 @@ export default function NotificationDropdown() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-1">
-                      <h4 className={`text-xs ${!notif.isRead ? 'font-bold text-[#111827]' : 'font-medium text-slate-700'} truncate`}>
+                      <h4 className={`text-xs ${!notif.isRead ? 'font-bold text-[var(--text-main)]' : 'font-medium text-slate-700'} truncate`}>
                         {notif.title}
                       </h4>
                       {!notif.isRead && (
                         <span className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0" />
                       )}
                     </div>
-                    <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5">{notif.message}</p>
+                    <p className="text-[11px] text-[var(--text-muted)] line-clamp-2 mt-0.5">{notif.message}</p>
                     <span className="text-[10px] text-slate-400 mt-1 block">
                       {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -185,7 +187,7 @@ export default function NotificationDropdown() {
           </div>
 
           {/* Footer Navigation */}
-          <div className="p-2.5 border-t border-[#E2E8F0] bg-slate-50 text-center">
+          <div className="p-2.5 border-t border-[#E2E8F0] bg-[var(--bg-body)] text-center">
             <Link
               to="/notifications"
               onClick={() => setIsOpen(false)}

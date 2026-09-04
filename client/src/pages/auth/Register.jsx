@@ -92,14 +92,15 @@ export default function Register() {
         </div>
       )}
 
+      {/* Main Form Fields */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Full Name */}
         <div>
-          <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-bold text-[var(--text-main)] opacity-80 uppercase tracking-wider mb-1.5">
             Full Name
           </label>
           <div className="relative">
-            <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="e.g. Maneesh Chandra"
@@ -107,11 +108,11 @@ export default function Register() {
                 required: 'Full Name is required',
                 minLength: { value: 2, message: 'Name must be at least 2 characters' },
               })}
-              className="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-slate-600"
+              className="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm bg-[var(--input-bg)] border-[var(--input-border)] text-[var(--text-main)] placeholder:text-[var(--input-placeholder)] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             />
           </div>
           {errors.name && (
-            <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
+            <p className="text-xs text-red-500 dark:text-red-400 mt-1 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" /> {errors.name.message}
             </p>
           )}
@@ -120,17 +121,17 @@ export default function Register() {
         {/* College Email */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <label className="block text-xs font-bold text-[var(--text-main)] opacity-80 uppercase tracking-wider">
               College Email
             </label>
             {isVitapEmail && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
                 <CheckCircle2 className="w-3 h-3" /> Valid Domain
               </span>
             )}
           </div>
           <div className="relative">
-            <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="email"
               placeholder="yourname@vitapstudent.ac.in"
@@ -141,11 +142,11 @@ export default function Register() {
                   message: 'Enter a valid email address',
                 },
               })}
-              className="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-slate-600 font-mono text-xs"
+              className="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm bg-[var(--input-bg)] border-[var(--input-border)] text-[var(--text-main)] placeholder:text-[var(--input-placeholder)] font-mono text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             />
           </div>
           {errors.email && (
-            <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
+            <p className="text-xs text-red-500 dark:text-red-400 mt-1 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" /> {errors.email.message}
             </p>
           )}
@@ -153,11 +154,11 @@ export default function Register() {
 
         {/* Password */}
         <div>
-          <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-bold text-[var(--text-main)] opacity-80 uppercase tracking-wider mb-1.5">
             Password
           </label>
           <div className="relative">
-            <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="Create a strong password"
@@ -169,12 +170,12 @@ export default function Register() {
                   message: 'Must include 1 uppercase letter & 1 number',
                 },
               })}
-              className="input-field w-full rounded-xl pl-10 pr-10 py-2.5 text-sm placeholder:text-slate-600"
+              className="input-field w-full rounded-xl pl-10 pr-10 py-2.5 text-sm bg-[var(--input-bg)] border-[var(--input-border)] text-[var(--text-main)] placeholder:text-[var(--input-placeholder)] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -182,25 +183,25 @@ export default function Register() {
 
           {/* Password Requirements Checklist */}
           {passwordValue && (
-            <div className="mt-2.5 p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-2">
+            <div className="mt-2.5 p-3 rounded-xl bg-slate-100 dark:bg-slate-950/60 border border-[var(--border-light)] space-y-2">
               <div className="flex items-center justify-between text-[11px]">
-                <span className="text-slate-400">Strength:</span>
-                <span className="font-semibold text-emerald-400">{strengthScore}%</span>
+                <span className="text-[var(--text-muted)]">Strength:</span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">{strengthScore}%</span>
               </div>
-              <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-1 w-full bg-slate-300 dark:bg-slate-800 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-amber-500 via-teal-400 to-emerald-400 transition-all duration-300"
                   style={{ width: `${strengthScore}%` }}
                 />
               </div>
               <div className="grid grid-cols-3 gap-1 pt-1 text-[10px]">
-                <div className={`flex items-center gap-1 ${hasMinLength ? 'text-emerald-400' : 'text-slate-400'}`}>
+                <div className={`flex items-center gap-1 ${hasMinLength ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
                   <CheckCircle2 className="w-3 h-3" /> 8+ chars
                 </div>
-                <div className={`flex items-center gap-1 ${hasUppercase ? 'text-emerald-400' : 'text-slate-400'}`}>
+                <div className={`flex items-center gap-1 ${hasUppercase ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
                   <CheckCircle2 className="w-3 h-3" /> 1 Uppercase
                 </div>
-                <div className={`flex items-center gap-1 ${hasNumber ? 'text-emerald-400' : 'text-slate-400'}`}>
+                <div className={`flex items-center gap-1 ${hasNumber ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
                   <CheckCircle2 className="w-3 h-3" /> 1 Number
                 </div>
               </div>
@@ -208,7 +209,7 @@ export default function Register() {
           )}
 
           {errors.password && (
-            <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
+            <p className="text-xs text-red-500 dark:text-red-400 mt-1 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" /> {errors.password.message}
             </p>
           )}
@@ -216,11 +217,11 @@ export default function Register() {
 
         {/* Confirm Password */}
         <div>
-          <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-bold text-[var(--text-main)] opacity-80 uppercase tracking-wider mb-1.5">
             Confirm Password
           </label>
           <div className="relative">
-            <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="password"
               placeholder="Re-enter your password"
@@ -228,11 +229,11 @@ export default function Register() {
                 required: 'Please confirm your password',
                 validate: (val) => val === watch('password') || 'Passwords do not match',
               })}
-              className="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-slate-600"
+              className="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm bg-[var(--input-bg)] border-[var(--input-border)] text-[var(--text-main)] placeholder:text-[var(--input-placeholder)] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             />
           </div>
           {errors.confirmPassword && (
-            <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
+            <p className="text-xs text-red-500 dark:text-red-400 mt-1 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" /> {errors.confirmPassword.message}
             </p>
           )}
@@ -242,7 +243,7 @@ export default function Register() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-sm shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99]"
+          className="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white dark:text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99]"
         >
           {isLoading ? (
             <>
@@ -259,9 +260,9 @@ export default function Register() {
       </form>
 
       {/* Switch to Login */}
-      <div className="pt-2 text-center text-xs text-slate-400">
+      <div className="pt-2 text-center text-xs text-[var(--text-muted)]">
         Already registered?{' '}
-        <Link to="/login" className="text-emerald-400 font-bold hover:underline">
+        <Link to="/login" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
           Sign In here
         </Link>
       </div>

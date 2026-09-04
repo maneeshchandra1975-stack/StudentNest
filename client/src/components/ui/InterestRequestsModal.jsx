@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X, CheckCircle2, XCircle, ShieldCheck, MessageSquare, Loader2 } from 'lucide-react';
 import Button from './Button';
 import Badge from './Badge';
+import ReviewModal from './ReviewModal';
 import { toast } from 'sonner';
 import api from '../../services/api';
 
@@ -12,26 +13,29 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
   const [receivedRequests, setReceivedRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   const [loading, setLoading] = useState(false);
+  
+  // Review Modal State
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedRequestForReview, setSelectedRequestForReview] = useState(null);
+
+  const fetchRequests = async () => {
+    if (!isOpen) return;
+    setLoading(true);
+    try {
+      const [resReceived, resSent] = await Promise.all([
+        api.get('/interests/received'),
+        api.get('/interests/sent'),
+      ]);
+      setReceivedRequests(resReceived.data.data || []);
+      setSentRequests(resSent.data.data || []);
+    } catch (err) {
+      console.error('Failed to load interest requests:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    const fetchRequests = async () => {
-      setLoading(true);
-      try {
-        const [resReceived, resSent] = await Promise.all([
-          api.get('/interests/received'),
-          api.get('/interests/sent'),
-        ]);
-        setReceivedRequests(resReceived.data.data || []);
-        setSentRequests(resSent.data.data || []);
-      } catch (err) {
-        console.error('Failed to load interest requests:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchRequests();
   }, [isOpen]);
 
@@ -73,11 +77,11 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl border border-[#E2E8F0] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+      <div className="relative w-full max-w-2xl bg-[var(--bg-card)] rounded-2xl border border-[#E2E8F0] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
-        <div className="p-4 border-b border-[#E2E8F0] flex items-center justify-between bg-slate-50">
+        <div className="p-4 border-b border-[#E2E8F0] flex items-center justify-between bg-[var(--bg-body)]">
           <div>
-            <h3 className="text-base font-bold text-[#111827] font-heading">
+            <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
               Interest Requests Manager
             </h3>
             <p className="text-xs text-[#64748B]">
@@ -93,13 +97,13 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-[#E2E8F0] bg-white text-xs font-bold">
+        <div className="flex border-b border-[#E2E8F0] bg-[var(--bg-card)] text-xs font-bold">
           <button
             onClick={() => setActiveTab('received')}
             className={`flex-1 py-3 border-b-2 text-center transition-colors ${
               activeTab === 'received'
                 ? 'border-[#2563EB] text-[#2563EB] bg-blue-50/50'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                : 'border-transparent text-[var(--text-muted)] hover:text-slate-800'
             }`}
           >
             Received Requests ({receivedRequests.length})
@@ -109,7 +113,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
             className={`flex-1 py-3 border-b-2 text-center transition-colors ${
               activeTab === 'sent'
                 ? 'border-[#2563EB] text-[#2563EB] bg-blue-50/50'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                : 'border-transparent text-[var(--text-muted)] hover:text-slate-800'
             }`}
           >
             Sent Requests ({sentRequests.length})
@@ -117,7 +121,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
         </div>
 
         {/* Content Feed */}
-        <div className="p-4 overflow-y-auto space-y-3 flex-1 bg-slate-50/30">
+        <div className="p-4 overflow-y-auto space-y-3 flex-1 bg-[var(--bg-body)]/30">
           {loading ? (
             <div className="p-8 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
               <Loader2 className="w-4 h-4 animate-spin text-[#2563EB]" />
@@ -132,7 +136,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
               receivedRequests.map((req) => (
                 <div
                   key={req._id}
-                  className="p-4 rounded-xl bg-white border border-[#E2E8F0] space-y-3 shadow-2xs"
+                  className="p-4 rounded-xl bg-[var(--bg-card)] border border-[#E2E8F0] space-y-3 shadow-2xs"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="space-y-0.5">
@@ -151,20 +155,20 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                           label={req.status}
                         />
                       </div>
-                      <h4 className="text-xs font-bold text-[#111827]">{getItemTitle(req)}</h4>
+                      <h4 className="text-xs font-bold text-[var(--text-main)]">{getItemTitle(req)}</h4>
                     </div>
                     <span className="text-[10px] text-slate-400 font-medium">
                       {new Date(req.createdAt).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                  <div className="p-2.5 rounded-lg bg-[var(--bg-body)] border border-slate-100 flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-full bg-blue-100 text-[#2563EB] font-bold flex items-center justify-center text-xs">
                         {req.sender?.name ? req.sender.name.charAt(0).toUpperCase() : 'S'}
                       </div>
                       <div>
-                        <div className="font-bold text-[#111827] flex items-center gap-1">
+                        <div className="font-bold text-[var(--text-main)] flex items-center gap-1">
                           <span>{req.sender?.name || 'Student'}</span>
                           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                         </div>
@@ -173,17 +177,39 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                     </div>
 
                     {req.status === 'Accepted' && (
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        icon={MessageSquare}
-                        onClick={() => {
-                          onClose();
-                          navigate(`/messages?interestId=${req._id}`);
-                        }}
-                      >
-                        Chat Now
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          icon={MessageSquare}
+                          onClick={() => {
+                            onClose();
+                            navigate(`/messages?interestId=${req._id}`);
+                          }}
+                        >
+                          Chat
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                          onClick={async () => {
+                            try {
+                              await api.patch(`/interests/${req._id}/complete`);
+                              toast.success('Interaction completed! The buyer can now review you.');
+                              fetchRequests();
+                            } catch (e) {
+                              toast.error('Failed to complete interaction');
+                            }
+                          }}
+                        >
+                          Mark Completed
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {req.status === 'Completed' && (
+                      <Badge variant="active" label="Completed & Sold" />
                     )}
                   </div>
 
@@ -220,15 +246,15 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
             sentRequests.map((req) => (
               <div
                 key={req._id}
-                className="p-4 rounded-xl bg-white border border-[#E2E8F0] space-y-3 shadow-2xs"
+                className="p-4 rounded-xl bg-[var(--bg-card)] border border-[#E2E8F0] space-y-3 shadow-2xs"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#2563EB]">
                       {req.listingType}
                     </span>
-                    <h4 className="text-xs font-bold text-[#111827] mt-1">{getItemTitle(req)}</h4>
-                    <div className="text-xs text-slate-500">
+                    <h4 className="text-xs font-bold text-[var(--text-main)] mt-1">{getItemTitle(req)}</h4>
+                    <div className="text-xs text-[var(--text-muted)]">
                       Listing Owner: <span className="font-bold text-slate-700">{req.recipient?.name}</span>
                     </div>
                   </div>
@@ -262,6 +288,19 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                       Chat with Owner
                     </Button>
                   )}
+                  {req.status === 'Completed' && (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white"
+                      onClick={() => {
+                         setSelectedRequestForReview(req);
+                         setReviewModalOpen(true);
+                      }}
+                    >
+                      Leave a Review
+                    </Button>
+                  )}
                   {req.status === 'Pending' && (
                     <Button
                       variant="ghost"
@@ -278,6 +317,18 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
           )}
         </div>
       </div>
+      
+      {/* Review Modal Portal */}
+      <ReviewModal
+        isOpen={reviewModalOpen}
+        onClose={() => {
+          setReviewModalOpen(false);
+          setSelectedRequestForReview(null);
+        }}
+        interestRequestId={selectedRequestForReview?._id}
+        revieweeName={selectedRequestForReview?.recipient?.name}
+        onReviewSuccess={fetchRequests}
+      />
     </div>
   );
 }

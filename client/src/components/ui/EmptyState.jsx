@@ -18,7 +18,7 @@ export default function EmptyState({
       </div>
 
       <div className="space-y-1">
-        <h4 className="text-base font-bold text-[#111827] font-heading">{title}</h4>
+        <h4 className="text-base font-bold text-[var(--text-main)] font-heading">{title}</h4>
         <p className="text-xs text-[#64748B] leading-relaxed">{description}</p>
       </div>
 

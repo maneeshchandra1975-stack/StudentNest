@@ -128,7 +128,7 @@ export default function Roommates() {
             <Users className="w-4 h-4" />
             <span>Peer-to-Peer Roommate Finder</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-[#111827] font-heading">
+          <h1 className="text-3xl font-extrabold text-[var(--text-main)] font-heading">
             Roommate Finder
           </h1>
           <p className="text-xs text-[#64748B] mt-1">
@@ -147,7 +147,7 @@ export default function Roommates() {
       </div>
 
       {/* Filters */}
-      <div className="sn-card p-4 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-white">
+      <div className="sn-card p-4 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-[var(--bg-card)]">
         <div className="sm:col-span-8 relative">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -163,7 +163,7 @@ export default function Roommates() {
           <select
             value={selectedRoomType}
             onChange={(e) => setSelectedRoomType(e.target.value)}
-            className="sn-input px-3 py-2 w-full text-xs font-medium text-[#111827]"
+            className="sn-input px-3 py-2 w-full text-xs font-medium text-[var(--text-main)]"
           >
             <option value="all">All Room Types</option>
             <option value="Shared Room">Shared Room</option>
@@ -190,15 +190,20 @@ export default function Roommates() {
               <Card key={post.id} hover className="p-5 flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#2563EB] text-[11px] font-bold">
-                      {post.roomType}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#2563EB] text-[11px] font-bold">
+                        {post.roomType}
+                      </span>
+                      {post.status && post.status !== 'Available' && (
+                        <Badge variant="secondary" label={post.status} />
+                      )}
+                    </div>
                     <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
                       {post.vacancy} Vacancy
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-[#111827] font-heading line-clamp-2">
+                  <h3 className="text-base font-bold text-[var(--text-main)] font-heading line-clamp-2">
                     {post.title}
                   </h3>
 
@@ -232,13 +237,19 @@ export default function Roommates() {
                       </div>
                     </div>
 
-                    <Button
-                      variant={isInterested ? 'secondary' : 'primary'}
-                      size="sm"
-                      onClick={() => toggleInterest(post.id, post.author)}
-                    >
-                      {isInterested ? 'Cancel Interest' : 'Interested'}
-                    </Button>
+                    {post.status === 'Available' ? (
+                      <Button
+                        variant={isInterested ? 'secondary' : 'primary'}
+                        size="sm"
+                        onClick={() => toggleInterest(post.id, post.author)}
+                      >
+                        {isInterested ? 'Cancel Interest' : 'Interested'}
+                      </Button>
+                    ) : (
+                      <Button variant="secondary" size="sm" disabled>
+                        {post.status}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -250,9 +261,9 @@ export default function Roommates() {
       {/* Post Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
-          <div className="w-full max-w-lg bg-white rounded-2xl border border-[#E2E8F0] shadow-2xl p-6 space-y-4">
+          <div className="w-full max-w-lg bg-[var(--bg-card)] rounded-2xl border border-[#E2E8F0] shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-[#111827] font-heading">
+              <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
                 Post Roommate Vacancy
               </h3>
               <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-700">
@@ -262,7 +273,7 @@ export default function Roommates() {
 
             <form onSubmit={handleCreatePost} className="space-y-3">
               <div>
-                <label className="text-xs font-bold text-[#111827] block mb-1">Listing Title</label>
+                <label className="text-xs font-bold text-[var(--text-main)] block mb-1">Listing Title</label>
                 <input
                   type="text"
                   value={newTitle}
@@ -275,7 +286,7 @@ export default function Roommates() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-[#111827] block mb-1">Room Type</label>
+                  <label className="text-xs font-bold text-[var(--text-main)] block mb-1">Room Type</label>
                   <select
                     value={newRoomType}
                     onChange={(e) => setNewRoomType(e.target.value)}
@@ -288,7 +299,7 @@ export default function Roommates() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-[#111827] block mb-1">Vacancy Count</label>
+                  <label className="text-xs font-bold text-[var(--text-main)] block mb-1">Vacancy Count</label>
                   <input
                     type="number"
                     min="1"
@@ -302,7 +313,7 @@ export default function Roommates() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-[#111827] block mb-1">Rent Share (₹/month)</label>
+                  <label className="text-xs font-bold text-[var(--text-main)] block mb-1">Rent Share (₹/month)</label>
                   <input
                     type="number"
                     value={newRent}
@@ -313,7 +324,7 @@ export default function Roommates() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-[#111827] block mb-1">Location</label>
+                  <label className="text-xs font-bold text-[var(--text-main)] block mb-1">Location</label>
                   <input
                     type="text"
                     value={newLocation}
@@ -326,7 +337,7 @@ export default function Roommates() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#111827] block mb-1">Description</label>
+                <label className="text-xs font-bold text-[var(--text-main)] block mb-1">Description</label>
                 <textarea
                   rows="3"
                   value={newDesc}

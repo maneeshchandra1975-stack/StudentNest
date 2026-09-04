@@ -35,8 +35,16 @@ const createRoommatePost = async (req, res, next) => {
 
 const getRoommatePosts = async (req, res, next) => {
   try {
-    const { roomType, maxRent, search } = req.query;
+    const { roomType, maxRent, search, author, status } = req.query;
     const filter = {};
+
+    if (author) {
+      filter.author = author;
+    }
+
+    if (status) {
+      filter.status = status;
+    }
 
     if (roomType && roomType !== 'all') {
       filter.roomType = roomType;

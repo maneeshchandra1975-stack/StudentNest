@@ -78,15 +78,23 @@ const chatSlice = createSlice({
       state.error = null;
     },
     addMessage: (state, action) => {
-      // Avoid duplicate messages
-      const exists = state.messages.some((m) => m._id === action.payload._id);
-      if (!exists) {
-        state.messages.push(action.payload);
-      }
-      // Update last message in list if active
+      // Only push to messages array if this message belongs to the currently viewed conversation
       if (state.activeConversation && state.activeConversation._id === action.payload.conversation) {
+        const exists = state.messages.some((m) => m._id === action.payload._id);
+        if (!exists) {
+          state.messages.push(action.payload);
+        }
         state.activeConversation.lastMessage = action.payload.text;
         state.activeConversation.lastMessageAt = action.payload.createdAt;
+      }
+      
+      // Always update the conversations array to reflect the new last message and move it to top
+      const convIndex = state.conversations.findIndex((c) => c._id === action.payload.conversation);
+      if (convIndex > -1) {
+        const [conv] = state.conversations.splice(convIndex, 1);
+        conv.lastMessage = action.payload.text;
+        conv.lastMessageAt = action.payload.createdAt;
+        state.conversations.unshift(conv);
       }
     },
     clearError: (state) => {

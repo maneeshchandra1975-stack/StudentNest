@@ -35,8 +35,16 @@ const createMarketplaceItem = async (req, res, next) => {
 
 const getMarketplaceItems = async (req, res, next) => {
   try {
-    const { category, minPrice, maxPrice, condition, search } = req.query;
+    const { category, minPrice, maxPrice, condition, search, seller, status } = req.query;
     const filter = {};
+
+    if (seller) {
+      filter.seller = seller;
+    }
+
+    if (status) {
+      filter.status = status;
+    }
 
     if (category && category !== 'all') {
       filter.category = category;

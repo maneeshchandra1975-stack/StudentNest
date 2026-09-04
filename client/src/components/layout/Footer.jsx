@@ -4,14 +4,14 @@ import { Building2, ShieldCheck } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-[#E2E8F0] mt-16 text-xs text-[#64748B]">
+    <footer className="bg-[var(--bg-card)] border-t border-[#E2E8F0] mt-16 text-xs text-[#64748B]">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="space-y-3 md:col-span-2 pr-4">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-[#2563EB] flex items-center justify-center text-white font-bold">
               <Building2 className="w-3.5 h-3.5" />
             </div>
-            <span className="text-lg font-extrabold text-[#111827] font-heading">
+            <span className="text-lg font-extrabold text-[var(--text-main)] font-heading">
               Student<span className="text-[#2563EB]">Nest</span>
             </span>
           </div>
@@ -27,7 +27,7 @@ export default function Footer() {
         </div>
 
         <div className="space-y-2">
-          <div className="font-bold text-[#111827] uppercase tracking-wider text-[11px]">Platform</div>
+          <div className="font-bold text-[var(--text-main)] uppercase tracking-wider text-[11px]">Platform</div>
           <ul className="space-y-1.5 text-xs">
             <li><Link to="/housing" className="hover:text-[#2563EB] transition-colors">Campus Housing &amp; PGs</Link></li>
             <li><Link to="/marketplace" className="hover:text-[#2563EB] transition-colors">Student Marketplace</Link></li>
@@ -37,7 +37,7 @@ export default function Footer() {
         </div>
 
         <div className="space-y-2">
-          <div className="font-bold text-[#111827] uppercase tracking-wider text-[11px]">Support</div>
+          <div className="font-bold text-[var(--text-main)] uppercase tracking-wider text-[11px]">Support</div>
           <ul className="space-y-1.5 text-xs">
             <li><a href="#help" className="hover:text-[#2563EB] transition-colors">Help &amp; FAQs</a></li>
             <li><a href="#rules" className="hover:text-[#2563EB] transition-colors">Campus Verification Rules</a></li>

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/slices/authSlice';
 import NotificationDropdown from './NotificationDropdown';
+import { useTheme } from '../../contexts/ThemeContext';
 import {
   Building2,
   Home,
@@ -19,6 +20,9 @@ import {
   ShieldCheck,
   ChevronDown,
   Grid,
+  Sun,
+  Moon,
+  Settings
 } from 'lucide-react';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
@@ -31,12 +35,15 @@ export default function HeaderNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { theme, toggleTheme } = useTheme();
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const navLinks = [
     { label: 'Home', path: '/' },
-    { label: 'Student Hub (Housing, PGs, Roommates & Market)', path: '/housing' },
+    { label: 'Marketplace', path: '/marketplace' },
+    { label: 'Roommate Finder', path: '/roommates' },
+    { label: 'Nearby PGs', path: '/pgs' },
     { label: 'Messages', path: '/messages' },
   ];
 
@@ -47,14 +54,14 @@ export default function HeaderNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/90 border-b border-[#E2E8F0] backdrop-blur-md">
+    <header className="sticky top-0 z-40 bg-[var(--bg-card)]/90 dark:bg-slate-950/90 border-b border-[#E2E8F0] dark:border-slate-800 backdrop-blur-md transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
         {/* Left: Brand Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-xl bg-[#2563EB] flex items-center justify-center text-white font-bold shadow-xs">
             <Building2 className="w-4 h-4" />
           </div>
-          <span className="text-xl font-extrabold text-[#111827] tracking-tight font-heading">
+          <span className="text-xl font-extrabold text-[var(--text-main)] dark:text-white tracking-tight font-heading transition-colors">
             Student<span className="text-[#2563EB]">Nest</span>
           </span>
         </Link>
@@ -70,8 +77,8 @@ export default function HeaderNavbar() {
                 className={cn(
                   'px-3.5 py-2 rounded-xl text-sm font-semibold transition-all',
                   isActive
-                    ? 'bg-blue-50 text-[#2563EB]'
-                    : 'text-[#64748B] hover:text-[#111827] hover:bg-slate-50'
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400'
+                    : 'text-[#64748B] dark:text-slate-400 hover:text-[var(--text-main)] dark:hover:text-white hover:bg-[var(--bg-body)] dark:hover:bg-slate-800'
                 )}
               >
                 {link.label}
@@ -82,6 +89,13 @@ export default function HeaderNavbar() {
 
         {/* Right Actions & Profile */}
         <div className="flex items-center gap-3">
+          <button 
+            onClick={toggleTheme}
+            className="p-2 text-[var(--text-muted)] hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+            title="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
           <NotificationDropdown />
 
           <Button
@@ -98,13 +112,13 @@ export default function HeaderNavbar() {
             <div className="relative">
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-200"
+                className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 transition-colors border border-transparent hover:border-[var(--border-light)]"
               >
                 <div className="w-8 h-8 rounded-full bg-blue-100 text-[#2563EB] font-bold flex items-center justify-center text-xs">
                   {user?.name?.charAt(0) || 'S'}
                 </div>
                 <div className="hidden sm:block text-left">
-                  <div className="text-xs font-bold text-[#111827] line-clamp-1">{user?.name}</div>
+                  <div className="text-xs font-bold text-[var(--text-main)] line-clamp-1">{user?.name}</div>
                   <div className="text-[10px] text-emerald-600 font-semibold flex items-center gap-0.5">
                     <ShieldCheck className="w-3 h-3" /> Verified
                   </div>
@@ -113,25 +127,43 @@ export default function HeaderNavbar() {
               </button>
 
               {userDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white border border-[#E2E8F0] rounded-2xl shadow-lg p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 mt-2 w-56 bg-[var(--bg-card)] border border-[#E2E8F0] rounded-2xl shadow-lg p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="p-2 border-b border-slate-100 space-y-0.5">
-                    <div className="text-xs font-bold text-[#111827]">{user?.name}</div>
+                    <div className="text-xs font-bold text-[var(--text-main)]">{user?.name}</div>
                     <div className="text-[11px] text-[#64748B] font-mono truncate">{user?.email}</div>
                   </div>
 
                   <div className="py-1">
+                    {user?.role === 'admin' && (
+                      <Link
+                        to="/admin/dashboard"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-emerald-600 hover:bg-emerald-50 rounded-xl"
+                      >
+                        <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                        <span>Admin Dashboard</span>
+                      </Link>
+                    )}
                     <Link
                       to="/dashboard"
                       onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 rounded-xl"
+                      className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-[var(--bg-body)] rounded-xl"
                     >
                       <User className="w-4 h-4 text-slate-400" />
                       <span>Student Dashboard</span>
                     </Link>
                     <Link
+                      to="/profile"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-[var(--bg-body)] rounded-xl"
+                    >
+                      <Settings className="w-4 h-4 text-slate-400" />
+                      <span>My Profile & Listings</span>
+                    </Link>
+                    <Link
                       to="/messages"
                       onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 rounded-xl"
+                      className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-[var(--bg-body)] rounded-xl"
                     >
                       <MessageSquare className="w-4 h-4 text-slate-400" />
                       <span>Messages &amp; Chats</span>
@@ -171,18 +203,28 @@ export default function HeaderNavbar() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#E2E8F0] bg-white p-4 space-y-3">
+        <div className="md:hidden border-t border-[#E2E8F0] bg-[var(--bg-card)] p-4 space-y-3">
           <nav className="space-y-1">
             {navLinks.map((link, idx) => (
               <Link
                 key={idx}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3.5 py-2.5 rounded-xl text-sm font-medium text-[#111827] hover:bg-slate-50"
+                className="block px-3.5 py-2.5 rounded-xl text-sm font-medium text-[var(--text-main)] hover:bg-[var(--bg-body)]"
               >
                 {link.label}
               </Link>
             ))}
+            
+            {user?.role === 'admin' && (
+              <Link
+                to="/admin/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3.5 py-2.5 rounded-xl text-sm font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 mt-2"
+              >
+                Admin Dashboard
+              </Link>
+            )}
           </nav>
         </div>
       )}

@@ -19,7 +19,7 @@ const getUserConversations = async (req, res, next) => {
       .populate('participants', 'name email avatar phone')
       .populate({
         path: 'interestRequest',
-        select: 'status listingType marketplaceItem roommatePost sender recipient',
+        select: '_id status listingType marketplaceItem roommatePost sender recipient',
         populate: [
           { path: 'marketplaceItem', select: 'title price images status' },
           { path: 'roommatePost', select: 'title rentShare roomType status' },
@@ -27,9 +27,9 @@ const getUserConversations = async (req, res, next) => {
       })
       .sort({ lastMessageAt: -1 });
 
-    // Strictly filter out any conversation whose associated InterestRequest is NOT Accepted
+    // Strictly filter out any conversation whose associated InterestRequest is NOT Accepted or Completed
     const authorizedConversations = conversations.filter(
-      (c) => c.interestRequest && c.interestRequest.status === 'Accepted'
+      (c) => c.interestRequest && ['Accepted', 'Completed'].includes(c.interestRequest.status)
     );
 
     return res.status(200).json(
@@ -53,7 +53,7 @@ const getConversationById = async (req, res, next) => {
       .populate('participants', 'name email avatar phone')
       .populate({
         path: 'interestRequest',
-        select: 'status listingType marketplaceItem roommatePost sender recipient',
+        select: '_id status listingType marketplaceItem roommatePost sender recipient',
         populate: [
           { path: 'marketplaceItem', select: 'title price images status' },
           { path: 'roommatePost', select: 'title rentShare roomType status' },
@@ -72,8 +72,8 @@ const getConversationById = async (req, res, next) => {
       throw new ApiError(403, 'Unauthorized access to this conversation');
     }
 
-    // 2. Accepted Status Check
-    if (!conversation.interestRequest || conversation.interestRequest.status !== 'Accepted') {
+    // 2. Accepted or Completed Status Check
+    if (!conversation.interestRequest || !['Accepted', 'Completed'].includes(conversation.interestRequest.status)) {
       throw new ApiError(403, 'Chat is not available for this interaction.');
     }
 
@@ -109,7 +109,7 @@ const getMessages = async (req, res, next) => {
       throw new ApiError(403, 'Unauthorized access to this conversation');
     }
 
-    if (!conversation.interestRequest || conversation.interestRequest.status !== 'Accepted') {
+    if (!conversation.interestRequest || !['Accepted', 'Completed'].includes(conversation.interestRequest.status)) {
       throw new ApiError(403, 'Chat is not available for this interaction.');
     }
 
@@ -156,7 +156,7 @@ const sendMessage = async (req, res, next) => {
       throw new ApiError(403, 'Unauthorized access to this conversation');
     }
 
-    if (!conversation.interestRequest || conversation.interestRequest.status !== 'Accepted') {
+    if (!conversation.interestRequest || !['Accepted', 'Completed'].includes(conversation.interestRequest.status)) {
       throw new ApiError(403, 'Chat is not available for this interaction.');
     }
 
@@ -228,7 +228,7 @@ const getOrCreateByInterest = async (req, res, next) => {
       throw new ApiError(403, 'Unauthorized access');
     }
 
-    if (interestRequest.status !== 'Accepted') {
+    if (!['Accepted', 'Completed'].includes(interestRequest.status)) {
       throw new ApiError(403, 'Chat is not available for this interaction.');
     }
 
@@ -236,7 +236,7 @@ const getOrCreateByInterest = async (req, res, next) => {
       .populate('participants', 'name email avatar phone')
       .populate({
         path: 'interestRequest',
-        select: 'status listingType marketplaceItem roommatePost sender recipient',
+        select: '_id status listingType marketplaceItem roommatePost sender recipient',
         populate: [
           { path: 'marketplaceItem', select: 'title price images status' },
           { path: 'roommatePost', select: 'title rentShare roomType status' },
@@ -255,7 +255,7 @@ const getOrCreateByInterest = async (req, res, next) => {
         .populate('participants', 'name email avatar phone')
         .populate({
           path: 'interestRequest',
-          select: 'status listingType marketplaceItem roommatePost sender recipient',
+          select: '_id status listingType marketplaceItem roommatePost sender recipient',
           populate: [
             { path: 'marketplaceItem', select: 'title price images status' },
             { path: 'roommatePost', select: 'title rentShare roomType status' },

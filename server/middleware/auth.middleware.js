@@ -32,7 +32,12 @@ const protect = async (req, _res, next) => {
       throw new ApiError(403, 'Please verify your email address first.');
     }
 
-    // 5. Attach user to request
+    // 5. Check if user is active
+    if (user.status !== 'ACTIVE') {
+      throw new ApiError(403, `Account is ${user.status.toLowerCase()}. Please contact support.`);
+    }
+
+    // 6. Attach user to request
     req.user = user;
     next();
   } catch (error) {
@@ -46,4 +51,16 @@ const protect = async (req, _res, next) => {
   }
 };
 
-module.exports = { protect };
+/**
+ * restrictTo ?" verifies if the authenticated user has a specific role
+ */
+const restrictTo = (...roles) => {
+  return (req, _res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return next(new ApiError(403, 'You do not have permission to perform this action.'));
+    }
+    next();
+  };
+};
+
+module.exports = { protect, restrictTo };
