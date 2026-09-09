@@ -99,7 +99,7 @@ export default function HousingHub() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
                 isActive
-                  ? 'bg-[var(--bg-card)] text-[#2563EB] shadow-sm'
+                  ? 'bg-[var(--bg-card)] text-orange-500 shadow-sm'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
               }`}
             >
@@ -120,7 +120,7 @@ export default function HousingHub() {
               placeholder="Search by location or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-[var(--bg-body)] border border-[var(--border-light)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] outline-none transition-all"
+              className="w-full pl-9 pr-4 py-2 bg-[var(--bg-body)] border border-[var(--border-light)] rounded-xl text-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--text-main)] outline-none transition-all"
             />
           </div>
 
@@ -146,7 +146,7 @@ export default function HousingHub() {
                     <div>
                       <div className="flex justify-between items-start mb-3">
                         <div className="flex items-center gap-2">
-                          <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#2563EB] text-[11px] font-bold">
+                          <span className="px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 text-[11px] font-bold">
                             {post.roomType}
                           </span>
                           {post.status && post.status !== 'Available' && (
@@ -176,15 +176,15 @@ export default function HousingHub() {
                       </p>
                       
                       <div className="flex items-center gap-2 mt-3">
-                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md font-medium">Gender: {post.genderPreference}</span>
-                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md font-medium">Status: {post.status}</span>
+                        <span className="text-xs text-slate-500 bg-slate-100 dark:bg-[#141923] px-2 py-1 rounded-md font-medium">Gender: {post.genderPreference}</span>
+                        <span className="text-xs text-slate-500 bg-slate-100 dark:bg-[#141923] px-2 py-1 rounded-md font-medium">Status: {post.status}</span>
                       </div>
                     </div>
 
                     <div className="pt-4 border-t border-[var(--border-light)] flex justify-between items-center">
                       <div>
                         <div className="text-sm text-[var(--text-muted)]">Rent Share</div>
-                        <div className="text-lg font-bold text-[#2563EB]">₹{post.rentShare.toLocaleString()} <span className="text-xs font-normal text-[var(--text-muted)]">/ mo</span></div>
+                        <div className="text-lg font-extrabold text-orange-500 font-heading">₹{post.rentShare.toLocaleString()} <span className="text-xs font-normal text-[var(--text-muted)]">/ mo</span></div>
                       </div>
                       
                       {post.status === 'Available' ? (

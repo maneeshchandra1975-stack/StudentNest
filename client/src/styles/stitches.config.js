@@ -31,7 +31,8 @@ export const {
       // Accents
       teal400: '#2dd4bf',
       cyan400: '#22d3ee',
-      indigo500: '#6366f1',
+      orange500: '#f97316',
+      amber500: '#f59e0b',
       amber400: '#fbbf24',
       red500: '#ef4444',
 

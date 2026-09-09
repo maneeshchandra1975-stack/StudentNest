@@ -73,7 +73,7 @@ export default function Notifications() {
       case 'INTEREST_CANCELLED':
         return <XCircle className="w-5 h-5 text-amber-500" />;
       case 'NEW_MESSAGE':
-        return <MessageSquare className="w-5 h-5 text-[#2563EB]" />;
+        return <MessageSquare className="w-5 h-5 text-orange-500" />;
       default:
         return <Bell className="w-5 h-5 text-[var(--text-muted)]" />;
     }
@@ -83,12 +83,12 @@ export default function Notifications() {
     <div className="space-y-6 py-4 max-w-4xl mx-auto">
       {/* ── Header ── */}
       <div className="relative overflow-hidden rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6 sm:p-8 backdrop-blur-xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/15 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-500/15 via-orange-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-2">
-              <Bell className="w-3.5 h-3.5 text-indigo-500" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 mb-2">
+              <Bell className="w-3.5 h-3.5 text-orange-500" />
               <span>Real-Time Activity Alerts</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-[var(--text-main)] font-heading tracking-tight">
@@ -117,7 +117,7 @@ export default function Notifications() {
             onClick={() => setFilter('all')}
             className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
               filter === 'all'
-                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/20'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
@@ -127,7 +127,7 @@ export default function Notifications() {
             onClick={() => setFilter('unread')}
             className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
               filter === 'unread'
-                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/20'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
@@ -144,12 +144,12 @@ export default function Notifications() {
       <div className="space-y-3">
         {isLoading ? (
           <div className="p-16 text-center text-xs text-[var(--text-muted)] flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+            <div className="w-8 h-8 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
             <span>Retrieving live notifications...</span>
           </div>
         ) : filteredNotifications.length === 0 ? (
           <div className="sn-card p-12 text-center space-y-3 bg-[var(--bg-card)]">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-500 mx-auto flex items-center justify-center border border-indigo-500/20 shadow-xs">
+            <div className="w-14 h-14 rounded-2xl bg-orange-500/10 text-orange-500 mx-auto flex items-center justify-center border border-orange-500/20 shadow-xs">
               <Bell className="w-7 h-7" />
             </div>
             <div className="space-y-1 max-w-sm mx-auto">
@@ -168,7 +168,7 @@ export default function Notifications() {
               onClick={() => handleNotificationClick(notif)}
               className={`sn-card p-5 flex items-start gap-4 cursor-pointer transition-all hover:translate-y-[-2px] hover:shadow-md relative overflow-hidden ${
                 !notif.isRead
-                  ? 'border-l-4 border-l-indigo-500 bg-indigo-500/[0.04]'
+                  ? 'border-l-4 border-l-orange-500 bg-orange-500/[0.04]'
                   : 'border-[var(--border-light)]'
               }`}
             >
@@ -198,7 +198,7 @@ export default function Notifications() {
                 </p>
 
                 <div className="mt-3 flex items-center gap-4 text-xs">
-                  <span className="font-bold text-indigo-500 dark:text-cyan-400 hover:underline flex items-center gap-1">
+                  <span className="font-bold text-orange-600 dark:text-orange-400 hover:underline flex items-center gap-1">
                     <span>View Details</span>
                     <span>&rarr;</span>
                   </span>

@@ -13,7 +13,7 @@ export default function EmptyState({
 }) {
   return (
     <div className={cn('sn-card p-10 text-center flex flex-col items-center justify-center space-y-4 max-w-md mx-auto', className)}>
-      <div className="p-3.5 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100">
+      <div className="p-3.5 rounded-2xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
         <Icon className="w-7 h-7" />
       </div>
 

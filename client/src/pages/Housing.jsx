@@ -102,7 +102,7 @@ export default function Housing() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-6">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] mb-1">
+          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-500 mb-1">
             <Building2 className="w-4 h-4" />
             <span>Campus Housing &amp; Accommodations</span>
           </div>
@@ -115,12 +115,12 @@ export default function Housing() {
         </div>
 
         {/* View Toggle */}
-        <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl text-xs font-semibold">
+        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-[#141923] rounded-xl text-xs font-semibold">
           <button
             onClick={() => setViewMode('list')}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
               viewMode === 'list'
-                ? 'bg-[var(--bg-card)] text-[#2563EB] shadow-xs'
+                ? 'bg-[var(--bg-card)] text-orange-500 shadow-xs'
                 : 'text-slate-600 hover:text-[var(--text-main)]'
             }`}
           >
@@ -130,7 +130,7 @@ export default function Housing() {
             onClick={() => setViewMode('map')}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
               viewMode === 'map'
-                ? 'bg-[var(--bg-card)] text-[#2563EB] shadow-xs'
+                ? 'bg-[var(--bg-card)] text-orange-500 shadow-xs'
                 : 'text-slate-600 hover:text-[var(--text-main)]'
             }`}
           >
@@ -172,7 +172,7 @@ export default function Housing() {
         <div className="sm:col-span-4 space-y-1 px-1">
           <div className="flex justify-between text-xs text-[#64748B] font-semibold">
             <span>Max Budget</span>
-            <span className="text-[#2563EB] font-bold">₹{maxRent.toLocaleString()} / mo</span>
+            <span className="text-orange-500 font-bold">₹{maxRent.toLocaleString()} / mo</span>
           </div>
           <input
             type="range"
@@ -181,7 +181,7 @@ export default function Housing() {
             step="500"
             value={maxRent}
             onChange={(e) => setMaxRent(Number(e.target.value))}
-            className="w-full accent-[#2563EB] cursor-pointer"
+            className="w-full accent-orange-500 cursor-pointer"
           />
         </div>
       </div>
@@ -189,14 +189,14 @@ export default function Housing() {
       {/* Results View */}
       {viewMode === 'map' ? (
         <div className="sn-card p-8 text-center space-y-3 bg-[var(--bg-body)] border-dashed">
-          <MapPin className="w-8 h-8 text-[#2563EB] mx-auto" />
+          <MapPin className="w-8 h-8 text-orange-500 mx-auto" />
           <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
             VIT-AP Interactive Map View
           </h3>
           <p className="text-xs text-[#64748B] max-w-md mx-auto">
             Showing properties surrounding VIT-AP University campus within a 3km radius.
           </p>
-          <div className="h-64 rounded-2xl bg-slate-200 flex items-center justify-center text-xs text-[var(--text-muted)] font-medium">
+          <div className="h-64 rounded-2xl bg-slate-200 dark:bg-[#141923] flex items-center justify-center text-xs text-[var(--text-muted)] font-medium">
             [ Leaflet OpenStreetMap Container — VIT-AP Coordinates: 16.4971° N, 80.5002° E ]
           </div>
         </div>
@@ -216,7 +216,7 @@ export default function Housing() {
           {filtered.map((prop) => (
             <Card key={prop.id} hover className="overflow-hidden flex flex-col justify-between">
               <div>
-                <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-[#141923]">
                   <img
                     src={prop.image}
                     alt={prop.title}
@@ -237,7 +237,7 @@ export default function Housing() {
 
                 <div className="p-5 space-y-3">
                   <div className="text-xs font-semibold text-[#64748B] flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded bg-blue-50 text-[#2563EB] font-bold">
+                    <span className="px-2 py-0.5 rounded bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 font-bold">
                       {prop.type}
                     </span>
                     <span className="flex items-center gap-1 text-[var(--text-muted)]">

@@ -33,8 +33,8 @@ export default function Dashboard() {
       badge: 'Peer-to-Peer',
       icon: ShoppingBag,
       path: '/marketplace',
-      gradient: 'from-indigo-600 to-blue-600',
-      iconBg: 'bg-indigo-500/10 text-indigo-500',
+      gradient: 'from-amber-500 to-orange-500',
+      iconBg: 'bg-orange-500/10 text-orange-500',
     },
     {
       title: 'Roommate Finder',
@@ -42,8 +42,8 @@ export default function Dashboard() {
       badge: 'Zero Brokerage',
       icon: Users,
       path: '/roommates',
-      gradient: 'from-blue-600 to-cyan-500',
-      iconBg: 'bg-cyan-500/10 text-cyan-500',
+      gradient: 'from-orange-500 to-rose-500',
+      iconBg: 'bg-amber-500/10 text-amber-500',
     },
     {
       title: 'Nearby PGs & Hostels',
@@ -51,8 +51,8 @@ export default function Dashboard() {
       badge: 'Live Geoapify',
       icon: Compass,
       path: '/pgs',
-      gradient: 'from-violet-600 to-indigo-600',
-      iconBg: 'bg-violet-500/10 text-violet-500',
+      gradient: 'from-rose-500 to-orange-500',
+      iconBg: 'bg-rose-500/10 text-rose-500',
     },
     {
       title: 'Direct Messages',
@@ -78,8 +78,8 @@ export default function Dashboard() {
       badge: '@vitapstudent.ac.in',
       icon: UserCheck,
       path: '/profile',
-      gradient: 'from-indigo-500 to-violet-500',
-      iconBg: 'bg-indigo-500/10 text-indigo-400',
+      gradient: 'from-orange-500 to-amber-500',
+      iconBg: 'bg-orange-500/10 text-orange-500',
     },
   ];
 
@@ -87,8 +87,8 @@ export default function Dashboard() {
     <div className="space-y-8 py-2">
       {/* ── 1. Futuristic Aurora Greeting Banner ── */}
       <div className="relative overflow-hidden rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6 sm:p-10 backdrop-blur-xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-indigo-500/15 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-violet-500/10 via-indigo-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-amber-500/15 via-orange-500/10 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 via-orange-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
@@ -110,7 +110,7 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="px-4 py-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-light)]">
               <div className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Connected Account</div>
-              <div className="text-xs font-mono font-bold text-indigo-500 dark:text-indigo-400 mt-0.5">
+              <div className="text-xs font-mono font-bold text-orange-600 dark:text-orange-400 mt-0.5">
                 {user?.email || 'vitapstudent.ac.in'}
               </div>
             </div>
@@ -137,9 +137,9 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <h3 className="text-lg font-black text-[var(--text-main)] font-heading group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors flex items-center gap-1.5">
+                <h3 className="text-lg font-black text-[var(--text-main)] font-heading group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors flex items-center gap-1.5">
                   <span>{card.title}</span>
-                  <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-indigo-500" />
+                  <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-orange-500" />
                 </h3>
                 <p className="text-xs text-[var(--text-muted)] mt-1.5 leading-relaxed font-normal">
                   {card.subtitle}
@@ -147,7 +147,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-[var(--border-light)] flex items-center justify-between text-xs font-bold text-indigo-500 dark:text-indigo-400">
+            <div className="pt-3 border-t border-[var(--border-light)] flex items-center justify-between text-xs font-bold text-orange-600 dark:text-orange-400">
               <span>Open Section</span>
               <span>&rarr;</span>
             </div>

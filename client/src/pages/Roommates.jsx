@@ -124,7 +124,7 @@ export default function Roommates() {
       {/* ── Page Header ────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[var(--border-light)] pb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-bold mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 text-xs font-bold mb-2">
             <Users className="w-3.5 h-3.5" />
             <span>VIT-AP Flatmate &amp; PG Network</span>
           </div>
@@ -141,7 +141,7 @@ export default function Roommates() {
           size="md"
           icon={Plus}
           onClick={() => setIsModalOpen(true)}
-          className="shadow-lg shadow-indigo-500/20"
+          className="shadow-lg shadow-orange-500/20"
         >
           Post Roommate Vacancy
         </Button>
@@ -192,7 +192,7 @@ export default function Roommates() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold border border-indigo-500/20">
+                      <span className="px-2.5 py-0.5 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-bold border border-orange-500/20">
                         {post.roomType}
                       </span>
                       {post.status && post.status !== 'Available' && (
@@ -209,7 +209,7 @@ export default function Roommates() {
                   </h3>
 
                   <div className="text-xs text-[var(--text-muted)] flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
                     <span className="truncate">{post.location}</span>
                   </div>
 

@@ -112,7 +112,7 @@ export default function AdminMarketplace() {
                       <span className={`px-2.5 py-1 text-[10px] font-bold rounded-full ${
                         item.status === 'Available' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' :
                         item.status === 'Sold' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20' :
-                        'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20'
+                        'bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20'
                       }`}>
                         {item.status}
                       </span>
@@ -122,7 +122,7 @@ export default function AdminMarketplace() {
                         <Link 
                           to={`/marketplace/${item._id}`} 
                           target="_blank"
-                          className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                          className="p-1.5 rounded-lg text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </Link>

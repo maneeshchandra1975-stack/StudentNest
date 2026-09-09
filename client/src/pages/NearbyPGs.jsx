@@ -60,13 +60,13 @@ export default function NearbyPGs() {
     <div className="space-y-8">
       {/* ── Aurora Hero Header Banner ── */}
       <div className="relative overflow-hidden rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6 sm:p-10 backdrop-blur-xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-indigo-500/15 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-violet-500/10 via-indigo-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-amber-500/15 via-orange-500/10 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 via-orange-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-              <Compass className="w-3.5 h-3.5 text-indigo-500" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider">
+              <Compass className="w-3.5 h-3.5 text-orange-500" />
               <span>Real-Time Geoapify Navigation</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-[var(--text-main)] font-heading tracking-tight">
@@ -110,7 +110,7 @@ export default function NearbyPGs() {
       {/* ── Cards Grid ── */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-24 text-[var(--text-muted)] space-y-3">
-          <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+          <div className="w-8 h-8 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
           <p className="text-xs font-semibold">Scanning campus surroundings...</p>
         </div>
       ) : (
@@ -134,14 +134,14 @@ export default function NearbyPGs() {
                       Live Verified
                     </span>
                   </div>
-                  <div className="absolute top-3 right-3 bg-[var(--bg-card)]/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-indigo-500 dark:text-cyan-400 border border-[var(--border-light)] shadow-xs">
+                  <div className="absolute top-3 right-3 bg-[var(--bg-card)]/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-orange-600 dark:text-orange-400 border border-[var(--border-light)] shadow-xs">
                     Hostel / PG
                   </div>
                 </div>
 
                 <div className="p-5 space-y-3">
                   <div className="flex items-center justify-between text-xs font-bold text-[var(--text-muted)]">
-                    <span className="flex items-center gap-1.5 text-indigo-500 dark:text-indigo-400">
+                    <span className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400">
                       <MapPin className="w-3.5 h-3.5 shrink-0" />
                       <span>{pg.distance || 'Near Campus'}</span>
                     </span>
@@ -153,7 +153,7 @@ export default function NearbyPGs() {
                     )}
                   </div>
 
-                  <h3 className="text-lg font-black text-[var(--text-main)] font-heading line-clamp-1 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors">
+                  <h3 className="text-lg font-black text-[var(--text-main)] font-heading line-clamp-1 group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">
                     {pg.name}
                   </h3>
 
@@ -166,7 +166,7 @@ export default function NearbyPGs() {
               <div className="p-5 pt-3 border-t border-[var(--border-light)] mt-2">
                 <button
                   onClick={() => openGoogleMaps(pg.mapLink)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-black text-xs shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs shadow-md shadow-orange-500/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Navigate on Google Maps</span>

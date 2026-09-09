@@ -114,7 +114,7 @@ export default function AdminHousing() {
                         <Link 
                           to={`/housing/roommates/${post._id}`} 
                           target="_blank"
-                          className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                          className="p-1.5 rounded-lg text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </Link>

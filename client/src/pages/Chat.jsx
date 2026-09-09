@@ -225,14 +225,14 @@ export default function Chat() {
         />
       )}
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-light)] pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] mb-1">
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-600 dark:text-orange-400 mb-1">
             <MessageSquare className="w-4 h-4" />
             <span>Controlled Real-Time Chat</span>
           </div>
           <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
-            Student Messages &amp; Direct Chat
+            Student Messages &amp; <span className="text-gradient-primary">Direct Chat</span>
           </h1>
         </div>
 
@@ -274,7 +274,7 @@ export default function Chat() {
           <div className="flex-1 overflow-y-auto divide-y divide-[var(--border-light)]/60">
             {isLoadingConversations ? (
               <div className="p-8 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin text-indigo-500" />
+                <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
                 <span>Loading conversations...</span>
               </div>
             ) : filteredConversations.length === 0 ? (
@@ -296,11 +296,11 @@ export default function Chat() {
                     onClick={() => dispatch(setActiveConversation(conv))}
                     className={`p-3.5 flex items-start gap-3 cursor-pointer transition-all duration-150 ${
                       isActive 
-                        ? 'bg-indigo-500/10 dark:bg-indigo-600/20 border-l-4 border-indigo-500' 
+                        ? 'bg-orange-500/10 dark:bg-orange-600/20 border-l-4 border-orange-500' 
                         : 'hover:bg-[var(--bg-card)]'
                     }`}
                   >
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
                       {convPartner.name ? convPartner.name.charAt(0).toUpperCase() : 'S'}
                     </div>
 
@@ -315,7 +315,7 @@ export default function Chat() {
                             : ''}
                         </span>
                       </div>
-                      <div className="text-[11px] text-indigo-500 dark:text-indigo-400 truncate font-semibold">
+                      <div className="text-[11px] text-orange-600 dark:text-orange-400 truncate font-semibold">
                         {getListingTitle(conv)}
                       </div>
                       <p className="text-xs text-[var(--text-muted)] truncate mt-0.5">
@@ -333,7 +333,7 @@ export default function Chat() {
         <div className="md:col-span-8 flex flex-col h-full bg-[var(--bg-card)]">
           {!activeConversation || error ? (
             <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-4 bg-[var(--bg-card-subtle)]/30">
-              <div className="p-4 rounded-2xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 shadow-sm">
+              <div className="p-4 rounded-2xl bg-orange-500/10 text-orange-500 border border-orange-500/20 shadow-sm">
                 <Lock className="w-8 h-8" />
               </div>
               <div className="space-y-1.5 max-w-sm">
@@ -359,7 +359,7 @@ export default function Chat() {
               {/* Header */}
               <div className="p-3.5 border-b border-[var(--border-light)] flex items-center justify-between bg-[var(--bg-card)] shrink-0 backdrop-blur-md">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 text-white font-bold flex items-center justify-center text-xs shadow-xs">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white font-bold flex items-center justify-center text-xs shadow-xs">
                     {partner.name ? partner.name.charAt(0).toUpperCase() : 'S'}
                   </div>
                   <div>
@@ -367,7 +367,7 @@ export default function Chat() {
                       <span>{partner.name}</span>
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
                     </h3>
-                    <div className="text-[10px] text-indigo-500 dark:text-indigo-400 font-semibold truncate max-w-xs">
+                    <div className="text-[10px] text-orange-600 dark:text-orange-400 font-semibold truncate max-w-xs">
                       {getListingTitle(activeConversation)}
                     </div>
                   </div>
@@ -439,7 +439,7 @@ export default function Chat() {
               <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[var(--bg-card-subtle)]/30">
                 {isLoadingMessages ? (
                   <div className="p-8 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-indigo-500" />
+                    <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
                     <span>Loading conversation history...</span>
                   </div>
                 ) : messages.length === 0 ? (
@@ -459,7 +459,7 @@ export default function Chat() {
                         <div
                           className={`max-w-md p-3.5 rounded-2xl text-xs leading-relaxed ${
                             isMe
-                              ? 'bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white rounded-br-xs shadow-md shadow-indigo-500/15'
+                              ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white rounded-br-xs shadow-md shadow-orange-500/15'
                               : 'bg-[var(--bg-card)] text-[var(--text-main)] border border-[var(--border-light)] rounded-bl-xs shadow-xs'
                           }`}
                         >
@@ -489,7 +489,7 @@ export default function Chat() {
                   placeholder="Type your message..."
                   className="sn-input flex-1 px-4 py-2.5 text-xs sm:text-sm"
                 />
-                <Button type="submit" variant="primary" size="sm" icon={Send} disabled={isSending} className="shadow-md shadow-indigo-500/20">
+                <Button type="submit" variant="primary" size="sm" icon={Send} disabled={isSending} className="shadow-md shadow-orange-500/20">
                   {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
                 </Button>
               </form>

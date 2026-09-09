@@ -58,16 +58,16 @@ export default function AdminDashboard() {
       value: kpis.totalStudents,
       subValue: `${kpis.activeUsers} Active`,
       icon: Users,
-      color: 'text-blue-500',
-      bg: 'bg-blue-500/10 border-blue-500/20'
+      color: 'text-amber-500',
+      bg: 'bg-amber-500/10 border-amber-500/20'
     },
     {
       title: 'Marketplace',
       value: kpis.totalListings,
       subValue: `${kpis.activeListings} Available`,
       icon: Store,
-      color: 'text-purple-500',
-      bg: 'bg-purple-500/10 border-purple-500/20'
+      color: 'text-orange-500',
+      bg: 'bg-orange-500/10 border-orange-500/20'
     },
     {
       title: 'Housing Posts',
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
         {/* Marketplace Categories Chart */}
         <div className="sn-card p-5">
           <h3 className="text-sm font-bold text-[var(--text-main)] mb-6 flex items-center gap-2">
-            <Store className="w-4 h-4 text-purple-500" /> Marketplace Categories
+            <Store className="w-4 h-4 text-orange-500" /> Marketplace Categories
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -201,7 +201,7 @@ export default function AdminDashboard() {
                 />
                 <Bar 
                   dataKey="count" 
-                  fill="#8b5cf6" 
+                  fill="#F97316" 
                   radius={[4, 4, 0, 0]}
                   name="Listings"
                 />

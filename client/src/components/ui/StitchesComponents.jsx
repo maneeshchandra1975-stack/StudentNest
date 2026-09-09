@@ -109,9 +109,9 @@ export const StitchesBadge = styled('span', {
         color: '$emerald400',
       },
       info: {
-        background: 'rgba(99, 102, 241, 0.12)',
-        border: '1px solid rgba(99, 102, 241, 0.3)',
-        color: '$indigo500',
+        background: 'rgba(249, 115, 22, 0.12)',
+        border: '1px solid rgba(249, 115, 22, 0.3)',
+        color: '$orange500',
       },
       warning: {
         background: 'rgba(251, 191, 36, 0.12)',

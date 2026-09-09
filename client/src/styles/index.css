@@ -5,63 +5,63 @@
   --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 
-  /* Light Theme (Elevated Neo-Clean) */
-  --bg-body: #F8FAFC;
+  /* Light Theme (Elevated Neo-Clean with Solar Warmth) */
+  --bg-body: #FBFBFB;
   --bg-card: #FFFFFF;
-  --bg-card-subtle: #F1F5F9;
-  --bg-glass: rgba(255, 255, 255, 0.75);
-  --text-main: #0F172A;
-  --text-muted: #64748B;
-  --border-light: #E2E8F0;
-  --border-hover: #CBD5E1;
-  --border-glass: rgba(226, 232, 240, 0.8);
+  --bg-card-subtle: #F5F5F7;
+  --bg-glass: rgba(255, 255, 255, 0.8);
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --border-light: #E5E7EB;
+  --border-hover: #D1D5DB;
+  --border-glass: rgba(229, 231, 235, 0.8);
   
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --accent-cyan: #06B6D4;
-  --accent-violet: #8B5CF6;
+  --primary: #EA580C;
+  --primary-hover: #C2410C;
+  --accent-amber: #F59E0B;
+  --accent-coral: #F43F5E;
   --accent-emerald: #10B981;
 
   --input-bg: #FFFFFF;
-  --input-border: #E2E8F0;
-  --input-placeholder: #94A3B8;
+  --input-border: #E5E7EB;
+  --input-placeholder: #9CA3AF;
 
-  --scrollbar-track: rgba(241, 245, 249, 0.7);
-  --scrollbar-thumb: #CBD5E1;
-  --scrollbar-thumb-hover: #94A3B8;
+  --scrollbar-track: rgba(245, 245, 247, 0.7);
+  --scrollbar-thumb: #D1D5DB;
+  --scrollbar-thumb-hover: #9CA3AF;
 
   --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-  --card-shadow-hover: 0 20px 30px -4px rgba(79, 70, 229, 0.1), 0 8px 16px -2px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 20px 30px -4px rgba(234, 88, 12, 0.12), 0 8px 16px -2px rgba(0, 0, 0, 0.04);
 }
 
 .dark {
-  /* Dark Theme (Futuristic Deep Obsidian & Indigo Nebula) */
-  --bg-body: #070B14;
-  --bg-card: #0D1527;
-  --bg-card-subtle: #111C35;
-  --bg-glass: rgba(13, 21, 39, 0.75);
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
+  /* Dark Theme (Futuristic Deep Obsidian & Solar Ember Flame) */
+  --bg-body: #0A0D14;
+  --bg-card: #111522;
+  --bg-card-subtle: #171D2E;
+  --bg-glass: rgba(17, 21, 34, 0.8);
+  --text-main: #F9FAFB;
+  --text-muted: #9CA3AF;
   --border-light: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(99, 102, 241, 0.4);
+  --border-hover: rgba(249, 115, 22, 0.45);
   --border-glass: rgba(255, 255, 255, 0.12);
 
-  --primary: #6366F1;
-  --primary-hover: #4F46E5;
-  --accent-cyan: #22D3EE;
-  --accent-violet: #A78BFA;
+  --primary: #F97316;
+  --primary-hover: #FB923C;
+  --accent-amber: #FBBF24;
+  --accent-coral: #FB7185;
   --accent-emerald: #34D399;
 
-  --input-bg: rgba(13, 21, 39, 0.9);
+  --input-bg: rgba(17, 21, 34, 0.9);
   --input-border: rgba(255, 255, 255, 0.12);
-  --input-placeholder: #64748B;
+  --input-placeholder: #6B7280;
 
-  --scrollbar-track: rgba(7, 11, 20, 0.8);
+  --scrollbar-track: rgba(10, 13, 20, 0.8);
   --scrollbar-thumb: rgba(255, 255, 255, 0.15);
-  --scrollbar-thumb-hover: rgba(99, 102, 241, 0.6);
+  --scrollbar-thumb-hover: rgba(249, 115, 22, 0.6);
 
-  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.06);
-  --card-shadow-hover: 0 20px 40px -4px rgba(99, 102, 241, 0.25), 0 0 1px 1px rgba(99, 102, 241, 0.4);
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+  --card-shadow-hover: 0 20px 40px -4px rgba(249, 115, 22, 0.22), 0 0 1px 1px rgba(249, 115, 22, 0.4);
 }
 
 /* ── Base Smooth Scroll & Global Styles ──────────────────────── */
@@ -141,24 +141,24 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .sn-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.25);
 }
 
 /* ── Gradient Text Utilities ─────────────────────────────────── */
 .text-gradient-primary {
-  background: linear-gradient(135deg, #6366F1 0%, #3B82F6 50%, #06B6D4 100%);
+  background: linear-gradient(135deg, #F59E0B 0%, #F97316 45%, #F43F5E 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-emerald {
-  background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+.text-gradient-amber {
+  background: linear-gradient(135deg, #FBBF24 0%, #F97316 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-purple {
-  background: linear-gradient(135deg, #A855F7 0%, #6366F1 100%);
+.text-gradient-coral {
+  background: linear-gradient(135deg, #FB7185 0%, #E11D48 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

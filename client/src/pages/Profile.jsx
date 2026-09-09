@@ -64,11 +64,11 @@ export default function Profile() {
     <div className="space-y-8 py-2 max-w-5xl mx-auto">
       {/* ── Profile Header Card ─────────────────────────────── */}
       <div className="sn-card p-6 sm:p-8 bg-[var(--bg-card)] border-[var(--border-light)] shadow-lg relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-indigo-500/10 to-cyan-500/5 rounded-bl-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-amber-500/10 to-orange-500/5 rounded-bl-full pointer-events-none" />
 
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left relative z-10">
           {/* Avatar with Radiant Gradient */}
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-400 text-white font-black flex items-center justify-center text-3xl shrink-0 shadow-lg shadow-indigo-500/25 border-2 border-white/20">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white font-black flex items-center justify-center text-3xl shrink-0 shadow-lg shadow-orange-500/25 border-2 border-white/20">
             {user?.name?.charAt(0).toUpperCase() || 'M'}
           </div>
 
@@ -79,7 +79,7 @@ export default function Profile() {
                   {user?.name || 'Maneesh Chandra'}
                 </h1>
                 <div className="text-xs text-[var(--text-muted)] flex items-center justify-center sm:justify-start gap-1.5 mt-1 font-mono">
-                  <Mail className="w-3.5 h-3.5 text-indigo-500" />
+                  <Mail className="w-3.5 h-3.5 text-orange-500" />
                   {user?.email || 'maneesh@vitapstudent.ac.in'}
                 </div>
               </div>
@@ -93,10 +93,10 @@ export default function Profile() {
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-1 text-xs text-[var(--text-muted)] font-medium">
               <span className="flex items-center gap-1.5 font-semibold text-[var(--text-main)]">
-                <MapPin className="w-4 h-4 text-indigo-500" /> Inavolu, Amaravati
+                <MapPin className="w-4 h-4 text-orange-500" /> Inavolu, Amaravati
               </span>
               <span className="flex items-center gap-1.5 font-semibold text-[var(--text-main)]">
-                <GraduationCap className="w-4 h-4 text-cyan-500" /> VIT-AP Campus
+                <GraduationCap className="w-4 h-4 text-amber-500" /> VIT-AP Campus
               </span>
             </div>
           </div>
@@ -140,13 +140,13 @@ export default function Profile() {
               <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
                 My Active Listings ({myListings.filter(item => item.status === 'Available').length})
               </h3>
-              <span className="text-[11px] font-bold text-indigo-500">Live on campus</span>
+              <span className="text-[11px] font-bold text-orange-600 dark:text-orange-400">Live on campus</span>
             </div>
 
             <div className="space-y-3">
               {loading ? (
                 <div className="flex justify-center p-8 text-[var(--text-muted)]">
-                  <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+                  <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
                 </div>
               ) : myListings.filter(item => item.status === 'Available').length === 0 ? (
                 <div className="p-8 text-center text-xs text-[var(--text-muted)] bg-[var(--bg-card-subtle)] rounded-xl border border-[var(--border-light)]">
@@ -160,7 +160,7 @@ export default function Profile() {
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
                           {item.type}
                         </span>
                         <Badge variant="active" label={item.status} />
@@ -187,7 +187,7 @@ export default function Profile() {
             <div className="space-y-3">
               {loading ? (
                 <div className="flex justify-center p-8 text-[var(--text-muted)]">
-                  <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+                  <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
                 </div>
               ) : myListings.filter(item => item.status !== 'Available').length === 0 ? (
                 <div className="p-8 text-center text-xs text-[var(--text-muted)] bg-[var(--bg-card-subtle)] rounded-xl border border-[var(--border-light)]">

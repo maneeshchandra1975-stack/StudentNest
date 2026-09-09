@@ -40,7 +40,7 @@ export default function NotificationDropdown() {
         // Toast feedback popup
         toast(newNotif.title, {
           description: newNotif.message,
-          icon: <Sparkles className="w-4 h-4 text-[#2563EB]" />,
+          icon: <Sparkles className="w-4 h-4 text-orange-500" />,
         });
       });
 
@@ -95,7 +95,7 @@ export default function NotificationDropdown() {
       case 'INTEREST_CANCELLED':
         return <XCircle className="w-4 h-4 text-amber-500" />;
       case 'NEW_MESSAGE':
-        return <MessageSquare className="w-4 h-4 text-[#2563EB]" />;
+        return <MessageSquare className="w-4 h-4 text-orange-500" />;
       default:
         return <Bell className="w-4 h-4 text-[var(--text-muted)]" />;
     }
@@ -113,7 +113,7 @@ export default function NotificationDropdown() {
       >
         <Bell className="w-5 h-5 text-slate-700" />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-extrabold text-white bg-[#2563EB] rounded-full ring-2 ring-white animate-pulse">
+          <span className="absolute top-1 right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-extrabold text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-full ring-2 ring-white animate-pulse">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
@@ -127,7 +127,7 @@ export default function NotificationDropdown() {
             <div className="flex items-center gap-2">
               <h3 className="text-xs font-bold text-[var(--text-main)] font-heading">Notifications</h3>
               {unreadCount > 0 && (
-                <span className="text-[10px] font-extrabold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                <span className="text-[10px] font-extrabold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-500/20">
                   {unreadCount} new
                 </span>
               )}
@@ -136,7 +136,7 @@ export default function NotificationDropdown() {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-[11px] font-semibold text-[#2563EB] hover:underline flex items-center gap-1"
+                className="text-[11px] font-semibold text-orange-500 hover:text-orange-600 hover:underline flex items-center gap-1"
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 <span>Mark all as read</span>
@@ -160,7 +160,7 @@ export default function NotificationDropdown() {
                   key={notif._id}
                   onClick={() => handleNotificationClick(notif)}
                   className={`p-3 flex items-start gap-3 cursor-pointer transition-colors ${
-                    !notif.isRead ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-[var(--bg-body)]'
+                    !notif.isRead ? 'bg-orange-500/5 hover:bg-orange-500/10' : 'hover:bg-[var(--bg-body)]'
                   }`}
                 >
                   <div className="p-2 rounded-xl bg-slate-100 shrink-0 mt-0.5">
@@ -173,7 +173,7 @@ export default function NotificationDropdown() {
                         {notif.title}
                       </h4>
                       {!notif.isRead && (
-                        <span className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0" />
+                        <span className="w-2 h-2 rounded-full bg-orange-500 shrink-0" />
                       )}
                     </div>
                     <p className="text-[11px] text-[var(--text-muted)] line-clamp-2 mt-0.5">{notif.message}</p>
@@ -191,7 +191,7 @@ export default function NotificationDropdown() {
             <Link
               to="/notifications"
               onClick={() => setIsOpen(false)}
-              className="text-xs font-bold text-[#2563EB] hover:underline"
+              className="text-xs font-bold text-orange-500 hover:text-orange-600 hover:underline"
             >
               View all notifications →
             </Link>

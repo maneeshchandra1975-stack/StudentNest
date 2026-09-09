@@ -40,13 +40,13 @@ export default function Home() {
   return (
     <div className="space-y-16 py-4">
       {/* ── 1. Futuristic Aurora Hero Banner ───────────────────── */}
-      <div className="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-950/40 via-[var(--bg-card)] to-[var(--bg-card)] p-8 sm:p-14 text-center backdrop-blur-2xl shadow-xl shadow-indigo-500/5">
+      <div className="relative overflow-hidden rounded-3xl border border-orange-500/20 bg-gradient-to-b from-orange-950/20 via-[var(--bg-card)] to-[var(--bg-card)] p-8 sm:p-14 text-center backdrop-blur-2xl shadow-xl shadow-orange-500/5">
         {/* Background Radial Glow */}
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] bg-gradient-to-b from-indigo-500/20 to-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] bg-gradient-to-b from-amber-500/20 via-orange-500/15 to-rose-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl mx-auto space-y-6">
           {/* Official Verification Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-600 dark:text-indigo-400 text-xs font-bold tracking-tight shadow-xs backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-600 dark:text-orange-400 text-xs font-bold tracking-tight shadow-xs backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Exclusively for Verified VIT-AP Students</span>
           </div>
@@ -68,7 +68,7 @@ export default function Home() {
               variant="primary"
               size="lg"
               onClick={() => navigate('/roommates')}
-              className="shadow-xl shadow-indigo-500/25"
+              className="shadow-xl shadow-orange-500/25"
             >
               Find Roommates &amp; PGs
             </Button>
@@ -92,7 +92,7 @@ export default function Home() {
               <div className="text-[11px] font-semibold text-[var(--text-muted)] mt-0.5">Brokerage Fees</div>
             </div>
             <div>
-              <div className="text-xl sm:text-2xl font-black text-gradient-purple font-heading">100%</div>
+              <div className="text-xl sm:text-2xl font-black text-gradient-amber font-heading">100%</div>
               <div className="text-[11px] font-semibold text-[var(--text-muted)] mt-0.5">Domain Verified</div>
             </div>
           </div>
@@ -112,13 +112,13 @@ export default function Home() {
             title: 'Zero Brokerage & Hassle',
             desc: 'Direct peer-to-peer flatmate matching and housing discovery with zero middleman commissions or surprise costs.',
             icon: Building2,
-            color: 'from-blue-500/20 to-cyan-500/5 text-blue-500 border-blue-500/20',
+            color: 'from-amber-500/20 to-orange-500/5 text-amber-500 border-amber-500/20',
           },
           {
             title: 'Secure Campus Marketplace',
             desc: 'Buy and sell textbooks, electronics, cycles, and monitors hand-to-hand on campus with students you can trust.',
             icon: ShoppingBag,
-            color: 'from-indigo-500/20 to-purple-500/5 text-indigo-500 border-indigo-500/20',
+            color: 'from-orange-500/20 to-rose-500/5 text-orange-500 border-orange-500/20',
           },
         ].map((feature, idx) => (
           <Card key={idx} hover className="p-7 flex flex-col justify-between space-y-4">
@@ -165,7 +165,7 @@ export default function Home() {
                 <div>
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold border border-indigo-500/20">
+                      <span className="px-2.5 py-0.5 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-bold border border-orange-500/20">
                         {post.roomType}
                       </span>
                       <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-lg">
@@ -175,7 +175,7 @@ export default function Home() {
                   </div>
                   <h3 className="text-base font-bold text-[var(--text-main)] font-heading leading-snug line-clamp-1">{post.title}</h3>
                   <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] mt-2">
-                    <MapPin className="w-3.5 h-3.5 text-indigo-500" />
+                    <MapPin className="w-3.5 h-3.5 text-orange-500" />
                     <span className="line-clamp-1">{post.location}</span>
                   </div>
                 </div>

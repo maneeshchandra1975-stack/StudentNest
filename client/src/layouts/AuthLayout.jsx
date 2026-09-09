@@ -37,7 +37,7 @@ export default function AuthLayout() {
       desc: 'Connect with students sharing similar sleep routines, study habits, and cleanliness preferences.',
       icon: Users,
       stat: '98% Compatibility Rate',
-      gradient: 'from-indigo-500 to-cyan-400',
+      gradient: 'from-amber-500 to-orange-500',
     },
     {
       title: 'Campus Marketplace',
@@ -53,16 +53,16 @@ export default function AuthLayout() {
     <div className="relative min-h-screen bg-[var(--bg-body)] text-[var(--text-main)] flex flex-col justify-between overflow-x-hidden transition-colors duration-300">
       {/* ── Background Ambient Lights ── */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-indigo-500/15 blur-3xl" />
-        <div className="absolute top-1/2 -right-40 w-[30rem] h-[30rem] rounded-full bg-cyan-500/10 blur-3xl" />
-        <div className="absolute -bottom-40 left-1/3 w-[32rem] h-[32rem] rounded-full bg-violet-500/15 blur-3xl" />
+        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="absolute top-1/2 -right-40 w-[30rem] h-[30rem] rounded-full bg-orange-500/10 blur-3xl" />
+        <div className="absolute -bottom-40 left-1/3 w-[32rem] h-[32rem] rounded-full bg-rose-500/10 blur-3xl" />
       </div>
 
       {/* ── Header ── */}
       <header className="relative z-20 px-6 py-4 border-b border-[var(--border-light)] bg-[var(--bg-card)]/80 backdrop-blur-xl">
         <div className="container mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-400 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-all">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center text-white font-bold shadow-md shadow-orange-500/25 group-hover:scale-105 transition-all">
               <Building2 className="w-5 h-5" />
             </div>
             <span className="text-xl font-extrabold text-[var(--text-main)] tracking-tight font-heading">
@@ -106,7 +106,7 @@ export default function AuthLayout() {
             className="hidden lg:flex lg:col-span-6 flex-col space-y-8 pr-4"
           >
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>The Verified VIT-AP Campus Network</span>
               </div>
@@ -132,7 +132,7 @@ export default function AuthLayout() {
                     onClick={() => setActiveTab(idx)}
                     className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                       activeTab === idx
-                        ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20 scale-[1.02]'
+                        ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/25 scale-[1.02]'
                         : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
                     }`}
                   >
@@ -153,14 +153,14 @@ export default function AuthLayout() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 text-white shadow-xs">
+                      <div className="p-3 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white shadow-xs">
                         {React.createElement(highlights[activeTab].icon, { className: 'w-5 h-5' })}
                       </div>
                       <div>
                         <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
                           {highlights[activeTab].title}
                         </h3>
-                        <p className="text-xs text-indigo-500 dark:text-indigo-400 font-semibold">
+                        <p className="text-xs text-orange-600 dark:text-orange-400 font-semibold">
                           {highlights[activeTab].subtitle}
                         </p>
                       </div>
@@ -188,8 +188,8 @@ export default function AuthLayout() {
             className="lg:col-span-6 flex justify-center"
           >
             <div className="w-full max-w-md bg-[var(--bg-card)] border border-[var(--border-light)] rounded-3xl shadow-xl p-7 sm:p-9 relative overflow-hidden backdrop-blur-xl">
-              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-400" />
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500" />
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
 
               <Outlet />
             </div>
@@ -203,9 +203,9 @@ export default function AuthLayout() {
         <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>&copy; {new Date().getFullYear()} StudentNest. Exclusively engineered for VIT-AP University.</p>
           <div className="flex items-center gap-5">
-            <a href="#privacy" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Privacy Policy</a>
-            <a href="#terms" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Terms of Service</a>
-            <a href="#support" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Help Center</a>
+            <a href="#privacy" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Privacy Policy</a>
+            <a href="#terms" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Terms of Service</a>
+            <a href="#support" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Help Center</a>
           </div>
         </div>
       </footer>

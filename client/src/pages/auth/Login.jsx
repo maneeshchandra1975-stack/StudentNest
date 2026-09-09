@@ -41,8 +41,8 @@ export default function Login() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
-          <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider mb-2">
+          <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
           <span>Student Portal Access</span>
         </div>
         <h2 className="text-3xl font-black text-[var(--text-main)] tracking-tight font-heading">
@@ -67,7 +67,7 @@ export default function Login() {
             <label className="block text-xs font-bold text-[var(--text-main)] uppercase tracking-wider">
               Student Email (Gmail)
             </label>
-            <span className="text-[10px] text-indigo-500 dark:text-indigo-400 font-mono font-semibold lowercase">
+            <span className="text-[10px] text-orange-600 dark:text-orange-400 font-mono font-semibold lowercase">
               @vitapstudent.ac.in
             </span>
           </div>
@@ -101,7 +101,7 @@ export default function Login() {
             </label>
             <Link
               to="/forgot-password"
-              className="text-xs text-indigo-500 dark:text-indigo-400 font-bold hover:underline flex items-center gap-1"
+              className="text-xs text-orange-600 dark:text-orange-400 font-bold hover:underline flex items-center gap-1"
             >
               <KeyRound className="w-3 h-3" /> Forgot?
             </Link>
@@ -135,7 +135,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 hover:from-indigo-500 hover:via-blue-500 hover:to-cyan-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+          className="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -154,7 +154,7 @@ export default function Login() {
       {/* Switch to Register */}
       <div className="pt-2 text-center text-xs text-[var(--text-muted)] font-medium">
         Don't have an account yet?{' '}
-        <Link to="/register" className="text-indigo-500 dark:text-indigo-400 font-bold hover:underline">
+        <Link to="/register" className="text-orange-600 dark:text-orange-400 font-bold hover:underline">
           Register now
         </Link>
       </div>

@@ -77,13 +77,13 @@ export default function RoommateFinder() {
     <div className="space-y-8 py-2">
       {/* ── Aurora Hero Header Banner ── */}
       <div className="relative overflow-hidden rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6 sm:p-10 backdrop-blur-xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-indigo-500/15 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-violet-500/10 via-indigo-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-amber-500/15 via-orange-500/10 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 via-orange-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-orange-500" />
               <span>Campus Flatmate Network</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-[var(--text-main)] font-heading tracking-tight">
@@ -100,12 +100,12 @@ export default function RoommateFinder() {
               className="flex-1 sm:flex-none !rounded-xl !py-2.5 !px-4"
               onClick={() => setIsRequestsModalOpen(true)}
             >
-              <Inbox className="w-4 h-4 mr-2 text-indigo-500" />
+              <Inbox className="w-4 h-4 mr-2 text-orange-500" />
               <span>Incoming Requests</span>
             </Button>
             <Button
               variant="primary"
-              className="flex-1 sm:flex-none !rounded-xl !py-2.5 !px-4 shadow-lg shadow-indigo-500/20"
+              className="flex-1 sm:flex-none !rounded-xl !py-2.5 !px-4 shadow-lg shadow-orange-500/20"
               onClick={() => setIsCreateModalOpen(true)}
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -137,7 +137,7 @@ export default function RoommateFinder() {
                 onClick={() => setSelectedType(type)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   selectedType === type
-                    ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                    ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/20'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)] border border-transparent hover:border-[var(--border-light)]'
                 }`}
               >
@@ -151,7 +151,7 @@ export default function RoommateFinder() {
       {/* ── Roommate Listings Bento Grid ── */}
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-24 text-[var(--text-muted)] space-y-3">
-          <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+          <div className="w-8 h-8 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
           <p className="text-xs font-semibold">Loading roommate vacancies...</p>
         </div>
       ) : filteredPosts.length === 0 ? (
@@ -180,7 +180,7 @@ export default function RoommateFinder() {
                   {/* Top Bar: Room Type & Vacancy Badges */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[11px] font-black border border-indigo-500/20 uppercase tracking-wider">
+                      <span className="px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 text-[11px] font-black border border-orange-500/20 uppercase tracking-wider">
                         {post.roomType || 'Shared Room'}
                       </span>
                       <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold border border-emerald-500/20">
@@ -201,11 +201,11 @@ export default function RoommateFinder() {
 
                   {/* Title & Location */}
                   <div>
-                    <h3 className="text-lg font-black text-[var(--text-main)] font-heading leading-tight group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors">
+                    <h3 className="text-lg font-black text-[var(--text-main)] font-heading leading-tight group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">
                       {post.title}
                     </h3>
                     <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] mt-1.5 font-medium">
-                      <MapPin className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
                       <span className="truncate">{post.location}</span>
                     </div>
                   </div>
@@ -233,7 +233,7 @@ export default function RoommateFinder() {
                       <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider block">
                         Rent Share
                       </span>
-                      <div className="text-xl font-black text-indigo-600 dark:text-cyan-400 font-heading">
+                      <div className="text-xl font-black text-gradient-primary font-heading">
                         ₹{post.rentShare?.toLocaleString()}{' '}
                         <span className="text-xs font-normal text-[var(--text-muted)]">/ mo</span>
                       </div>
@@ -244,8 +244,8 @@ export default function RoommateFinder() {
                         onClick={() => toggleInterest(post._id, post.author?._id)}
                         className={`py-2 px-4 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
                           hasInterested
-                            ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20'
-                            : 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white hover:from-indigo-500 hover:to-cyan-400 shadow-md shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98]'
+                            ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20'
+                            : 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 shadow-md shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98]'
                         }`}
                       >
                         <Heart className={`w-3.5 h-3.5 ${hasInterested ? 'fill-current text-rose-500' : ''}`} />

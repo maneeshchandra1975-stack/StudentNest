@@ -120,11 +120,11 @@ export default function VerifyOtp() {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-2">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-400 text-white mx-auto flex items-center justify-center shadow-lg shadow-indigo-500/25">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white mx-auto flex items-center justify-center shadow-lg shadow-orange-500/25">
           <KeyRound className="w-7 h-7" />
         </div>
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5" /> Step 2 of 2: OTP Verification
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-[var(--text-main)] tracking-tight font-heading">
@@ -132,7 +132,7 @@ export default function VerifyOtp() {
           </h2>
           <p className="text-xs text-[var(--text-muted)] mt-1.5 max-w-xs mx-auto leading-relaxed">
             We sent a 6-digit verification code to <br />
-            <span className="inline-block mt-1 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold">
+            <span className="inline-block mt-1 px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 font-mono text-xs font-bold">
               {displayEmail}
             </span>
           </p>
@@ -159,7 +159,7 @@ export default function VerifyOtp() {
               value={digit}
               onChange={(e) => handleChange(idx, e.target.value)}
               onKeyDown={(e) => handleKeyDown(idx, e)}
-              className="w-12 h-14 sm:w-13 sm:h-15 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-2xl text-center text-2xl font-black text-indigo-600 dark:text-cyan-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition-all shadow-xs font-mono"
+              className="w-12 h-14 sm:w-13 sm:h-15 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-2xl text-center text-2xl font-black text-orange-600 dark:text-orange-400 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all shadow-xs font-mono"
             />
           ))}
         </div>
@@ -167,7 +167,7 @@ export default function VerifyOtp() {
         <button
           type="submit"
           disabled={isLoading || otpValues.join('').length !== 6}
-          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 hover:from-indigo-500 hover:via-blue-500 hover:to-cyan-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -190,7 +190,7 @@ export default function VerifyOtp() {
           type="button"
           onClick={handleResend}
           disabled={!canResend || isLoading}
-          className="inline-flex items-center gap-1.5 font-bold text-indigo-500 dark:text-indigo-400 hover:underline disabled:text-slate-500 disabled:no-underline transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 font-bold text-orange-600 dark:text-orange-400 hover:underline disabled:text-slate-500 disabled:no-underline transition-colors cursor-pointer"
         >
           <RotateCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           {canResend ? 'Resend New OTP' : `Resend OTP in ${timer}s`}

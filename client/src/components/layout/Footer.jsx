@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="space-y-3.5 md:col-span-2 pr-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 flex items-center justify-center text-white font-bold shadow-sm shadow-indigo-500/20">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center text-white font-bold shadow-sm shadow-orange-500/20">
               <Building2 className="w-4 h-4" />
             </div>
             <span className="text-xl font-extrabold text-[var(--text-main)] font-heading">
@@ -29,20 +29,20 @@ export default function Footer() {
         <div className="space-y-2.5">
           <div className="font-bold text-[var(--text-main)] uppercase tracking-wider text-[11px]">Platform</div>
           <ul className="space-y-2 text-xs">
-            <li><Link to="/housing" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Campus Housing &amp; PGs</Link></li>
-            <li><Link to="/marketplace" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Student Marketplace</Link></li>
-            <li><Link to="/messages" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Messages &amp; Chat</Link></li>
-            <li><Link to="/dashboard" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Student Dashboard</Link></li>
+            <li><Link to="/housing" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Campus Housing &amp; PGs</Link></li>
+            <li><Link to="/marketplace" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Student Marketplace</Link></li>
+            <li><Link to="/messages" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Messages &amp; Chat</Link></li>
+            <li><Link to="/dashboard" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Student Dashboard</Link></li>
           </ul>
         </div>
 
         <div className="space-y-2.5">
           <div className="font-bold text-[var(--text-main)] uppercase tracking-wider text-[11px]">Campus Support</div>
           <ul className="space-y-2 text-xs">
-            <li><a href="#help" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Help &amp; FAQs</a></li>
-            <li><a href="#rules" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Campus Verification Rules</a></li>
-            <li><a href="#privacy" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
-            <li><a href="#terms" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Terms of Service</a></li>
+            <li><a href="#help" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Help &amp; FAQs</a></li>
+            <li><a href="#rules" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Campus Verification Rules</a></li>
+            <li><a href="#privacy" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Privacy Policy</a></li>
+            <li><a href="#terms" className="hover:text-orange-500 dark:hover:text-orange-400 transition-colors">Terms of Service</a></li>
           </ul>
         </div>
       </div>

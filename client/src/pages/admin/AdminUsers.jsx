@@ -148,7 +148,7 @@ export default function AdminUsers() {
                       {getStatusBadge(u.status)}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`text-xs font-semibold uppercase tracking-wider ${u.role === 'admin' ? 'text-purple-500' : 'text-[var(--text-muted)]'}`}>
+                      <span className={`text-xs font-semibold uppercase tracking-wider ${u.role === 'admin' ? 'text-orange-500 font-bold' : 'text-[var(--text-muted)]'}`}>
                         {u.role}
                       </span>
                     </td>

@@ -102,7 +102,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
             onClick={() => setActiveTab('received')}
             className={`flex-1 py-2.5 rounded-xl text-center transition-all cursor-pointer ${
               activeTab === 'received'
-                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/20'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
@@ -112,7 +112,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
             onClick={() => setActiveTab('sent')}
             className={`flex-1 py-2.5 rounded-xl text-center transition-all cursor-pointer ${
               activeTab === 'sent'
-                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/20'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
@@ -124,7 +124,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
         <div className="p-6 overflow-y-auto space-y-3 flex-1 bg-[var(--bg-body)]/40">
           {loading ? (
             <div className="p-8 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin text-[#2563EB]" />
+              <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
               <span>Loading interest requests...</span>
             </div>
           ) : activeTab === 'received' ? (
@@ -136,12 +136,12 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
               receivedRequests.map((req) => (
                 <div
                   key={req._id}
-                  className="p-4 rounded-xl bg-[var(--bg-card)] border border-[#E2E8F0] space-y-3 shadow-2xs"
+                  className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] space-y-3 shadow-2xs"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#2563EB]">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400">
                           {req.listingType}
                         </span>
                         <Badge
@@ -162,9 +162,9 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                     </span>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-[var(--bg-body)] border border-slate-100 flex items-center justify-between text-xs">
+                  <div className="p-2.5 rounded-lg bg-[var(--bg-body)] border border-[var(--border-light)] flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-blue-100 text-[#2563EB] font-bold flex items-center justify-center text-xs">
+                      <div className="w-7 h-7 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 font-bold flex items-center justify-center text-xs">
                         {req.sender?.name ? req.sender.name.charAt(0).toUpperCase() : 'S'}
                       </div>
                       <div>
@@ -246,16 +246,16 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
             sentRequests.map((req) => (
               <div
                 key={req._id}
-                className="p-4 rounded-xl bg-[var(--bg-card)] border border-[#E2E8F0] space-y-3 shadow-2xs"
+                className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] space-y-3 shadow-2xs"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#2563EB]">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400">
                       {req.listingType}
                     </span>
                     <h4 className="text-xs font-bold text-[var(--text-main)] mt-1">{getItemTitle(req)}</h4>
                     <div className="text-xs text-[var(--text-muted)]">
-                      Listing Owner: <span className="font-bold text-slate-700">{req.recipient?.name}</span>
+                      Listing Owner: <span className="font-bold text-[var(--text-main)]">{req.recipient?.name}</span>
                     </div>
                   </div>
 

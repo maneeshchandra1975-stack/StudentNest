@@ -54,11 +54,11 @@ export default function HeaderNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[var(--bg-card)]/80 dark:bg-[#070B14]/80 border-b border-[var(--border-light)] backdrop-blur-xl transition-all duration-300">
+    <header className="sticky top-0 z-40 bg-[var(--bg-card)]/80 dark:bg-[#0A0D14]/80 border-b border-[var(--border-light)] backdrop-blur-xl transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
         {/* Left: Brand Logo with Gradient & Glow */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-400 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-500/20 group-hover:scale-105 group-hover:shadow-indigo-500/35 transition-all duration-200">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center text-white font-bold shadow-md shadow-orange-500/25 group-hover:scale-105 group-hover:shadow-orange-500/40 transition-all duration-200">
             <Building2 className="w-5 h-5" />
           </div>
           <span className="text-xl font-extrabold text-[var(--text-main)] tracking-tight font-heading flex items-center">
@@ -77,7 +77,7 @@ export default function HeaderNavbar() {
                 className={cn(
                   'px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 relative',
                   isActive
-                    ? 'bg-white dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-300 shadow-sm border border-slate-200/60 dark:border-indigo-500/30'
+                    ? 'bg-white dark:bg-orange-500/15 text-orange-600 dark:text-orange-400 shadow-sm border border-slate-200/60 dark:border-orange-500/30'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-white/40 dark:hover:bg-slate-800/40'
                 )}
               >
@@ -114,7 +114,7 @@ export default function HeaderNavbar() {
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-[var(--bg-card-subtle)] transition-all border border-transparent hover:border-[var(--border-light)]"
               >
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 text-white font-bold flex items-center justify-center text-xs shadow-sm shadow-indigo-500/25">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white font-bold flex items-center justify-center text-xs shadow-sm shadow-orange-500/25">
                   {user?.name?.charAt(0) || 'S'}
                 </div>
                 <div className="hidden sm:block text-left">

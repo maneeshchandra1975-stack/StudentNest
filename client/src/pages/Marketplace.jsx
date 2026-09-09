@@ -105,7 +105,7 @@ export default function Marketplace() {
       {/* ── Page Header ────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[var(--border-light)] pb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-bold mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 text-xs font-bold mb-2">
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>VIT-AP Peer-to-Peer Hub</span>
           </div>
@@ -123,7 +123,7 @@ export default function Marketplace() {
           </Button>
           <Button
             variant="primary"
-            className="flex-1 sm:flex-none shadow-lg shadow-indigo-500/20"
+            className="flex-1 sm:flex-none shadow-lg shadow-orange-500/20"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -156,7 +156,7 @@ export default function Marketplace() {
                 className={cn(
                   'flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer select-none',
                   isActive 
-                    ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/25 scale-[1.02]' 
+                    ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/25 scale-[1.02]' 
                     : 'bg-[var(--bg-card-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--border-light)]'
                 )}
               >
@@ -171,7 +171,7 @@ export default function Marketplace() {
       {/* ── Items Grid ─────────────────────────────────────────── */}
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-24 text-[var(--text-muted)] gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+          <div className="w-8 h-8 rounded-full border-2 border-orange-500/30 border-t-orange-500 animate-spin" />
           <span className="text-xs font-semibold">Loading marketplace listings...</span>
         </div>
       ) : items.length === 0 ? (

@@ -72,7 +72,7 @@ export default function Register() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider mb-2">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Step 1 of 2: Verification</span>
         </div>
@@ -186,11 +186,11 @@ export default function Register() {
             <div className="mt-2.5 p-3 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-light)] space-y-2">
               <div className="flex items-center justify-between text-[11px]">
                 <span className="text-[var(--text-muted)]">Strength:</span>
-                <span className="font-bold text-indigo-500">{strengthScore}%</span>
+                <span className="font-bold text-orange-500">{strengthScore}%</span>
               </div>
               <div className="h-1.5 w-full bg-[var(--border-light)] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-400 transition-all duration-300"
                   style={{ width: `${strengthScore}%` }}
                 />
               </div>
@@ -243,7 +243,7 @@ export default function Register() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 hover:from-indigo-500 hover:via-blue-500 hover:to-cyan-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+          className="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -262,7 +262,7 @@ export default function Register() {
       {/* Switch to Login */}
       <div className="pt-2 text-center text-xs text-[var(--text-muted)] font-medium">
         Already registered?{' '}
-        <Link to="/login" className="text-indigo-500 dark:text-indigo-400 font-bold hover:underline">
+        <Link to="/login" className="text-orange-600 dark:text-orange-400 font-bold hover:underline">
           Sign In here
         </Link>
       </div>
