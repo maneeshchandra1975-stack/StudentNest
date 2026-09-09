@@ -38,119 +38,157 @@ export default function Home() {
   const topMarketplace = marketplaceItems.slice(0, 3);
 
   return (
-    <div className="space-y-12 py-6">
-      {/* 1. Hero Banner */}
-      <div className="sn-card relative overflow-hidden bg-gradient-to-br from-[#2563EB] to-indigo-700 text-white p-8 md:p-12 text-center space-y-6">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=1600')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
-        <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-          <h1 className="text-3xl md:text-5xl font-extrabold font-heading leading-tight tracking-tight">
-            The Exclusive Network for <br />
-            <span className="text-emerald-300">VIT-AP Students</span>
+    <div className="space-y-16 py-4">
+      {/* ── 1. Futuristic Aurora Hero Banner ───────────────────── */}
+      <div className="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-950/40 via-[var(--bg-card)] to-[var(--bg-card)] p-8 sm:p-14 text-center backdrop-blur-2xl shadow-xl shadow-indigo-500/5">
+        {/* Background Radial Glow */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] bg-gradient-to-b from-indigo-500/20 to-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+          {/* Official Verification Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-600 dark:text-indigo-400 text-xs font-bold tracking-tight shadow-xs backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Exclusively for Verified VIT-AP Students</span>
+          </div>
+
+          {/* Hero Heading */}
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-heading leading-[1.1] tracking-tight text-[var(--text-main)]">
+            The High-Trust Campus Network for{' '}
+            <span className="text-gradient-primary">VIT-AP</span>
           </h1>
-          <p className="text-sm md:text-base text-blue-100 font-medium max-w-xl mx-auto leading-relaxed">
-            Discover verified flatmates, buy and sell textbooks, and connect securely using your official university identity.
+
+          {/* Subheading */}
+          <p className="text-sm sm:text-base text-[var(--text-muted)] max-w-xl mx-auto leading-relaxed font-medium">
+            Find compatible flatmates, explore verified PGs, and buy/sell textbooks &amp; campus gear safely using your official university identity.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-4">
             <Button
               variant="primary"
               size="lg"
-              onClick={() => navigate('/housing')}
-              className="!bg-white !text-[#2563EB] hover:!bg-slate-50 border-none shadow-xl"
+              onClick={() => navigate('/roommates')}
+              className="shadow-xl shadow-indigo-500/25"
             >
-              Explore Housing
+              Find Roommates &amp; PGs
             </Button>
             <Button
               variant="secondary"
               size="lg"
               onClick={() => navigate('/marketplace')}
-              className="!bg-indigo-900/40 !text-white !border-indigo-400 hover:!bg-indigo-900/60 backdrop-blur-md"
             >
               Browse Marketplace
             </Button>
           </div>
+
+          {/* Stats Bar */}
+          <div className="pt-8 border-t border-[var(--border-light)] grid grid-cols-3 gap-4 max-w-lg mx-auto text-center">
+            <div>
+              <div className="text-xl sm:text-2xl font-black text-gradient-primary font-heading">1,400+</div>
+              <div className="text-[11px] font-semibold text-[var(--text-muted)] mt-0.5">Active Students</div>
+            </div>
+            <div>
+              <div className="text-xl sm:text-2xl font-black text-gradient-emerald font-heading">₹0</div>
+              <div className="text-[11px] font-semibold text-[var(--text-muted)] mt-0.5">Brokerage Fees</div>
+            </div>
+            <div>
+              <div className="text-xl sm:text-2xl font-black text-gradient-purple font-heading">100%</div>
+              <div className="text-[11px] font-semibold text-[var(--text-muted)] mt-0.5">Domain Verified</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 2. Verified Trust Badges */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+      {/* ── 2. Bento Grid Value Props ──────────────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           {
             title: 'Verified Student Identity',
-            desc: 'Every user is authenticated using their official @vitapstudent.ac.in university domain.',
+            desc: 'Every student is securely authenticated with their official @vitapstudent.ac.in credentials. Zero imposters or scammers.',
             icon: ShieldCheck,
+            color: 'from-emerald-500/20 to-teal-500/5 text-emerald-500 border-emerald-500/20',
           },
           {
-            title: 'Zero Brokerage Fees',
-            desc: 'Direct peer-to-peer student transactions with zero broker commission or hidden fees.',
+            title: 'Zero Brokerage & Hassle',
+            desc: 'Direct peer-to-peer flatmate matching and housing discovery with zero middleman commissions or surprise costs.',
             icon: Building2,
+            color: 'from-blue-500/20 to-cyan-500/5 text-blue-500 border-blue-500/20',
           },
           {
-            title: 'Safe Campus Marketplace',
-            desc: 'Buy and sell textbooks, bicycles, and electronics safely with fellow batchmates.',
+            title: 'Secure Campus Marketplace',
+            desc: 'Buy and sell textbooks, electronics, cycles, and monitors hand-to-hand on campus with students you can trust.',
             icon: ShoppingBag,
+            color: 'from-indigo-500/20 to-purple-500/5 text-indigo-500 border-indigo-500/20',
           },
         ].map((feature, idx) => (
-          <div key={idx} className="sn-card p-6 space-y-3 border-[#E2E8F0] bg-[var(--bg-card)]">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center border border-blue-100">
-              <feature.icon className="w-5 h-5" />
+          <Card key={idx} hover className="p-7 flex flex-col justify-between space-y-4">
+            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center border shadow-xs`}>
+              <feature.icon className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-[var(--text-main)] font-heading">{feature.title}</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">{feature.desc}</p>
-          </div>
+            <div className="space-y-2">
+              <h3 className="text-lg font-bold text-[var(--text-main)] font-heading">{feature.title}</h3>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">{feature.desc}</p>
+            </div>
+          </Card>
         ))}
       </div>
 
-      {/* 3. Featured Campus Housing Section */}
+      {/* ── 3. Featured Campus Housing Section ─────────────────── */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-[var(--text-main)] font-heading">
-              Featured Housing & PGs
+            <h2 className="text-2xl font-extrabold text-[var(--text-main)] font-heading tracking-tight">
+              Featured Housing &amp; Vacancies
             </h2>
-            <p className="text-xs text-[#64748B] mt-0.5">
-              Verified accommodations and room vacancies posted by students.
+            <p className="text-xs text-[var(--text-muted)] mt-1">
+              Recent verified accommodations and room vacancies posted by fellow students.
             </p>
           </div>
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate('/housing')}
+            onClick={() => navigate('/roommates')}
             className="hidden sm:inline-flex"
           >
-            View All Housing <ArrowRight className="w-4 h-4 ml-1" />
+            Explore All Housing <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
 
         {housingLoading ? (
-          <div className="text-sm text-slate-500 py-10 text-center">Loading housing options...</div>
+          <div className="text-sm text-[var(--text-muted)] py-12 text-center">Loading campus listings...</div>
         ) : topHousing.length === 0 ? (
-          <div className="text-sm text-slate-500 py-10 text-center bg-[var(--bg-card)] rounded-2xl border border-[var(--border-light)]">No housing listings found. Be the first to post!</div>
+          <div className="text-sm text-[var(--text-muted)] py-12 text-center sn-card">No housing listings found. Be the first to post!</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {topHousing.map((post) => (
-              <Card key={post._id} hover className="p-5 flex flex-col justify-between space-y-4">
+              <Card key={post._id} hover className="p-6 flex flex-col justify-between space-y-4 border-[var(--border-light)]">
                 <div>
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-2.5 py-0.5 rounded bg-blue-50 text-[#2563EB] text-xs font-bold border border-blue-100">{post.roomType}</span>
-                      <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded">{post.vacancy} Vacancy</span>
+                      <span className="px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold border border-indigo-500/20">
+                        {post.roomType}
+                      </span>
+                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-lg">
+                        {post.vacancy} Vacancy
+                      </span>
                     </div>
                   </div>
-                  <h3 className="text-base font-bold text-[var(--text-main)] font-heading leading-tight">{post.title}</h3>
+                  <h3 className="text-base font-bold text-[var(--text-main)] font-heading leading-snug line-clamp-1">{post.title}</h3>
                   <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] mt-2">
-                    <MapPin className="w-3.5 h-3.5" />
-                    {post.location}
+                    <MapPin className="w-3.5 h-3.5 text-indigo-500" />
+                    <span className="line-clamp-1">{post.location}</span>
                   </div>
                 </div>
 
                 <div className="pt-4 border-t border-[var(--border-light)] flex justify-between items-center">
                   <div>
-                    <div className="text-sm text-[var(--text-muted)]">Rent Share</div>
-                    <div className="text-lg font-bold text-[#2563EB]">₹{post.rentShare.toLocaleString()} <span className="text-xs font-normal text-[var(--text-muted)]">/ mo</span></div>
+                    <div className="text-[10px] uppercase font-bold text-[var(--text-muted)]">Rent Share</div>
+                    <div className="text-lg font-black text-gradient-primary">
+                      ₹{post.rentShare.toLocaleString()} <span className="text-xs font-normal text-[var(--text-muted)]">/ mo</span>
+                    </div>
                   </div>
-                  <Button variant="secondary" size="sm" onClick={() => navigate('/housing')}>
-                    View Post
+                  <Button variant="secondary" size="sm" onClick={() => navigate('/roommates')}>
+                    View Details
                   </Button>
                 </div>
               </Card>
@@ -159,15 +197,15 @@ export default function Home() {
         )}
       </div>
 
-      {/* 4. Student Marketplace Preview Section */}
+      {/* ── 4. Student Marketplace Preview Section ────────────── */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-[var(--text-main)] font-heading">
-              Student Marketplace Essentials
+            <h2 className="text-2xl font-extrabold text-[var(--text-main)] font-heading tracking-tight">
+              Marketplace Essentials
             </h2>
-            <p className="text-xs text-[#64748B] mt-0.5">
-              Buy and sell pre-loved textbooks, cycles, and monitors directly from batchmates.
+            <p className="text-xs text-[var(--text-muted)] mt-1">
+              Textbooks, calculators, cycles, and electronics passed down directly between batches.
             </p>
           </div>
           <Button
@@ -181,21 +219,21 @@ export default function Home() {
         </div>
 
         {marketplaceLoading ? (
-          <div className="text-sm text-slate-500 py-10 text-center">Loading marketplace...</div>
+          <div className="text-sm text-[var(--text-muted)] py-12 text-center">Loading marketplace items...</div>
         ) : topMarketplace.length === 0 ? (
-          <div className="text-sm text-slate-500 py-10 text-center bg-[var(--bg-card)] rounded-2xl border border-[var(--border-light)]">No items for sale yet. Be the first to sell!</div>
+          <div className="text-sm text-[var(--text-muted)] py-12 text-center sn-card">No marketplace items listed yet. Be the first to post!</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {topMarketplace.map((item) => (
               <Card key={item._id} hover className="overflow-hidden flex flex-col justify-between">
                 <div>
-                  <div className="relative h-44 w-full overflow-hidden bg-[var(--bg-body)]">
+                  <div className="relative h-48 w-full overflow-hidden bg-[var(--bg-body)]">
                     <img
                       src={item.images && item.images.length > 0 ? item.images[0] : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff'}
                       alt={item.title}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                     />
-                    <div className="absolute top-3 left-3 bg-[var(--bg-card)]/90 px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-700 border border-[var(--border-light)]">
+                    <div className="absolute top-3 left-3 bg-[var(--bg-card)]/85 backdrop-blur-md px-2.5 py-1 rounded-lg text-[11px] font-bold text-[var(--text-main)] border border-[var(--border-light)] shadow-xs">
                       {item.condition}
                     </div>
                   </div>
@@ -211,7 +249,7 @@ export default function Home() {
                 </div>
 
                 <div className="p-5 pt-0 flex items-center justify-between border-t border-[var(--border-light)] mt-2">
-                  <div className="text-lg font-extrabold text-[#2563EB] font-heading">₹{item.price.toLocaleString()}</div>
+                  <div className="text-lg font-black text-gradient-primary font-heading">₹{item.price.toLocaleString()}</div>
                   <Button variant="secondary" size="sm" onClick={() => navigate('/marketplace')}>
                     Contact Seller
                   </Button>

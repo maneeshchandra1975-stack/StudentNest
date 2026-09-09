@@ -61,37 +61,42 @@ export default function Profile() {
   }, [user]);
 
   return (
-    <div className="space-y-8 py-2 max-w-4xl mx-auto">
+    <div className="space-y-8 py-2 max-w-5xl mx-auto">
       {/* ── Profile Header Card ─────────────────────────────── */}
-      <div className="sn-card p-6 sm:p-8 space-y-6 bg-[var(--bg-card)]">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-          {/* Avatar */}
-          <div className="w-20 h-20 rounded-2xl bg-blue-100 text-[#2563EB] font-extrabold flex items-center justify-center text-2xl shrink-0 shadow-xs border border-blue-200">
+      <div className="sn-card p-6 sm:p-8 bg-[var(--bg-card)] border-[var(--border-light)] shadow-lg relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-indigo-500/10 to-cyan-500/5 rounded-bl-full pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left relative z-10">
+          {/* Avatar with Radiant Gradient */}
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-400 text-white font-black flex items-center justify-center text-3xl shrink-0 shadow-lg shadow-indigo-500/25 border-2 border-white/20">
             {user?.name?.charAt(0).toUpperCase() || 'M'}
           </div>
 
-          <div className="space-y-2 flex-1">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="space-y-2.5 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
+                <h1 className="text-2xl sm:text-3xl font-black text-[var(--text-main)] font-heading">
                   {user?.name || 'Maneesh Chandra'}
                 </h1>
-                <div className="text-xs text-[#64748B] flex items-center justify-center sm:justify-start gap-1 mt-0.5 font-mono">
-                  <Mail className="w-3.5 h-3.5" />
+                <div className="text-xs text-[var(--text-muted)] flex items-center justify-center sm:justify-start gap-1.5 mt-1 font-mono">
+                  <Mail className="w-3.5 h-3.5 text-indigo-500" />
                   {user?.email || 'maneesh@vitapstudent.ac.in'}
                 </div>
               </div>
 
-              <Badge variant="verified" />
+              <Badge variant="verified" className="shadow-xs" />
             </div>
 
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Student at VIT-AP University. Active member of Campus Housing &amp; Marketplace Network.
+            <p className="text-xs text-[var(--text-muted)] leading-relaxed max-w-xl">
+              Verified Scholar at VIT-AP University. Active contributor to the campus peer-to-peer network.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2 text-xs text-slate-600 font-medium">
-              <span className="flex items-center gap-1">
-                <MapPin className="w-4 h-4 text-[#2563EB]" /> Inavolu, Amaravati
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-1 text-xs text-[var(--text-muted)] font-medium">
+              <span className="flex items-center gap-1.5 font-semibold text-[var(--text-main)]">
+                <MapPin className="w-4 h-4 text-indigo-500" /> Inavolu, Amaravati
+              </span>
+              <span className="flex items-center gap-1.5 font-semibold text-[var(--text-main)]">
+                <GraduationCap className="w-4 h-4 text-cyan-500" /> VIT-AP Campus
               </span>
             </div>
           </div>
@@ -101,16 +106,16 @@ export default function Profile() {
       {/* ── Listings & Details Tabs ───────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Verification Credentials */}
-        <div className="sn-card p-6 space-y-4 bg-[var(--bg-card)]">
+        <div className="sn-card p-6 space-y-4 bg-[var(--bg-card)] border-[var(--border-light)] h-fit shadow-sm">
           <h3 className="text-base font-bold text-[var(--text-main)] font-heading">Campus Status</h3>
 
           <div className="space-y-3 text-xs">
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 space-y-1">
-              <div className="font-bold flex items-center gap-1">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" /> Domain Authenticated
+            <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 space-y-1.5">
+              <div className="font-bold flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                <ShieldCheck className="w-4 h-4" /> Domain Authenticated
               </div>
-              <p className="text-[11px] text-emerald-700">
-                Verified via official university email address `@vitapstudent.ac.in`.
+              <p className="text-[11px] leading-relaxed opacity-90">
+                Secured via official student identity email domain <code className="font-mono text-[10px] bg-emerald-500/20 px-1 py-0.5 rounded">@vitapstudent.ac.in</code>.
               </p>
             </div>
 
@@ -130,35 +135,38 @@ export default function Profile() {
         <div className="md:col-span-2 space-y-6">
           
           {/* Active Listings */}
-          <div className="sn-card p-6 space-y-4 bg-[var(--bg-card)]">
-            <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
-              My Active Listings ({myListings.filter(item => item.status === 'Available').length})
-            </h3>
+          <div className="sn-card p-6 space-y-4 bg-[var(--bg-card)] border-[var(--border-light)] shadow-sm">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
+                My Active Listings ({myListings.filter(item => item.status === 'Available').length})
+              </h3>
+              <span className="text-[11px] font-bold text-indigo-500">Live on campus</span>
+            </div>
 
             <div className="space-y-3">
               {loading ? (
-                <div className="flex justify-center p-8 text-slate-400">
-                  <Loader2 className="w-6 h-6 animate-spin" />
+                <div className="flex justify-center p-8 text-[var(--text-muted)]">
+                  <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
                 </div>
               ) : myListings.filter(item => item.status === 'Available').length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-400 bg-[var(--bg-body)] rounded-xl border border-slate-100">
-                  You don't have any active listings.
+                <div className="p-8 text-center text-xs text-[var(--text-muted)] bg-[var(--bg-card-subtle)] rounded-xl border border-[var(--border-light)]">
+                  You don't have any active listings yet.
                 </div>
               ) : (
                 myListings.filter(item => item.status === 'Available').map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl bg-[var(--bg-body)] border border-[var(--border-light)]/80 flex items-center justify-between"
+                    className="p-4 rounded-xl bg-[var(--bg-card-subtle)]/70 border border-[var(--border-light)] flex items-center justify-between hover:border-[var(--border-hover)] transition-all"
                   >
-                    <div className="space-y-0.5">
+                    <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#2563EB]">
+                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
                           {item.type}
                         </span>
                         <Badge variant="active" label={item.status} />
                       </div>
                       <h4 className="text-xs font-bold text-[var(--text-main)]">{item.title}</h4>
-                      <div className="text-xs font-bold text-[#2563EB]">{item.priceOrRent}</div>
+                      <div className="text-xs font-black text-gradient-primary">{item.priceOrRent}</div>
                     </div>
 
                     <Button variant="ghost" size="sm" onClick={() => toast.info('Listing edits coming soon')}>
@@ -171,35 +179,35 @@ export default function Profile() {
           </div>
 
           {/* Sold / Completed Listings */}
-          <div className="sn-card p-6 space-y-4 bg-[var(--bg-card)] opacity-90">
+          <div className="sn-card p-6 space-y-4 bg-[var(--bg-card)] border-[var(--border-light)] shadow-sm">
             <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
               My Sold / Completed Listings ({myListings.filter(item => item.status !== 'Available').length})
             </h3>
 
             <div className="space-y-3">
               {loading ? (
-                <div className="flex justify-center p-8 text-slate-400">
-                  <Loader2 className="w-6 h-6 animate-spin" />
+                <div className="flex justify-center p-8 text-[var(--text-muted)]">
+                  <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
                 </div>
               ) : myListings.filter(item => item.status !== 'Available').length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-400 bg-[var(--bg-body)] rounded-xl border border-slate-100">
-                  You haven't sold anything yet.
+                <div className="p-8 text-center text-xs text-[var(--text-muted)] bg-[var(--bg-card-subtle)] rounded-xl border border-[var(--border-light)]">
+                  You haven't marked any listings as sold or completed yet.
                 </div>
               ) : (
                 myListings.filter(item => item.status !== 'Available').map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl bg-[var(--bg-body)] border border-slate-200 bg-slate-50 flex items-center justify-between grayscale-[20%]"
+                    className="p-4 rounded-xl bg-[var(--bg-card-subtle)]/40 border border-[var(--border-light)] flex items-center justify-between opacity-80"
                   >
-                    <div className="space-y-0.5">
+                    <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#2563EB]">
+                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-500/10 text-slate-500 border border-slate-500/20">
                           {item.type}
                         </span>
                         <Badge variant="inactive" label={item.status} />
                       </div>
-                      <h4 className="text-xs font-bold text-[var(--text-main)] line-through text-slate-500">{item.title}</h4>
-                      <div className="text-xs font-bold text-slate-400">{item.priceOrRent}</div>
+                      <h4 className="text-xs font-bold text-[var(--text-main)] line-through text-[var(--text-muted)]">{item.title}</h4>
+                      <div className="text-xs font-bold text-[var(--text-muted)]">{item.priceOrRent}</div>
                     </div>
                   </div>
                 ))

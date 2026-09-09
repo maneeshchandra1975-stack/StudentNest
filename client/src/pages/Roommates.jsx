@@ -120,19 +120,19 @@ export default function Roommates() {
   });
 
   return (
-    <div className="space-y-8 py-2">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-6">
+    <div className="space-y-8">
+      {/* ── Page Header ────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[var(--border-light)] pb-6">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] mb-1">
-            <Users className="w-4 h-4" />
-            <span>Peer-to-Peer Roommate Finder</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-bold mb-2">
+            <Users className="w-3.5 h-3.5" />
+            <span>VIT-AP Flatmate &amp; PG Network</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-[var(--text-main)] font-heading">
+          <h1 className="text-3xl font-black text-[var(--text-main)] font-heading tracking-tight">
             Roommate Finder
           </h1>
-          <p className="text-xs text-[#64748B] mt-1">
-            Find compatible flatmates and roommates for flats and PGs around VIT-AP campus.
+          <p className="text-sm text-[var(--text-muted)] mt-1">
+            Find compatible flatmates and verified rooms around Amaravati &amp; VIT-AP campus.
           </p>
         </div>
 
@@ -141,21 +141,22 @@ export default function Roommates() {
           size="md"
           icon={Plus}
           onClick={() => setIsModalOpen(true)}
+          className="shadow-lg shadow-indigo-500/20"
         >
           Post Roommate Vacancy
         </Button>
       </div>
 
-      {/* Filters */}
-      <div className="sn-card p-4 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-[var(--bg-card)]">
+      {/* ── Filters ────────────────────────────────────────────── */}
+      <div className="glass-panel rounded-2xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center shadow-xs">
         <div className="sm:col-span-8 relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search roommate listings by location or keywords..."
-            className="sn-input pl-10 pr-4 py-2 w-full text-xs"
+            placeholder="Search by location (e.g. Inavolu, Mandadam, Thullur) or amenities..."
+            className="sn-input pl-10 pr-4 py-2.5 w-full text-xs sm:text-sm"
           />
         </div>
 
@@ -163,9 +164,9 @@ export default function Roommates() {
           <select
             value={selectedRoomType}
             onChange={(e) => setSelectedRoomType(e.target.value)}
-            className="sn-input px-3 py-2 w-full text-xs font-medium text-[var(--text-main)]"
+            className="sn-input px-3.5 py-2.5 w-full text-xs sm:text-sm font-semibold text-[var(--text-main)] cursor-pointer"
           >
-            <option value="all">All Room Types</option>
+            <option value="all">All Room Configurations</option>
             <option value="Shared Room">Shared Room</option>
             <option value="Private Room">Private Room</option>
             <option value="2BHK Flatshare">2BHK Flatshare</option>
@@ -174,7 +175,7 @@ export default function Roommates() {
         </div>
       </div>
 
-      {/* Feed Grid */}
+      {/* ── Feed Grid ──────────────────────────────────────────── */}
       {filtered.length === 0 ? (
         <EmptyState
           title="No roommate listings found"
@@ -187,53 +188,53 @@ export default function Roommates() {
           {filtered.map((post) => {
             const isInterested = interestedIds.includes(post.id);
             return (
-              <Card key={post.id} hover className="p-5 flex flex-col justify-between space-y-4">
+              <Card key={post.id} hover className="p-6 flex flex-col justify-between space-y-4 border-[var(--border-light)] shadow-sm">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#2563EB] text-[11px] font-bold">
+                      <span className="px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold border border-indigo-500/20">
                         {post.roomType}
                       </span>
                       {post.status && post.status !== 'Available' && (
                         <Badge variant="secondary" label={post.status} />
                       )}
                     </div>
-                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-lg">
                       {post.vacancy} Vacancy
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-[var(--text-main)] font-heading line-clamp-2">
+                  <h3 className="text-base font-bold text-[var(--text-main)] font-heading line-clamp-2 leading-snug">
                     {post.title}
                   </h3>
 
-                  <div className="text-xs text-[#64748B] flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <div className="text-xs text-[var(--text-muted)] flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                     <span className="truncate">{post.location}</span>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed line-clamp-2">
                     {post.description}
                   </p>
 
                   {/* Preferences */}
-                  <div className="flex flex-wrap gap-1 pt-1">
+                  <div className="flex flex-wrap gap-1.5 pt-1">
                     {post.preferences.map((pref, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-slate-100 text-[10px] font-medium text-slate-600">
+                      <span key={idx} className="px-2.5 py-1 rounded-lg bg-[var(--bg-card-subtle)] text-[10px] font-bold text-[var(--text-muted)] border border-[var(--border-light)]">
                         {pref}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 space-y-3">
+                <div className="pt-4 border-t border-[var(--border-light)] space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-lg font-extrabold text-[#2563EB] font-heading">
-                        ₹{post.rentShare.toLocaleString()} <span className="text-xs font-normal text-slate-400">/ mo</span>
+                      <div className="text-lg font-black text-gradient-primary font-heading">
+                        ₹{post.rentShare.toLocaleString()} <span className="text-xs font-normal text-[var(--text-muted)]">/ mo</span>
                       </div>
-                      <div className="text-[10px] text-slate-400 flex items-center gap-0.5">
-                        <ShieldCheck className="w-3 h-3 text-emerald-600" /> {post.author}
+                      <div className="text-[10px] text-[var(--text-muted)] flex items-center gap-1 font-semibold mt-0.5">
+                        <ShieldCheck className="w-3 h-3 text-emerald-500" /> {post.author}
                       </div>
                     </div>
 

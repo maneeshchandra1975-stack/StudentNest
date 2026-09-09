@@ -1,39 +1,72 @@
 @import "tailwindcss";
 
-/* Typography Tokens */
+/* ── Global Typography & Modern Design Tokens ───────────────── */
 :root {
-  --font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 
-  /* Light Theme (Default) */
+  /* Light Theme (Elevated Neo-Clean) */
   --bg-body: #F8FAFC;
   --bg-card: #FFFFFF;
-  --text-main: #111827;
+  --bg-card-subtle: #F1F5F9;
+  --bg-glass: rgba(255, 255, 255, 0.75);
+  --text-main: #0F172A;
   --text-muted: #64748B;
   --border-light: #E2E8F0;
   --border-hover: #CBD5E1;
+  --border-glass: rgba(226, 232, 240, 0.8);
+  
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --accent-cyan: #06B6D4;
+  --accent-violet: #8B5CF6;
+  --accent-emerald: #10B981;
+
   --input-bg: #FFFFFF;
   --input-border: #E2E8F0;
   --input-placeholder: #94A3B8;
-  --scrollbar-bg: #F8FAFC;
+
+  --scrollbar-track: rgba(241, 245, 249, 0.7);
   --scrollbar-thumb: #CBD5E1;
   --scrollbar-thumb-hover: #94A3B8;
+
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  --card-shadow-hover: 0 20px 30px -4px rgba(79, 70, 229, 0.1), 0 8px 16px -2px rgba(0, 0, 0, 0.04);
 }
 
 .dark {
-  /* Dark Theme */
-  --bg-body: #020617;      /* slate-950 */
-  --bg-card: #0F172A;      /* slate-900 */
-  --text-main: #F8FAFC;    /* slate-50 */
-  --text-muted: #94A3B8;   /* slate-400 */
-  --border-light: #1E293B; /* slate-800 */
-  --border-hover: #334155; /* slate-700 */
-  --input-bg: #0F172A;     /* slate-900 */
-  --input-border: #1E293B; /* slate-800 */
-  --input-placeholder: #475569; /* slate-600 */
-  --scrollbar-bg: #020617;
-  --scrollbar-thumb: #334155;
-  --scrollbar-thumb-hover: #475569;
+  /* Dark Theme (Futuristic Deep Obsidian & Indigo Nebula) */
+  --bg-body: #070B14;
+  --bg-card: #0D1527;
+  --bg-card-subtle: #111C35;
+  --bg-glass: rgba(13, 21, 39, 0.75);
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(99, 102, 241, 0.4);
+  --border-glass: rgba(255, 255, 255, 0.12);
+
+  --primary: #6366F1;
+  --primary-hover: #4F46E5;
+  --accent-cyan: #22D3EE;
+  --accent-violet: #A78BFA;
+  --accent-emerald: #34D399;
+
+  --input-bg: rgba(13, 21, 39, 0.9);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --input-placeholder: #64748B;
+
+  --scrollbar-track: rgba(7, 11, 20, 0.8);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --scrollbar-thumb-hover: rgba(99, 102, 241, 0.6);
+
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+  --card-shadow-hover: 0 20px 40px -4px rgba(99, 102, 241, 0.25), 0 0 1px 1px rgba(99, 102, 241, 0.4);
+}
+
+/* ── Base Smooth Scroll & Global Styles ──────────────────────── */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -44,37 +77,61 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
-/* Startup Card Primitive */
+/* ── Modern Glassmorphism & Surface Utilities ────────────────── */
+.glass-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+}
+
+.glass-dropdown {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Advanced Startup Card Primitive ─────────────────────────── */
 .sn-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-light);
-  border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.sn-card-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sn-card-hover:hover {
   border-color: var(--border-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
 }
 
-/* Clean Form Control Inputs */
+/* ── Advanced Inputs & Controls ──────────────────────────────── */
 .sn-input {
   background-color: var(--input-bg);
   border: 1px solid var(--input-border);
-  border-radius: 12px;
+  border-radius: 14px;
   color: var(--text-main);
   font-size: 14px;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.2s ease;
 }
 
 .sn-input::placeholder {
@@ -83,23 +140,44 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .sn-input:focus {
   outline: none;
-  border-color: #2563EB;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-/* Custom Scrollbar */
+/* ── Gradient Text Utilities ─────────────────────────────────── */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #6366F1 0%, #3B82F6 50%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #A855F7 0%, #6366F1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Luxury Custom Scrollbar ─────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--scrollbar-bg);
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
   border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
