@@ -42,11 +42,8 @@ const getMarketplaceItems = async (req, res, next) => {
       filter.seller = seller;
     }
 
-    if (status) {
+    if (status && status !== 'all') {
       filter.status = status;
-    } else if (!seller) {
-      // By default, hide Sold items unless viewing a specific seller's profile
-      filter.status = 'Active';
     }
 
     if (category && category !== 'all') {

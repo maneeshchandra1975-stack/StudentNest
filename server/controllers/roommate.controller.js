@@ -42,11 +42,8 @@ const getRoommatePosts = async (req, res, next) => {
       filter.author = author;
     }
 
-    if (status) {
+    if (status && status !== 'all') {
       filter.status = status;
-    } else if (!author) {
-      // By default, hide Filled items unless viewing a specific author's profile
-      filter.status = 'Active';
     }
 
     if (roomType && roomType !== 'all') {
