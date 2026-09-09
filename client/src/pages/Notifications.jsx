@@ -81,78 +81,83 @@ export default function Notifications() {
 
   return (
     <div className="space-y-6 py-4 max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-4">
-        <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] mb-1">
-            <Bell className="w-4 h-4" />
-            <span>Activity &amp; Real-Time Alerts</span>
-          </div>
-          <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
-            Student Notifications
-          </h1>
-        </div>
+      {/* ── Header ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6 sm:p-8 backdrop-blur-xl">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/15 to-transparent rounded-full blur-2xl pointer-events-none" />
 
-        {unreadCount > 0 && (
-          <Button
-            variant="secondary"
-            size="sm"
-            icon={CheckCheck}
-            onClick={handleMarkAllRead}
-          >
-            Mark All as Read ({unreadCount})
-          </Button>
-        )}
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+              <Bell className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Real-Time Activity Alerts</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-[var(--text-main)] font-heading tracking-tight">
+              Student <span className="text-gradient-primary">Notifications</span>
+            </h1>
+          </div>
+
+          {unreadCount > 0 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={CheckCheck}
+              onClick={handleMarkAllRead}
+              className="!rounded-xl !text-xs !py-2 !px-3.5 shadow-xs"
+            >
+              Mark All as Read ({unreadCount})
+            </Button>
+          )}
+        </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center justify-between gap-4 bg-[var(--bg-card)] p-1.5 rounded-2xl border border-[#E2E8F0] shadow-2xs">
-        <div className="flex items-center gap-1">
+      {/* ── Filter Tabs ── */}
+      <div className="sn-card p-2 flex items-center justify-between gap-4 bg-[var(--bg-card)]/90 backdrop-blur-xl border-[var(--border-light)]">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
               filter === 'all'
-                ? 'bg-[#2563EB] text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
-            All ({notifications.length})
+            All Alerts ({notifications.length})
           </button>
           <button
             onClick={() => setFilter('unread')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
               filter === 'unread'
-                ? 'bg-[#2563EB] text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
             Unread ({unreadCount})
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-medium hidden sm:block pr-3">
-          Click any notification to navigate directly to the listing or chat.
+        <div className="text-xs text-[var(--text-muted)] font-medium hidden sm:block pr-3">
+          Click any alert to jump directly to the listing or chat.
         </div>
       </div>
 
-      {/* Feed List */}
+      {/* ── Feed List ── */}
       <div className="space-y-3">
         {isLoading ? (
-          <div className="p-12 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
-            <Loader2 className="w-5 h-5 animate-spin text-[#2563EB]" />
-            <span>Loading notifications...</span>
+          <div className="p-16 text-center text-xs text-[var(--text-muted)] flex flex-col items-center justify-center gap-3">
+            <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+            <span>Retrieving live notifications...</span>
           </div>
         ) : filteredNotifications.length === 0 ? (
           <div className="sn-card p-12 text-center space-y-3 bg-[var(--bg-card)]">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2563EB] mx-auto flex items-center justify-center">
-              <Bell className="w-6 h-6" />
+            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-500 mx-auto flex items-center justify-center border border-indigo-500/20 shadow-xs">
+              <Bell className="w-7 h-7" />
             </div>
             <div className="space-y-1 max-w-sm mx-auto">
-              <h3 className="text-base font-bold text-[var(--text-main)]">
-                {filter === 'unread' ? 'No unread notifications' : 'No notifications yet'}
+              <h3 className="text-base font-black text-[var(--text-main)] font-heading">
+                {filter === 'unread' ? 'All caught up!' : 'No notifications yet'}
               </h3>
-              <p className="text-xs text-[var(--text-muted)]">
-                When students express interest in your posts or send you messages, alerts will appear here.
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                When students express interest in your items or send you direct chat requests, live notifications will appear here.
               </p>
             </div>
           </div>
@@ -161,26 +166,26 @@ export default function Notifications() {
             <div
               key={notif._id}
               onClick={() => handleNotificationClick(notif)}
-              className={`sn-card p-4 flex items-start gap-4 cursor-pointer transition-all hover:shadow-md ${
+              className={`sn-card p-5 flex items-start gap-4 cursor-pointer transition-all hover:translate-y-[-2px] hover:shadow-md relative overflow-hidden ${
                 !notif.isRead
-                  ? 'bg-blue-50/40 border-l-4 border-l-[#2563EB] border-[#E2E8F0]'
-                  : 'bg-[var(--bg-card)] border-[#E2E8F0]'
+                  ? 'border-l-4 border-l-indigo-500 bg-indigo-500/[0.04]'
+                  : 'border-[var(--border-light)]'
               }`}
             >
-              <div className="p-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] shadow-2xs shrink-0 mt-0.5">
+              <div className="p-2.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-light)] shadow-2xs shrink-0 mt-0.5">
                 {getNotificationIcon(notif.type)}
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
                   <h4
-                    className={`text-sm ${
-                      !notif.isRead ? 'font-extrabold text-[var(--text-main)]' : 'font-bold text-slate-800'
+                    className={`text-sm font-heading ${
+                      !notif.isRead ? 'font-black text-[var(--text-main)]' : 'font-bold text-[var(--text-main)] opacity-85'
                     }`}
                   >
                     {notif.title}
                   </h4>
-                  <span className="text-[11px] text-slate-400 shrink-0">
+                  <span className="text-[11px] font-mono text-[var(--text-muted)] shrink-0">
                     {new Date(notif.createdAt).toLocaleString([], {
                       dateStyle: 'short',
                       timeStyle: 'short',
@@ -188,16 +193,19 @@ export default function Notifications() {
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed mt-1">{notif.message}</p>
+                <p className="text-xs text-[var(--text-muted)] leading-relaxed mt-1 font-medium">
+                  {notif.message}
+                </p>
 
-                <div className="mt-2.5 flex items-center gap-3 text-[11px]">
-                  <span className="font-semibold text-[#2563EB] hover:underline">
-                    View Action →
+                <div className="mt-3 flex items-center gap-4 text-xs">
+                  <span className="font-bold text-indigo-500 dark:text-cyan-400 hover:underline flex items-center gap-1">
+                    <span>View Details</span>
+                    <span>&rarr;</span>
                   </span>
                   {!notif.isRead && (
                     <button
                       onClick={(e) => handleMarkSingleRead(e, notif._id)}
-                      className="text-slate-400 hover:text-emerald-600 font-medium flex items-center gap-1"
+                      className="text-[var(--text-muted)] hover:text-emerald-500 font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                     >
                       <Check className="w-3.5 h-3.5" />
                       <span>Mark as read</span>

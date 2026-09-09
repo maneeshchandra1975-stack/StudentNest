@@ -35,112 +35,146 @@ export default function CreateListingModal({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[var(--bg-card)] border border-[var(--border-light)] w-full max-w-lg rounded-2xl shadow-xl flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-[var(--bg-card)]/95 border border-[var(--border-light)] w-full max-w-lg rounded-3xl shadow-2xl flex flex-col max-h-[90vh] backdrop-blur-2xl overflow-hidden">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-[var(--border-light)]">
-          <h2 className="text-lg font-bold text-[var(--text-main)]">Sell an Item</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-[var(--bg-body)] text-[var(--text-muted)] transition-colors">
+        <div className="flex items-center justify-between p-6 border-b border-[var(--border-light)]">
+          <div>
+            <h2 className="text-xl font-black text-[var(--text-main)] font-heading">
+              Sell an <span className="text-gradient-primary">Item</span>
+            </h2>
+            <p className="text-xs text-[var(--text-muted)] mt-0.5 font-medium">
+              List student equipment, books, tech, or cycles for campus peer exchange.
+            </p>
+          </div>
+          <button 
+            onClick={onClose} 
+            className="p-2 rounded-xl hover:bg-[var(--bg-card-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-5 overflow-y-auto">
+        <div className="p-6 overflow-y-auto space-y-4">
           <form id="create-listing-form" onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Item Title *</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-main)] mb-1.5">
+                Item Title *
+              </label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="e.g. Scientific Calculator Casio"
-                className="w-full px-4 py-2.5 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] placeholder-[var(--input-placeholder)] outline-none"
+                placeholder="e.g. Scientific Calculator Casio fx-991EX"
+                className="sn-input w-full px-4 py-2.5 text-xs"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Price (???)*</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-main)] mb-1.5">
+                  Price (₹) *
+                </label>
                 <div className="relative">
-                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+                  <IndianRupee className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                   <input
                     type="number"
                     name="price"
                     value={formData.price}
                     onChange={handleChange}
                     placeholder="999"
-                    className="w-full pl-9 pr-4 py-2.5 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] outline-none"
+                    className="sn-input w-full pl-10 pr-4 py-2.5 text-xs font-mono font-bold"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Category</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-main)] mb-1.5">
+                  Category
+                </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] outline-none"
+                  className="sn-input w-full px-4 py-2.5 text-xs cursor-pointer"
                 >
-                  <option value="Books">Books & Notes</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Cycles">Cycles</option>
-                  <option value="Furniture">Furniture</option>
-                  <option value="Other">Other</option>
+                  <option value="Books">Books &amp; Notes</option>
+                  <option value="Electronics">Electronics &amp; Tech</option>
+                  <option value="Cycles">Cycles &amp; Mobility</option>
+                  <option value="Furniture">Furniture &amp; Room</option>
+                  <option value="Other">Other Necessities</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Condition</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-main)] mb-1.5">
+                Condition
+              </label>
               <select
                 name="condition"
                 value={formData.condition}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] outline-none"
+                className="sn-input w-full px-4 py-2.5 text-xs cursor-pointer"
               >
-                <option value="Like New">Like New</option>
-                <option value="Good">Good</option>
-                <option value="Fair">Fair</option>
+                <option value="Like New">Like New (Mint)</option>
+                <option value="Good">Good (Lightly Used)</option>
+                <option value="Fair">Fair (Noticeable Wear)</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Description *</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-main)] mb-1.5">
+                Description *
+              </label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                placeholder="Describe the item, how old it is, defects, etc."
-                rows={4}
-                className="w-full px-4 py-2.5 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] placeholder-[var(--input-placeholder)] outline-none resize-none"
+                placeholder="Detail the condition, age, reasons for selling, and pickup point inside VIT-AP."
+                rows={3}
+                className="sn-input w-full px-4 py-2.5 text-xs resize-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Image URL</label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={formData.images[0]}
-                  onChange={(e) => setFormData({ ...formData, images: [e.target.value] })}
-                  placeholder="https://..."
-                  className="w-full px-4 py-2.5 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] text-[var(--text-main)] outline-none"
-                />
-              </div>
-              <p className="text-xs text-[var(--text-muted)] mt-1">For this demo, just paste an image URL (e.g., from Unsplash).</p>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-main)] mb-1.5">
+                Product Image URL
+              </label>
+              <input
+                type="text"
+                value={formData.images[0]}
+                onChange={(e) => setFormData({ ...formData, images: [e.target.value] })}
+                placeholder="https://..."
+                className="sn-input w-full px-4 py-2.5 text-xs font-mono"
+              />
+              <p className="text-[11px] text-[var(--text-muted)] mt-1.5">
+                Paste a direct photo URL of the item or leave default mockup photo.
+              </p>
             </div>
           </form>
         </div>
 
         {/* Footer */}
-        <div className="p-5 border-t border-[var(--border-light)] flex justify-end gap-3 bg-[var(--bg-body)] rounded-b-2xl">
-          <Button variant="ghost" onClick={onClose} disabled={isCreating}>Cancel</Button>
-          <Button variant="primary" form="create-listing-form" type="submit" disabled={isCreating}>
-            {isCreating ? 'Posting...' : 'Post Item'}
-          </Button>
+        <div className="p-6 border-t border-[var(--border-light)] flex justify-end gap-3 bg-[var(--bg-card-subtle)]/50">
+          <button 
+            type="button" 
+            onClick={onClose} 
+            disabled={isCreating}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)] transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button 
+            form="create-listing-form" 
+            type="submit" 
+            disabled={isCreating}
+            className="py-2.5 px-5 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 hover:from-indigo-500 hover:via-blue-500 hover:to-cyan-400 text-white font-black text-xs shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+          >
+            {isCreating ? 'Publishing Listing...' : 'Publish Item Listing'}
+          </button>
         </div>
 
       </div>

@@ -49,32 +49,32 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-[var(--bg-card)] rounded-2xl w-full max-w-md shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-rose-50/50">
-          <div className="flex items-center gap-2 text-rose-600">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+      <div className="bg-[var(--bg-card)]/95 border border-[var(--border-light)] rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 backdrop-blur-2xl">
+        <div className="p-5 border-b border-[var(--border-light)] flex items-center justify-between bg-rose-500/10">
+          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
             <ShieldAlert className="w-5 h-5" />
-            <h2 className="text-lg font-bold font-heading">
+            <h2 className="text-base font-black font-heading">
               Report this {targetType === 'MarketplaceItem' ? 'Item' : targetType === 'RoommatePost' ? 'Post' : targetType}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)] rounded-xl transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-700">
-              Why are you reporting this? <span className="text-rose-500">*</span>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]">
+              Reason for Report <span className="text-rose-500">*</span>
             </label>
             <select
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="sn-input w-full text-sm font-medium"
+              className="sn-input w-full text-xs font-medium cursor-pointer"
               required
             >
               <option value="" disabled>Select a reason</option>
@@ -84,8 +84,8 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
             </select>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-700">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]">
               Additional Details (Optional)
             </label>
             <textarea
@@ -93,24 +93,31 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Provide any additional context to help our admins investigate..."
-              className="sn-input w-full text-sm resize-none"
+              className="sn-input w-full text-xs resize-none"
               maxLength={1000}
             />
           </div>
 
           <div className="pt-2">
-            <Button
+            <button
               type="submit"
-              variant="danger"
-              fullWidth
               disabled={loading || !reason}
-              icon={loading ? Loader2 : Flag}
-              className={loading ? 'animate-pulse' : ''}
+              className="w-full py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-lg shadow-rose-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
             >
-              {loading ? 'Submitting Report...' : 'Submit Report'}
-            </Button>
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Submitting Report...</span>
+                </>
+              ) : (
+                <>
+                  <Flag className="w-4 h-4" />
+                  <span>Submit Safety Report</span>
+                </>
+              )}
+            </button>
             <p className="text-[10px] text-center text-[var(--text-muted)] mt-3">
-              False reports may result in account suspension.
+              Protected by StudentNest Trust &amp; Safety. False reports may affect campus account standing.
             </p>
           </div>
         </form>

@@ -5,6 +5,13 @@ import {
   Building2,
   ShoppingBag,
   MessageSquare,
+  Users,
+  Compass,
+  Bell,
+  UserCheck,
+  Sparkles,
+  ArrowRight,
+  TrendingUp,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,52 +26,135 @@ export default function Dashboard() {
     return 'Good evening';
   };
 
+  const dashboardCards = [
+    {
+      title: 'Campus Marketplace',
+      subtitle: 'Buy & sell textbooks, lab kits, electronics & cycles directly.',
+      badge: 'Peer-to-Peer',
+      icon: ShoppingBag,
+      path: '/marketplace',
+      gradient: 'from-indigo-600 to-blue-600',
+      iconBg: 'bg-indigo-500/10 text-indigo-500',
+    },
+    {
+      title: 'Roommate Finder',
+      subtitle: 'Find verified flatmates and post campus vacancies with 0% brokerage.',
+      badge: 'Zero Brokerage',
+      icon: Users,
+      path: '/roommates',
+      gradient: 'from-blue-600 to-cyan-500',
+      iconBg: 'bg-cyan-500/10 text-cyan-500',
+    },
+    {
+      title: 'Nearby PGs & Hostels',
+      subtitle: 'Live geospatial map of verified hostels and apartments near campus.',
+      badge: 'Live Geoapify',
+      icon: Compass,
+      path: '/pgs',
+      gradient: 'from-violet-600 to-indigo-600',
+      iconBg: 'bg-violet-500/10 text-violet-500',
+    },
+    {
+      title: 'Direct Messages',
+      subtitle: 'Secure real-time chats with verified student buyers & flatmates.',
+      badge: 'Encrypted',
+      icon: MessageSquare,
+      path: '/messages',
+      gradient: 'from-emerald-500 to-teal-500',
+      iconBg: 'bg-emerald-500/10 text-emerald-500',
+    },
+    {
+      title: 'Activity & Alerts',
+      subtitle: 'Stay updated on item interests, status updates, and campus alerts.',
+      badge: 'Real-time',
+      icon: Bell,
+      path: '/notifications',
+      gradient: 'from-amber-500 to-rose-500',
+      iconBg: 'bg-amber-500/10 text-amber-500',
+    },
+    {
+      title: 'Student Identity',
+      subtitle: 'Manage your verified profile, student badge, and campus credentials.',
+      badge: '@vitapstudent.ac.in',
+      icon: UserCheck,
+      path: '/profile',
+      gradient: 'from-indigo-500 to-violet-500',
+      iconBg: 'bg-indigo-500/10 text-indigo-400',
+    },
+  ];
+
   return (
     <div className="space-y-8 py-2">
-      {/* 1. Workspace Header */}
-      <div className="sn-card p-6 sm:p-8 bg-[var(--bg-card)] space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>✓ Verified Student</span>
+      {/* ── 1. Futuristic Aurora Greeting Banner ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6 sm:p-10 backdrop-blur-xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-indigo-500/15 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-violet-500/10 via-indigo-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Verified VIT-AP Student Hub</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-main)] font-heading">
-              {getGreeting()}, {user?.name || 'Student'}
+            <h1 className="text-3xl sm:text-4xl font-black text-[var(--text-main)] font-heading tracking-tight">
+              {getGreeting()},{' '}
+              <span className="text-gradient-primary">
+                {user?.name?.split(' ')[0] || 'Student'}
+              </span>
             </h1>
-            <p className="text-sm text-[var(--text-muted)]">
-              Welcome to your centralized student hub. Access marketplace, housing, and your messages here.
+            <p className="text-sm text-[var(--text-muted)] max-w-xl leading-relaxed font-medium">
+              Welcome to your unified campus cockpit. Discover trusted flatmates, buy and sell second-hand gear, and navigate verified accommodations.
             </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="px-4 py-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-light)]">
+              <div className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Connected Account</div>
+              <div className="text-xs font-mono font-bold text-indigo-500 dark:text-indigo-400 mt-0.5">
+                {user?.email || 'vitapstudent.ac.in'}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Navigation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div onClick={() => navigate('/marketplace')} className="sn-card p-6 cursor-pointer hover:border-[#2563EB]/50 transition-colors group">
-          <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <ShoppingBag className="w-6 h-6 text-[#2563EB]" />
-          </div>
-          <h3 className="text-lg font-bold text-[var(--text-main)]">Marketplace</h3>
-          <p className="text-sm text-[var(--text-muted)] mt-1">Buy and sell items securely on campus.</p>
-        </div>
+      {/* ── 2. Bento Quick Navigation Grid ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {dashboardCards.map((card, idx) => (
+          <div
+            key={idx}
+            onClick={() => navigate(card.path)}
+            className="sn-card sn-card-hover p-6 cursor-pointer flex flex-col justify-between space-y-4 group overflow-hidden relative"
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className={`w-12 h-12 rounded-2xl ${card.iconBg} flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs`}>
+                  <card.icon className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-light)] text-[var(--text-muted)]">
+                  {card.badge}
+                </span>
+              </div>
 
-        <div onClick={() => navigate('/housing')} className="sn-card p-6 cursor-pointer hover:border-indigo-500/50 transition-colors group">
-          <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <Building2 className="w-6 h-6 text-indigo-600" />
-          </div>
-          <h3 className="text-lg font-bold text-[var(--text-main)]">Housing Hub</h3>
-          <p className="text-sm text-[var(--text-muted)] mt-1">Find roommates and discover nearby PGs.</p>
-        </div>
+              <div>
+                <h3 className="text-lg font-black text-[var(--text-main)] font-heading group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors flex items-center gap-1.5">
+                  <span>{card.title}</span>
+                  <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-indigo-500" />
+                </h3>
+                <p className="text-xs text-[var(--text-muted)] mt-1.5 leading-relaxed font-normal">
+                  {card.subtitle}
+                </p>
+              </div>
+            </div>
 
-        <div onClick={() => navigate('/messages')} className="sn-card p-6 cursor-pointer hover:border-emerald-500/50 transition-colors group">
-          <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <MessageSquare className="w-6 h-6 text-emerald-600" />
+            <div className="pt-3 border-t border-[var(--border-light)] flex items-center justify-between text-xs font-bold text-indigo-500 dark:text-indigo-400">
+              <span>Open Section</span>
+              <span>&rarr;</span>
+            </div>
           </div>
-          <h3 className="text-lg font-bold text-[var(--text-main)]">Messages</h3>
-          <p className="text-sm text-[var(--text-muted)] mt-1">Chat with interested buyers and potential roommates.</p>
-        </div>
+        ))}
       </div>
     </div>
   );
 }
+

@@ -76,44 +76,44 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[var(--bg-card)] rounded-2xl border border-[#E2E8F0] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl bg-[var(--bg-card)]/95 rounded-3xl border border-[var(--border-light)] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] backdrop-blur-2xl">
         {/* Header */}
-        <div className="p-4 border-b border-[#E2E8F0] flex items-center justify-between bg-[var(--bg-body)]">
+        <div className="p-6 border-b border-[var(--border-light)] flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
-              Interest Requests Manager
+            <h3 className="text-xl font-black text-[var(--text-main)] font-heading">
+              Interest Requests <span className="text-gradient-primary">Manager</span>
             </h3>
-            <p className="text-xs text-[#64748B]">
-              Accept requests to reserve items and unlock direct messaging.
+            <p className="text-xs text-[var(--text-muted)] mt-0.5 font-medium">
+              Accept requests to reserve items or confirm roommates, and unlock direct peer chat.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60"
+            className="p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-[#E2E8F0] bg-[var(--bg-card)] text-xs font-bold">
+        <div className="p-2 border-b border-[var(--border-light)] bg-[var(--bg-card-subtle)]/50 flex gap-2 text-xs font-bold">
           <button
             onClick={() => setActiveTab('received')}
-            className={`flex-1 py-3 border-b-2 text-center transition-colors ${
+            className={`flex-1 py-2.5 rounded-xl text-center transition-all cursor-pointer ${
               activeTab === 'received'
-                ? 'border-[#2563EB] text-[#2563EB] bg-blue-50/50'
-                : 'border-transparent text-[var(--text-muted)] hover:text-slate-800'
+                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
             Received Requests ({receivedRequests.length})
           </button>
           <button
             onClick={() => setActiveTab('sent')}
-            className={`flex-1 py-3 border-b-2 text-center transition-colors ${
+            className={`flex-1 py-2.5 rounded-xl text-center transition-all cursor-pointer ${
               activeTab === 'sent'
-                ? 'border-[#2563EB] text-[#2563EB] bg-blue-50/50'
-                : 'border-transparent text-[var(--text-muted)] hover:text-slate-800'
+                ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-md shadow-indigo-500/20'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
             }`}
           >
             Sent Requests ({sentRequests.length})
@@ -121,7 +121,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
         </div>
 
         {/* Content Feed */}
-        <div className="p-4 overflow-y-auto space-y-3 flex-1 bg-[var(--bg-body)]/30">
+        <div className="p-6 overflow-y-auto space-y-3 flex-1 bg-[var(--bg-body)]/40">
           {loading ? (
             <div className="p-8 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
               <Loader2 className="w-4 h-4 animate-spin text-[#2563EB]" />

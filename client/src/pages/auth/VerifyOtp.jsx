@@ -120,25 +120,27 @@ export default function VerifyOtp() {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-2">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/10">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-400 text-white mx-auto flex items-center justify-center shadow-lg shadow-indigo-500/25">
           <KeyRound className="w-7 h-7" />
         </div>
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">
-            <Sparkles className="w-3.5 h-3.5" /> Step 2 of 2
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
+            <Sparkles className="w-3.5 h-3.5" /> Step 2 of 2: OTP Verification
           </div>
-          <h2 className="text-2xl font-extrabold text-[var(--text-main)] tracking-tight font-heading">
-            Verify Your Email
+          <h2 className="text-2xl sm:text-3xl font-black text-[var(--text-main)] tracking-tight font-heading">
+            Verify Your <span className="text-gradient-primary">Email</span>
           </h2>
-          <p className="text-xs text-[var(--text-muted)] mt-1 max-w-xs mx-auto">
-            We sent a 6-digit OTP code to <br />
-            <strong className="text-emerald-600 dark:text-emerald-400 font-mono text-xs">{displayEmail}</strong>
+          <p className="text-xs text-[var(--text-muted)] mt-1.5 max-w-xs mx-auto leading-relaxed">
+            We sent a 6-digit verification code to <br />
+            <span className="inline-block mt-1 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold">
+              {displayEmail}
+            </span>
           </p>
         </div>
       </div>
 
       {error && (
-        <div className="p-3.5 rounded-2xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 flex items-start gap-3 text-red-500 dark:text-red-400 text-xs shadow-lg">
+        <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-3 text-rose-600 dark:text-rose-400 text-xs shadow-xs">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
@@ -157,7 +159,7 @@ export default function VerifyOtp() {
               value={digit}
               onChange={(e) => handleChange(idx, e.target.value)}
               onKeyDown={(e) => handleKeyDown(idx, e)}
-              className="w-12 h-14 sm:w-13 sm:h-15 bg-slate-950/90 border border-slate-800 rounded-2xl text-center text-2xl font-bold text-emerald-600 dark:text-emerald-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 transition-all shadow-inner font-mono"
+              className="w-12 h-14 sm:w-13 sm:h-15 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-2xl text-center text-2xl font-black text-indigo-600 dark:text-cyan-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition-all shadow-xs font-mono"
             />
           ))}
         </div>
@@ -165,7 +167,7 @@ export default function VerifyOtp() {
         <button
           type="submit"
           disabled={isLoading || otpValues.join('').length !== 6}
-          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white dark:text-slate-950 font-extrabold text-sm shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99]"
+          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 hover:from-indigo-500 hover:via-blue-500 hover:to-cyan-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -188,7 +190,7 @@ export default function VerifyOtp() {
           type="button"
           onClick={handleResend}
           disabled={!canResend || isLoading}
-          className="inline-flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 hover:underline disabled:text-slate-600 disabled:no-underline transition-colors"
+          className="inline-flex items-center gap-1.5 font-bold text-indigo-500 dark:text-indigo-400 hover:underline disabled:text-slate-500 disabled:no-underline transition-colors cursor-pointer"
         >
           <RotateCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           {canResend ? 'Resend New OTP' : `Resend OTP in ${timer}s`}
@@ -196,7 +198,7 @@ export default function VerifyOtp() {
       </div>
 
       <div className="text-center pt-2 text-xs">
-        <Link to="/register" className="text-slate-500 hover:text-[var(--text-main)] opacity-80 transition-colors">
+        <Link to="/register" className="text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors">
           &larr; Wrong email? Register again
         </Link>
       </div>
