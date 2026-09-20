@@ -13,13 +13,13 @@ export default function EmptyState({
 }) {
   return (
     <div className={cn('sn-card p-10 text-center flex flex-col items-center justify-center space-y-4 max-w-md mx-auto', className)}>
-      <div className="p-3.5 rounded-2xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+      <div className="p-3.5 rounded-2xl bg-primary/10 text-primary border border-primary/20">
         <Icon className="w-7 h-7" />
       </div>
 
       <div className="space-y-1">
-        <h4 className="text-base font-bold text-[var(--text-main)] font-heading">{title}</h4>
-        <p className="text-xs text-[#64748B] leading-relaxed">{description}</p>
+        <h4 className="text-base font-bold text-foreground font-heading">{title}</h4>
+        <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
       </div>
 
       {actionLabel && onAction && (

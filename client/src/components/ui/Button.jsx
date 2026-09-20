@@ -1,46 +1,92 @@
-import React from 'react';
-import { Loader2 } from 'lucide-react';
-import { cn } from '../../utils/cn';
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva } from "class-variance-authority";
+import { Loader2 } from "lucide-react";
+import { cn } from "../../utils/cn";
 
-export default function Button({
-  children,
-  variant = 'primary', // 'primary' | 'secondary' | 'ghost' | 'danger' | 'emerald'
-  size = 'md',          // 'sm' | 'md' | 'lg'
-  isLoading = false,
-  isDisabled = false,
-  fullWidth = false,
-  icon: Icon,
-  className,
-  ...props
-}) {
-  const baseStyles = 'inline-flex items-center justify-center font-bold tracking-tight rounded-xl transition-all duration-200 active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-orange-500/30 cursor-pointer select-none';
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer select-none active:scale-[0.98]",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm shadow-primary/20",
+        primary:
+          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm shadow-primary/20",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
+        danger:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
+        outline:
+          "border border-border bg-background hover:bg-accent hover:text-accent-foreground shadow-xs",
+        secondary:
+          "bg-card text-foreground border border-border hover:bg-muted hover:border-border/80 shadow-xs",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground",
+        link:
+          "text-primary underline-offset-4 hover:underline",
+        emerald:
+          "bg-success text-success-foreground hover:bg-success/90 shadow-sm shadow-success/20",
+        teal:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-sm shadow-secondary/20",
+      },
+      size: {
+        default: "h-10 px-4 py-2 text-sm",
+        sm: "h-9 rounded-lg px-3 text-xs gap-1.5",
+        md: "h-10 px-4 py-2 text-sm",
+        lg: "h-11 rounded-xl px-6 text-base gap-2.5",
+        icon: "h-10 w-10 p-0",
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
+    },
+  }
+);
 
-  const variants = {
-    primary: 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 border border-orange-400/20',
-    secondary: 'bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] text-[var(--text-main)] border border-[var(--border-light)] hover:border-[var(--border-hover)] shadow-xs hover:shadow-sm',
-    ghost: 'bg-transparent hover:bg-[var(--bg-card-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)]',
-    danger: 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 shadow-xs hover:shadow-rose-500/10',
-    emerald: 'bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-md shadow-emerald-500/25 hover:shadow-emerald-500/35 border border-emerald-400/20',
-  };
+const Button = React.forwardRef(
+  (
+    {
+      className,
+      variant = "primary",
+      size = "md",
+      asChild = false,
+      isLoading = false,
+      isDisabled = false,
+      fullWidth = false,
+      icon: Icon,
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button";
+    const isBtnDisabled = disabled || isDisabled || isLoading;
 
-  const sizes = {
-    sm: 'text-xs px-3.5 py-2 gap-1.5 rounded-lg',
-    md: 'text-sm px-4 py-2.5 gap-2 rounded-xl',
-    lg: 'text-base px-6 py-3.5 gap-2.5 rounded-2xl shadow-lg',
-  };
+    return (
+      <Comp
+        className={cn(
+          buttonVariants({ variant, size }),
+          fullWidth && "w-full",
+          className
+        )}
+        ref={ref}
+        disabled={isBtnDisabled}
+        {...props}
+      >
+        {isLoading ? (
+          <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+        ) : Icon ? (
+          <Icon className="w-4 h-4 shrink-0" />
+        ) : null}
+        {children ? <span>{children}</span> : null}
+      </Comp>
+    );
+  }
+);
+Button.displayName = "Button";
 
-  return (
-    <button
-      disabled={isDisabled || isLoading}
-      className={cn(baseStyles, variants[variant], sizes[size], fullWidth && 'w-full', className)}
-      {...props}
-    >
-      {isLoading ? (
-        <Loader2 className="w-4 h-4 animate-spin shrink-0" />
-      ) : Icon ? (
-        <Icon className="w-4 h-4 shrink-0" />
-      ) : null}
-      <span>{children}</span>
-    </button>
-  );
-}
+export { Button, buttonVariants };
+export default Button;

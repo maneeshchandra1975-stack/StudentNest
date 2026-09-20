@@ -4,6 +4,11 @@ import { fetchHousingPosts, deleteHousingPost } from '../../redux/slices/adminSl
 import { Search, Trash2, Loader2, AlertCircle, ExternalLink, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Input } from '../../components/ui/Input';
+import Card from '../../components/ui/Card';
+import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
+import { Alert, AlertDescription } from '../../components/ui/Alert';
 
 export default function AdminHousing() {
   const dispatch = useDispatch();
@@ -30,38 +35,40 @@ export default function AdminHousing() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto py-6 px-2">
       <div>
-        <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
+        <h1 className="text-3xl font-extrabold text-foreground font-heading">
           Housing Moderation
         </h1>
-        <p className="text-sm text-[var(--text-muted)] mt-1">
+        <p className="text-sm text-muted-foreground mt-2 font-medium">
           Monitor and manage roommate vacancies and posts.
         </p>
       </div>
 
-      <div className="relative max-w-md">
-        <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
-        <input
+      <div className="relative max-w-md bg-card/60 backdrop-blur-sm rounded-2xl p-2 border border-border/50 shadow-sm">
+        <Search className="w-4 h-4 text-muted-foreground absolute left-5 top-1/2 -translate-y-1/2" />
+        <Input
           type="text"
           placeholder="Search housing posts by title..."
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-          className="input-field w-full rounded-xl pl-10 pr-4 py-2 text-sm bg-[var(--input-bg)] border-[var(--input-border)] text-[var(--text-main)] placeholder:text-[var(--input-placeholder)]"
+          className="pl-11 pr-4 py-2.5 text-sm bg-background border border-border/50 focus-visible:ring-primary shadow-inner rounded-xl w-full"
         />
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-2xl flex items-center gap-2">
-          <AlertCircle className="w-5 h-5" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive" className="bg-destructive/10 border-destructive/20 text-destructive">
+          <AlertCircle className="w-4 h-4" />
+          <AlertDescription className="font-semibold text-xs ml-2">
+            {error}
+          </AlertDescription>
+        </Alert>
       )}
 
-      <div className="sn-card overflow-hidden">
+      <Card className="overflow-hidden border-border/50 shadow-sm bg-card/60 backdrop-blur-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-slate-50 dark:bg-slate-900/50 text-[var(--text-muted)] uppercase text-[10px] font-bold tracking-wider border-b border-[var(--border-light)]">
+            <thead className="bg-muted/50 text-muted-foreground uppercase text-[10px] font-bold tracking-wider border-b border-border/50">
               <tr>
                 <th className="px-6 py-4">Title</th>
                 <th className="px-6 py-4">Posted By</th>
@@ -70,57 +77,54 @@ export default function AdminHousing() {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--border-light)]">
+            <tbody className="divide-y divide-border/50">
               {isLoading && housing.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center">
-                    <Loader2 className="w-6 h-6 animate-spin text-emerald-500 mx-auto" />
+                  <td colSpan="5" className="px-6 py-16 text-center">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary mx-auto" />
                   </td>
                 </tr>
               ) : housing.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-[var(--text-muted)]">
+                  <td colSpan="5" className="px-6 py-16 text-center text-muted-foreground font-medium">
                     No housing posts found.
                   </td>
                 </tr>
               ) : (
                 housing.map((post) => (
-                  <tr key={post._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                  <tr key={post._id} className="hover:bg-muted/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
-                        <p className="font-bold text-[var(--text-main)] truncate max-w-[250px]">{post.title}</p>
-                        <p className="text-xs text-[var(--text-muted)] flex items-center gap-1 mt-0.5">
+                        <p className="font-bold text-foreground truncate max-w-[250px]">{post.title}</p>
+                        <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1 font-medium">
                           <MapPin className="w-3 h-3" /> {post.location}
                         </p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-medium text-[var(--text-main)]">{post.user?.name || 'Unknown'}</p>
-                      <p className="text-xs text-[var(--text-muted)]">{post.user?.email || 'N/A'}</p>
+                      <p className="font-bold text-foreground">{post.user?.name || 'Unknown'}</p>
+                      <p className="text-xs text-muted-foreground font-medium">{post.user?.email || 'N/A'}</p>
                     </td>
-                    <td className="px-6 py-4 font-mono font-semibold text-emerald-600 dark:text-emerald-400">
-                      ₹{post.rentAmount}<span className="text-[10px] font-normal text-[var(--text-muted)]">/mo</span>
+                    <td className="px-6 py-4 font-mono font-bold text-success">
+                      ₹{post.rentAmount}<span className="text-[10px] font-normal text-muted-foreground">/mo</span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 text-[10px] font-bold rounded-full ${
-                        post.status === 'Available' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' :
-                        'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
-                      }`}>
+                      <Badge variant={post.status === 'Available' ? 'success' : 'warning'}>
                         {post.status}
-                      </span>
+                      </Badge>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-3">
                         <Link 
                           to={`/housing/roommates/${post._id}`} 
                           target="_blank"
-                          className="p-1.5 rounded-lg text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors"
+                          className="p-2 rounded-lg text-primary hover:bg-primary/10 transition-colors"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </Link>
                         <button 
                           onClick={() => handleDelete(post._id)}
-                          className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                          className="p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -135,29 +139,33 @@ export default function AdminHousing() {
         
         {/* Pagination */}
         {pagination.pages > 1 && (
-          <div className="p-4 border-t border-[var(--border-light)] flex items-center justify-between">
-            <span className="text-xs text-[var(--text-muted)]">
+          <div className="p-4 bg-muted/20 border-t border-border/50 flex items-center justify-between">
+            <span className="text-xs font-medium text-muted-foreground">
               Showing page {pagination.currentPage} of {pagination.pages}
             </span>
             <div className="flex items-center gap-2">
-              <button 
+              <Button 
+                variant="outline"
+                size="sm"
                 disabled={page === 1}
                 onClick={() => setPage(page - 1)}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border-light)] text-[var(--text-main)] hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
+                className="h-8 px-3 text-xs"
               >
                 Previous
-              </button>
-              <button 
+              </Button>
+              <Button 
+                variant="outline"
+                size="sm"
                 disabled={page === pagination.pages}
                 onClick={() => setPage(page + 1)}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border-light)] text-[var(--text-main)] hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
+                className="h-8 px-3 text-xs"
               >
                 Next
-              </button>
+              </Button>
             </div>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

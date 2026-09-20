@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   MessageSquare,
   Search,
@@ -11,16 +12,19 @@ import {
   Inbox,
   AlertCircle,
   Loader2,
-  User,
   Star,
   CheckCircle2,
   Flag,
 } from 'lucide-react';
+
 import Button from '../components/ui/Button';
 import InterestRequestsModal from '../components/ui/InterestRequestsModal';
 import ReviewModal from '../components/ui/ReviewModal';
 import ReportModal from '../components/ui/ReportModal';
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/Avatar';
+import { Input } from '../components/ui/Input';
 import { toast } from 'sonner';
+
 import {
   fetchConversations,
   fetchConversationById,
@@ -32,6 +36,7 @@ import {
 } from '../redux/slices/chatSlice';
 import { initSocket, getSocket } from '../services/socket';
 import api from '../services/api';
+import { cn } from '../utils/cn';
 
 export default function Chat() {
   const dispatch = useDispatch();
@@ -56,8 +61,9 @@ export default function Chat() {
   const [requestsModalOpen, setRequestsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [typingUser, setTypingUser] = useState(null);
+  
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [reviewTarget, setReviewTarget] = useState(null); // { interestRequestId, partnerName }
+  const [reviewTarget, setReviewTarget] = useState(null); 
   const [reportModalOpen, setReportModalOpen] = useState(false);
 
   const messagesEndRef = useRef(null);
@@ -71,10 +77,8 @@ export default function Chat() {
     }
 
     const handleTokenRefresh = (e) => {
-      console.log('[CHAT] Token refreshed, re-initializing socket...');
       initSocket(e.detail);
       if (activeConversation) {
-        // Re-join the conversation room if we were in one
         const socket = getSocket();
         if (socket) {
           socket.emit('join_conversation', { conversationId: activeConversation._id });
@@ -96,7 +100,6 @@ export default function Chat() {
     
     if (openRequestsParam === 'true') {
       setRequestsModalOpen(true);
-      // Clean up the URL to prevent reopening on refresh
       const newParams = new URLSearchParams(searchParams);
       newParams.delete('openRequests');
       navigate(`/messages?${newParams.toString()}`, { replace: true });
@@ -118,7 +121,6 @@ export default function Chat() {
       });
 
       socket.on('receive_message', (newMsg) => {
-        // Reducer will automatically handle updating the sidebar and/or active chat feed
         dispatch(addMessage(newMsg));
       });
 
@@ -180,13 +182,11 @@ export default function Chat() {
         { conversationId: activeConversation._id, text: textToSend },
         (res) => {
           if (!res || !res.success) {
-            // Fallback to REST API if socket callback fails
             dispatch(sendMessageApi({ conversationId: activeConversation._id, text: textToSend }));
           }
         }
       );
     } else {
-      // Fallback REST API
       dispatch(sendMessageApi({ conversationId: activeConversation._id, text: textToSend }));
     }
   };
@@ -199,7 +199,7 @@ export default function Chat() {
   const partner = getPartner(activeConversation);
 
   return (
-    <div className="space-y-4 py-2">
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6 space-y-4 min-h-[calc(100vh-4rem)] flex flex-col">
       <InterestRequestsModal
         isOpen={requestsModalOpen}
         onClose={() => setRequestsModalOpen(false)}
@@ -215,7 +215,6 @@ export default function Chat() {
         }}
       />
       
-      {/* Report Modal */}
       {activeConversation && partner && (
         <ReportModal
           isOpen={reportModalOpen}
@@ -225,65 +224,76 @@ export default function Chat() {
         />
       )}
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-light)] pb-4">
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-600 dark:text-orange-400 mb-1">
-            <MessageSquare className="w-4 h-4" />
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1 bg-primary/10 px-2 py-0.5 rounded-full">
+            <MessageSquare className="w-3.5 h-3.5" />
             <span>Controlled Real-Time Chat</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
-            Student Messages &amp; <span className="text-gradient-primary">Direct Chat</span>
+          <h1 className="text-3xl font-extrabold text-foreground font-heading">
+            Student Messages
           </h1>
         </div>
 
         <Button
-          variant="secondary"
-          size="sm"
-          icon={Inbox}
+          variant="outline"
+          size="default"
+          className="rounded-full shadow-sm border-border bg-background"
           onClick={() => setRequestsModalOpen(true)}
         >
+          <Inbox className="w-4 h-4 mr-2" />
           Manage Interest Requests
         </Button>
-      </div>
+      </motion.div>
 
       {/* Global Error Banner */}
       {error && (
-        <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center gap-3 text-amber-700 text-xs">
+        <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 flex items-center gap-3 text-destructive text-sm font-semibold mb-4">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* 2-Column Chat Box */}
-      <div className="sn-card h-[640px] grid grid-cols-1 md:grid-cols-12 overflow-hidden border-[var(--border-light)] shadow-xl">
+      {/* 2-Column Chat UI */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98 }} 
+        animate={{ opacity: 1, scale: 1 }} 
+        transition={{ duration: 0.3 }}
+        className="flex-1 min-h-[600px] h-[calc(100vh-14rem)] bg-card border border-border/60 rounded-3xl overflow-hidden shadow-sm flex flex-col md:flex-row"
+      >
         {/* Left Column: Conversation List */}
-        <div className="md:col-span-4 border-r border-[var(--border-light)] flex flex-col bg-[var(--bg-card-subtle)]/50 backdrop-blur-md">
-          <div className="p-3.5 border-b border-[var(--border-light)]">
+        <div className="w-full md:w-80 lg:w-96 border-r border-border/60 flex flex-col bg-muted/30">
+          <div className="p-4 border-b border-border/60">
             <div className="relative">
-              <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
+              <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
+              <Input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search active conversations..."
-                className="sn-input pl-10 pr-3 py-2 w-full text-xs"
+                placeholder="Search conversations..."
+                className="pl-11 rounded-xl bg-background/50 border-border/50"
               />
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto divide-y divide-[var(--border-light)]/60">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-2 space-y-1">
             {isLoadingConversations ? (
-              <div className="p-8 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+              <div className="p-8 text-center text-sm text-muted-foreground flex flex-col items-center justify-center gap-2">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
                 <span>Loading conversations...</span>
               </div>
             ) : filteredConversations.length === 0 ? (
-              <div className="p-8 text-center space-y-2">
-                <Inbox className="w-8 h-8 text-[var(--text-muted)] mx-auto opacity-50" />
-                <p className="text-xs text-[var(--text-muted)] font-semibold">No active accepted chats</p>
-                <p className="text-[11px] text-[var(--text-muted)] opacity-80">
-                  Chat unlocks automatically when an interest request is accepted.
-                </p>
+              <div className="p-8 text-center flex flex-col items-center gap-3 mt-10">
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                  <Inbox className="w-6 h-6 text-muted-foreground opacity-50" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground">No active chats</p>
+                  <p className="text-xs text-muted-foreground mt-1 max-w-[200px] leading-relaxed">
+                    Chat unlocks automatically when an interest request is accepted.
+                  </p>
+                </div>
               </div>
             ) : (
               filteredConversations.map((conv) => {
@@ -291,38 +301,44 @@ export default function Chat() {
                 const convPartner = getPartner(conv);
 
                 return (
-                  <div
+                  <button
                     key={conv._id}
                     onClick={() => dispatch(setActiveConversation(conv))}
-                    className={`p-3.5 flex items-start gap-3 cursor-pointer transition-all duration-150 ${
+                    className={cn(
+                      "w-full text-left p-3 rounded-2xl flex items-center gap-3 transition-all duration-200 group border border-transparent",
                       isActive 
-                        ? 'bg-orange-500/10 dark:bg-orange-600/20 border-l-4 border-orange-500' 
-                        : 'hover:bg-[var(--bg-card)]'
-                    }`}
+                        ? "bg-background shadow-sm border-border/60 ring-1 ring-primary/20" 
+                        : "hover:bg-muted/60"
+                    )}
                   >
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
-                      {convPartner.name ? convPartner.name.charAt(0).toUpperCase() : 'S'}
+                    <div className="relative shrink-0">
+                      <Avatar className="w-12 h-12 shadow-sm border border-border/50">
+                        <AvatarFallback className={cn("text-sm font-bold", isActive ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground")}>
+                          {convPartner.name ? convPartner.name.charAt(0).toUpperCase() : 'S'}
+                        </AvatarFallback>
+                      </Avatar>
+                      {isActive && <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-background" />}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-bold text-[var(--text-main)] truncate">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <h4 className="text-sm font-bold text-foreground font-heading truncate">
                           {convPartner.name}
                         </h4>
-                        <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                        <span className="text-[10px] text-muted-foreground font-semibold">
                           {conv.lastMessageAt
                             ? new Date(conv.lastMessageAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                             : ''}
                         </span>
                       </div>
-                      <div className="text-[11px] text-orange-600 dark:text-orange-400 truncate font-semibold">
+                      <div className="text-[11px] text-primary truncate font-bold uppercase tracking-wider mb-0.5">
                         {getListingTitle(conv)}
                       </div>
-                      <p className="text-xs text-[var(--text-muted)] truncate mt-0.5">
+                      <p className="text-xs text-muted-foreground truncate group-hover:text-foreground/80 transition-colors">
                         {conv.lastMessage || 'No messages yet'}
                       </p>
                     </div>
-                  </div>
+                  </button>
                 );
               })
             )}
@@ -330,65 +346,68 @@ export default function Chat() {
         </div>
 
         {/* Right Column: Chat Thread */}
-        <div className="md:col-span-8 flex flex-col h-full bg-[var(--bg-card)]">
+        <div className="flex-1 flex flex-col h-full bg-background relative">
           {!activeConversation || error ? (
-            <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-4 bg-[var(--bg-card-subtle)]/30">
-              <div className="p-4 rounded-2xl bg-orange-500/10 text-orange-500 border border-orange-500/20 shadow-sm">
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-muted/10">
+              <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mb-6 border border-primary/20 shadow-sm">
                 <Lock className="w-8 h-8" />
               </div>
-              <div className="space-y-1.5 max-w-sm">
-                <h4 className="text-base font-bold text-[var(--text-main)] font-heading">
-                  Verified Chat Protected
-                </h4>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  Direct student-to-student messaging opens as soon as an interest request is accepted by the owner.
-                </p>
-              </div>
+              <h4 className="text-xl font-extrabold text-foreground font-heading mb-2">
+                Verified Campus Chat
+              </h4>
+              <p className="text-sm text-muted-foreground max-w-md leading-relaxed mb-6">
+                Direct student-to-student messaging opens securely as soon as an interest request is accepted by the listing owner.
+              </p>
 
               <Button
-                variant="primary"
-                size="sm"
-                icon={Inbox}
+                variant="default"
+                size="lg"
+                className="rounded-full shadow-sm"
                 onClick={() => setRequestsModalOpen(true)}
               >
-                View Interest Requests
+                <Inbox className="w-4 h-4 mr-2" />
+                View Pending Requests
               </Button>
             </div>
           ) : (
             <>
-              {/* Header */}
-              <div className="p-3.5 border-b border-[var(--border-light)] flex items-center justify-between bg-[var(--bg-card)] shrink-0 backdrop-blur-md">
+              {/* Chat Header */}
+              <div className="h-16 px-6 border-b border-border/60 flex items-center justify-between bg-card/80 backdrop-blur-md sticky top-0 z-10 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white font-bold flex items-center justify-center text-xs shadow-xs">
-                    {partner.name ? partner.name.charAt(0).toUpperCase() : 'S'}
-                  </div>
+                  <Avatar className="w-10 h-10 shadow-sm border border-border/50 hidden sm:block">
+                    <AvatarFallback className="bg-primary text-primary-foreground font-bold">
+                      {partner.name ? partner.name.charAt(0).toUpperCase() : 'S'}
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
-                    <h3 className="text-xs font-bold text-[var(--text-main)] flex items-center gap-1.5">
-                      <span>{partner.name}</span>
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <h3 className="text-sm font-bold text-foreground flex items-center gap-1.5 font-heading">
+                      {partner.name}
+                      <ShieldCheck className="w-4 h-4 text-success" />
                     </h3>
-                    <div className="text-[10px] text-orange-600 dark:text-orange-400 font-semibold truncate max-w-xs">
+                    <div className="text-[11px] text-muted-foreground font-medium truncate max-w-[200px] sm:max-w-xs">
                       {getListingTitle(activeConversation)}
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
-                    icon={Phone}
+                    className="h-8 w-8 p-0 sm:w-auto sm:px-3 rounded-full bg-background"
                     onClick={() => toast.info(`Contact: ${partner.email || 'Available in profile'}`)}
-                    className="text-xs"
+                    title="Contact Details"
                   >
-                    Contact
+                    <Phone className="w-4 h-4 sm:mr-1.5 text-muted-foreground" />
+                    <span className="hidden sm:inline text-xs font-semibold">Contact</span>
                   </Button>
 
                   {/* Mark as Sold Button (Seller Only) */}
                   {activeConversation?.interestRequest && activeConversation.interestRequest.recipient === currentUser?._id && activeConversation.interestRequest.status === 'Accepted' && (
                     <Button
-                      variant="emerald"
+                      variant="default"
                       size="sm"
+                      className="h-8 rounded-full bg-success hover:bg-success/90 text-success-foreground px-3 shadow-sm text-xs font-bold"
                       onClick={async () => {
                         try {
                           await api.patch(`/interests/${activeConversation.interestRequest._id}/complete`);
@@ -399,7 +418,7 @@ export default function Chat() {
                         }
                       }}
                     >
-                      <CheckCircle2 className="w-4 h-4 mr-1 text-white" />
+                      <CheckCircle2 className="w-4 h-4 mr-1.5" />
                       Mark Sold
                     </Button>
                   )}
@@ -407,7 +426,7 @@ export default function Chat() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="border-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 text-xs"
+                    className="h-8 rounded-full border-warning/30 text-warning-foreground bg-warning/10 hover:bg-warning/20 px-3 text-xs font-bold"
                     onClick={() => {
                       const req = activeConversation?.interestRequest;
                       if (!req) {
@@ -421,12 +440,12 @@ export default function Chat() {
                       setReviewModalOpen(true);
                     }}
                   >
-                    <Star className="w-3.5 h-3.5 mr-1 fill-amber-400 text-amber-400" />
-                    Rate
+                    <Star className="w-3.5 h-3.5 sm:mr-1.5 fill-warning text-warning" />
+                    <span className="hidden sm:inline">Rate</span>
                   </Button>
                   
                   <button
-                    className="p-2 rounded-xl text-rose-500 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                    className="h-8 w-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors ml-1"
                     title="Report User"
                     onClick={() => setReportModalOpen(true)}
                   >
@@ -436,67 +455,82 @@ export default function Chat() {
               </div>
 
               {/* Messages Feed */}
-              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[var(--bg-card-subtle)]/30">
+              <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-muted/10">
                 {isLoadingMessages ? (
-                  <div className="p-8 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
-                    <span>Loading conversation history...</span>
+                  <div className="h-full flex flex-col items-center justify-center text-sm text-muted-foreground gap-3">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    <span>Decrypting chat history...</span>
                   </div>
                 ) : messages.length === 0 ? (
-                  <div className="p-8 text-center space-y-1.5 my-auto">
-                    <p className="text-xs text-[var(--text-muted)] font-bold">This is the start of your encrypted conversation.</p>
-                    <p className="text-[11px] text-[var(--text-muted)] opacity-80">Say hello to coordinate item inspection or room visits!</p>
+                  <div className="h-full flex flex-col items-center justify-center space-y-3">
+                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-2">
+                      <MessageSquare className="w-5 h-5" />
+                    </div>
+                    <p className="text-sm font-bold text-foreground">Secure Connection Established</p>
+                    <p className="text-xs text-muted-foreground max-w-[250px] text-center leading-relaxed">Say hello and arrange a time to inspect the item or visit the room.</p>
                   </div>
                 ) : (
-                  messages.map((msg) => {
+                  messages.map((msg, idx) => {
                     const isMe = msg.sender?._id === currentUser?._id || msg.sender === currentUser?._id;
+                    const isLastMessage = idx === messages.length - 1;
 
                     return (
-                      <div
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
                         key={msg._id}
-                        className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
+                        className={cn("flex flex-col", isMe ? 'items-end' : 'items-start')}
                       >
                         <div
-                          className={`max-w-md p-3.5 rounded-2xl text-xs leading-relaxed ${
+                          className={cn(
+                            "max-w-[75%] md:max-w-md px-4 py-2.5 text-sm leading-relaxed shadow-sm",
                             isMe
-                              ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white rounded-br-xs shadow-md shadow-orange-500/15'
-                              : 'bg-[var(--bg-card)] text-[var(--text-main)] border border-[var(--border-light)] rounded-bl-xs shadow-xs'
-                          }`}
+                              ? 'bg-primary text-primary-foreground rounded-2xl rounded-br-sm'
+                              : 'bg-card text-foreground border border-border/50 rounded-2xl rounded-bl-sm'
+                          )}
                         >
                           {msg.text}
                         </div>
-                        <span className="text-[10px] text-[var(--text-muted)] mt-1 px-1 font-mono">
+                        <span className="text-[10px] text-muted-foreground mt-1.5 px-1 font-semibold">
                           {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
-                      </div>
+                      </motion.div>
                     );
                   })
                 )}
                 {typingUser && (
-                  <div className="text-[11px] text-[var(--text-muted)] italic px-2">
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground italic px-2 font-medium">
                     {typingUser} is typing...
-                  </div>
+                  </motion.div>
                 )}
-                <div ref={messagesEndRef} />
+                <div ref={messagesEndRef} className="h-2" />
               </div>
 
-              {/* Input Form */}
-              <form onSubmit={handleSend} className="p-3 border-t border-[var(--border-light)] bg-[var(--bg-card)] flex items-center gap-2 shrink-0">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Type your message..."
-                  className="sn-input flex-1 px-4 py-2.5 text-xs sm:text-sm"
-                />
-                <Button type="submit" variant="primary" size="sm" icon={Send} disabled={isSending} className="shadow-md shadow-orange-500/20">
-                  {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
-                </Button>
-              </form>
+              {/* Message Input Floating Bar */}
+              <div className="p-4 bg-background border-t border-border/60 shrink-0">
+                <form onSubmit={handleSend} className="max-w-4xl mx-auto flex items-center gap-2 bg-card border border-border/60 p-1.5 rounded-full shadow-sm focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Type a message..."
+                    className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 px-4 text-sm text-foreground placeholder:text-muted-foreground"
+                  />
+                  <Button 
+                    type="submit" 
+                    variant="default" 
+                    size="icon" 
+                    disabled={isSending || !input.trim()} 
+                    className="w-10 h-10 rounded-full shrink-0 shadow-sm disabled:opacity-50"
+                  >
+                    {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 ml-0.5" />}
+                  </Button>
+                </form>
+              </div>
             </>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

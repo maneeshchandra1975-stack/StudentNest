@@ -1,67 +1,174 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
 /* ── Global Typography & Modern Design Tokens ───────────────── */
 :root {
-  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', 'Geist', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Inter', 'Geist', system-ui, sans-serif;
 
-  /* Light Theme (Elevated Neo-Clean with Solar Warmth) */
-  --bg-body: #FBFBFB;
-  --bg-card: #FFFFFF;
-  --bg-card-subtle: #F5F5F7;
-  --bg-glass: rgba(255, 255, 255, 0.8);
-  --text-main: #111827;
-  --text-muted: #6B7280;
-  --border-light: #E5E7EB;
-  --border-hover: #D1D5DB;
-  --border-glass: rgba(229, 231, 235, 0.8);
-  
-  --primary: #EA580C;
-  --primary-hover: #C2410C;
-  --accent-amber: #F59E0B;
-  --accent-coral: #F43F5E;
-  --accent-emerald: #10B981;
+  /* Core Semantic Tokens (Light) */
+  --background: #F7F5EF;
+  --foreground: #17211B;
 
-  --input-bg: #FFFFFF;
-  --input-border: #E5E7EB;
-  --input-placeholder: #9CA3AF;
+  --card: #FFFDF8;
+  --card-foreground: #17211B;
 
-  --scrollbar-track: rgba(245, 245, 247, 0.7);
-  --scrollbar-thumb: #D1D5DB;
-  --scrollbar-thumb-hover: #9CA3AF;
+  --popover: #FFFDF8;
+  --popover-foreground: #17211B;
 
-  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-  --card-shadow-hover: 0 20px 30px -4px rgba(234, 88, 12, 0.12), 0 8px 16px -2px rgba(0, 0, 0, 0.04);
+  --primary: #1F5C45;
+  --primary-hover: #174A38;
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #496B8A;
+  --secondary-foreground: #FFFFFF;
+
+  --muted: #ECEAE2;
+  --muted-foreground: #667067;
+
+  --accent: #E27D5F;
+  --accent-foreground: #FFFFFF;
+  --accent-soft: #F2D8CF;
+
+  --destructive: #C95A52;
+  --destructive-foreground: #FFFFFF;
+
+  --warning: #C88A2B;
+  --warning-foreground: #FFFFFF;
+
+  --success: #3F7D5A;
+  --success-foreground: #FFFFFF;
+
+  --border: #DCDDD5;
+  --input: #DCDDD5;
+  --ring: #1F5C45;
+
+  --radius: 0.75rem;
+
+  /* Backward Compatibility Aliases for Existing App Views */
+  --bg-body: var(--background);
+  --bg-card: var(--card);
+  --bg-card-subtle: var(--muted);
+  --bg-glass: rgba(255, 253, 248, 0.85);
+  --text-main: var(--foreground);
+  --text-muted: var(--muted-foreground);
+  --border-light: var(--border);
+  --border-hover: var(--ring);
+  --border-glass: var(--border);
+
+  --input-bg: var(--card);
+  --input-border: var(--input);
+  --input-placeholder: var(--muted-foreground);
+
+  --scrollbar-track: #F7F5EF;
+  --scrollbar-thumb: #DCDDD5;
+  --scrollbar-thumb-hover: #1F5C45;
+
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --card-shadow-hover: 0 10px 15px -3px rgba(31, 92, 69, 0.08), 0 4px 6px -4px rgba(31, 92, 69, 0.04);
 }
 
 .dark {
-  /* Dark Theme (Futuristic Deep Obsidian & Solar Ember Flame) */
-  --bg-body: #0A0D14;
-  --bg-card: #111522;
-  --bg-card-subtle: #171D2E;
-  --bg-glass: rgba(17, 21, 34, 0.8);
-  --text-main: #F9FAFB;
-  --text-muted: #9CA3AF;
-  --border-light: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(249, 115, 22, 0.45);
-  --border-glass: rgba(255, 255, 255, 0.12);
+  /* Core Semantic Tokens (Dark) */
+  --background: #151A17;
+  --foreground: #F5F3EA;
 
-  --primary: #F97316;
-  --primary-hover: #FB923C;
-  --accent-amber: #FBBF24;
-  --accent-coral: #FB7185;
-  --accent-emerald: #34D399;
+  --card: #1D241F;
+  --card-foreground: #F5F3EA;
 
-  --input-bg: rgba(17, 21, 34, 0.9);
-  --input-border: rgba(255, 255, 255, 0.12);
-  --input-placeholder: #6B7280;
+  --popover: #1D241F;
+  --popover-foreground: #F5F3EA;
 
-  --scrollbar-track: rgba(10, 13, 20, 0.8);
-  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
-  --scrollbar-thumb-hover: rgba(249, 115, 22, 0.6);
+  --primary: #5FA982;
+  --primary-hover: #76BB98;
+  --primary-foreground: #151A17;
 
-  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.06);
-  --card-shadow-hover: 0 20px 40px -4px rgba(249, 115, 22, 0.22), 0 0 1px 1px rgba(249, 115, 22, 0.4);
+  --secondary: #7896B3;
+  --secondary-foreground: #151A17;
+
+  --muted: #252D28;
+  --muted-foreground: #A8B0A9;
+
+  --accent: #E88B70;
+  --accent-foreground: #151A17;
+  --accent-soft: #252D28;
+
+  --destructive: #D8756C;
+  --destructive-foreground: #151A17;
+
+  --warning: #D7A34A;
+  --warning-foreground: #151A17;
+
+  --success: #71B58B;
+  --success-foreground: #151A17;
+
+  --border: #343C36;
+  --input: #343C36;
+  --ring: #5FA982;
+
+  /* Backward Compatibility Aliases for Existing App Views (Dark) */
+  --bg-body: var(--background);
+  --bg-card: var(--card);
+  --bg-card-subtle: var(--muted);
+  --bg-glass: rgba(29, 36, 31, 0.85);
+  --text-main: var(--foreground);
+  --text-muted: var(--muted-foreground);
+  --border-light: var(--border);
+  --border-hover: var(--ring);
+  --border-glass: var(--border);
+
+  --input-bg: var(--card);
+  --input-border: var(--input);
+  --input-placeholder: var(--muted-foreground);
+
+  --scrollbar-track: #151A17;
+  --scrollbar-thumb: #343C36;
+  --scrollbar-thumb-hover: #5FA982;
+
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 12px 24px -4px rgba(95, 169, 130, 0.15), 0 0 1px 1px rgba(95, 169, 130, 0.3);
 }
 
 /* ── Base Smooth Scroll & Global Styles ──────────────────────── */
@@ -71,67 +178,66 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-body);
-  color: var(--text-main);
+  background-color: var(--background);
+  color: var(--foreground);
   line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-heading);
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
 }
 
 /* ── Modern Glassmorphism & Surface Utilities ────────────────── */
 .glass-panel {
   background: var(--bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
 }
 
 .glass-dropdown {
-  background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.2);
+  background: var(--card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.15);
 }
 
-/* ── Advanced Startup Card Primitive ─────────────────────────── */
+/* ── StudentNest Card Primitives ─────────────────────────────── */
 .sn-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: 20px;
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   box-shadow: var(--card-shadow);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .sn-card-hover {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .sn-card-hover:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-4px);
+  border-color: var(--ring);
+  transform: translateY(-2px);
   box-shadow: var(--card-shadow-hover);
 }
 
-/* ── Advanced Inputs & Controls ──────────────────────────────── */
+/* ── StudentNest Inputs & Controls ───────────────────────────── */
 .sn-input {
   background-color: var(--input-bg);
   border: 1px solid var(--input-border);
-  border-radius: 14px;
+  border-radius: calc(var(--radius) - 2px);
   color: var(--text-main);
   font-size: 14px;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .sn-input::placeholder {
@@ -141,32 +247,26 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .sn-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.25);
+  box-shadow: 0 0 0 3px rgba(95, 169, 130, 0.2);
 }
 
-/* ── Gradient Text Utilities ─────────────────────────────────── */
+/* ── Clean Gradient Text Utilities ───────────────────────────── */
 .text-gradient-primary {
-  background: linear-gradient(135deg, #F59E0B 0%, #F97316 45%, #F43F5E 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-amber {
-  background: linear-gradient(135deg, #FBBF24 0%, #F97316 100%);
+.text-gradient-teal {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--success) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-coral {
-  background: linear-gradient(135deg, #FB7185 0%, #E11D48 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* ── Luxury Custom Scrollbar ─────────────────────────────────── */
+/* ── Clean Custom Scrollbar ──────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {

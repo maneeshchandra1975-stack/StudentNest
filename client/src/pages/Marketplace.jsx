@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShoppingBag,
   Search,
@@ -11,19 +12,32 @@ import {
   Plus,
   Flag,
   Inbox,
-  X,
   AlertTriangle,
 } from 'lucide-react';
+
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import EmptyState from '../components/ui/EmptyState';
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/Avatar';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/Dialog';
+import { Input } from '../components/ui/Input';
+import { Textarea } from '../components/ui/Textarea';
+
 import InterestRequestsModal from '../components/ui/InterestRequestsModal';
 import CreateListingModal from '../components/modals/CreateListingModal';
 import { fetchMarketplaceItems, toggleInterest, updateMarketplaceStatus } from '../redux/slices/marketplaceSlice';
 import api from '../services/api';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { cn } from '../utils/cn';
 
 const categories = [
   { label: 'All Items', value: 'all', icon: ShoppingBag },
@@ -46,6 +60,9 @@ export default function Marketplace() {
   // Modals state
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isRequestsModalOpen, setIsRequestsModalOpen] = useState(false);
+  
+  // Report Modal State
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportModalItem, setReportModalItem] = useState(null);
   const [reportReason, setReportReason] = useState('');
   const [reportDescription, setReportDescription] = useState('');
@@ -84,6 +101,8 @@ export default function Marketplace() {
 
   const handleReportSubmit = async (e) => {
     e.preventDefault();
+    if (!reportReason || !reportDescription) return;
+    
     try {
       await api.post('/reports', {
         targetType: 'MarketplaceItem',
@@ -92,6 +111,7 @@ export default function Marketplace() {
         description: reportDescription
       });
       toast.success('Report submitted successfully');
+      setIsReportModalOpen(false);
       setReportModalItem(null);
       setReportReason('');
       setReportDescription('');
@@ -100,48 +120,54 @@ export default function Marketplace() {
     }
   };
 
+  const openReportModal = (item) => {
+    setReportModalItem(item);
+    setIsReportModalOpen(true);
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-8 py-6">
       {/* ── Page Header ────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[var(--border-light)] pb-6">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 text-xs font-bold mb-2">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6">
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold mb-3 shadow-sm">
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>VIT-AP Peer-to-Peer Hub</span>
           </div>
-          <h1 className="text-3xl font-black text-[var(--text-main)] font-heading tracking-tight">Campus Marketplace</h1>
-          <p className="text-sm text-[var(--text-muted)] mt-1">Direct student exchange with zero platform commissions.</p>
-        </div>
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <h1 className="text-4xl font-extrabold text-foreground font-heading tracking-tight">Campus Marketplace</h1>
+          <p className="text-muted-foreground mt-2 text-lg">Direct student exchange with zero platform commissions.</p>
+        </motion.div>
+        
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="flex items-center gap-3 w-full sm:w-auto">
           <Button
-            variant="secondary"
-            className="flex-1 sm:flex-none"
+            variant="outline"
+            className="flex-1 sm:flex-none rounded-full bg-background"
             onClick={() => setIsRequestsModalOpen(true)}
           >
             <Inbox className="w-4 h-4 mr-2" />
-            Received Requests
+            Inbox
           </Button>
           <Button
-            variant="primary"
-            className="flex-1 sm:flex-none shadow-lg shadow-orange-500/20"
+            variant="default"
+            className="flex-1 sm:flex-none rounded-full shadow-sm"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus className="w-4 h-4 mr-2" />
-            Sell an Item
+            Sell Item
           </Button>
-        </div>
+        </motion.div>
       </div>
 
       {/* ── Search & Filter Panel ──────────────────────────────── */}
-      <div className="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 items-center shadow-xs">
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }} className="bg-card/50 backdrop-blur-xl border border-border rounded-2xl p-4 flex flex-col md:flex-row gap-4 items-center shadow-sm">
         <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
-          <input
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
             type="text"
-            placeholder="Search textbooks, calculators, monitors, cycles..."
+            placeholder="Search textbooks, calculators, cycles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="sn-input w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm"
+            className="w-full pl-11 rounded-xl bg-background/50 border-border/50 focus-visible:ring-primary shadow-inner"
           />
         </div>
         
@@ -154,10 +180,10 @@ export default function Marketplace() {
                 key={cat.value}
                 onClick={() => setActiveCategory(cat.value)}
                 className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer select-none',
+                  'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer select-none',
                   isActive 
-                    ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/25 scale-[1.02]' 
-                    : 'bg-[var(--bg-card-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--border-light)]'
+                    ? 'bg-primary text-primary-foreground shadow-md scale-[1.02]' 
+                    : 'bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted'
                 )}
               >
                 <Icon className="w-4 h-4" />
@@ -166,112 +192,159 @@ export default function Marketplace() {
             );
           })}
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Items Grid ─────────────────────────────────────────── */}
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center py-24 text-[var(--text-muted)] gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-orange-500/30 border-t-orange-500 animate-spin" />
-          <span className="text-xs font-semibold">Loading marketplace listings...</span>
+        <div className="flex flex-col items-center justify-center py-32 text-muted-foreground gap-4">
+          <div className="w-10 h-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+          <span className="text-sm font-semibold">Loading marketplace listings...</span>
         </div>
       ) : items.length === 0 ? (
-        <EmptyState
-          icon={ShoppingBag}
-          title="No items found"
-          description="We couldn't find any items matching your search or category."
-          actionLabel="Clear Filters"
-          onAction={() => {
-            setSearchQuery('');
-            setActiveCategory('all');
-          }}
-        />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <EmptyState
+            icon={ShoppingBag}
+            title="No items found"
+            description="We couldn't find any items matching your search or category."
+            actionLabel="Clear Filters"
+            onAction={() => {
+              setSearchQuery('');
+              setActiveCategory('all');
+            }}
+          />
+        </motion.div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item) => {
-            const isOwner = user?._id === item.seller?._id;
-            const hasInterested = item.interestedUsers?.includes(user?._id);
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: { staggerChildren: 0.05 }
+            }
+          }}
+        >
+          <AnimatePresence mode="popLayout">
+            {items.map((item) => {
+              const isOwner = user?._id === item.seller?._id;
+              const hasInterested = item.interestedUsers?.includes(user?._id);
 
-            return (
-              <Card key={item._id} hover className="overflow-hidden flex flex-col group border-[var(--border-light)] shadow-sm">
-                <div className="relative aspect-[4/3] bg-[var(--bg-card-subtle)] overflow-hidden">
-                  <img
-                    src={item.images && item.images.length > 0 ? item.images[0] : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff'}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <Badge variant={item.status === 'Available' ? 'success' : 'secondary'} className="shadow-md">
-                      {item.status}
-                    </Badge>
-                  </div>
-                  {!isOwner && (
-                    <button
-                      onClick={() => setReportModalItem(item)}
-                      className="absolute top-3 right-3 p-2 rounded-xl bg-[var(--bg-card)]/90 backdrop-blur-md text-slate-500 hover:text-rose-500 shadow-md opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
-                      title="Report this item"
-                    >
-                      <Flag className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="p-5 flex-1 flex flex-col">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex-1 pr-2">
-                      <h3 className="text-base font-bold text-[var(--text-main)] font-heading leading-tight line-clamp-1">{item.title}</h3>
-                      <p className="text-xs text-[var(--text-muted)] mt-1">{item.category} • {item.condition}</p>
-                    </div>
-                    <div className="text-lg font-black text-gradient-primary whitespace-nowrap">₹{item.price.toLocaleString()}</div>
-                  </div>
-                  
-                  <p className="text-xs text-[var(--text-muted)] line-clamp-2 mt-2 mb-4 flex-1 leading-relaxed">
-                    {item.description}
-                  </p>
-
-                  <div className="flex items-center gap-2 mt-auto pt-4 border-t border-[var(--border-light)]">
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-bold text-[var(--text-main)] truncate">
-                        {item.seller?.name || 'Student'}
+              return (
+                <motion.div
+                  key={item._id}
+                  layout
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    show: { opacity: 1, y: 0 }
+                  }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Card className="overflow-hidden flex flex-col h-full group border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1">
+                    {/* Image Section */}
+                    <div className="relative aspect-[4/3] bg-muted overflow-hidden">
+                      <img
+                        src={item.images && item.images.length > 0 ? item.images[0] : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff'}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      
+                      {/* Top Overlay Badges */}
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <Badge variant={item.status === 'Available' ? 'success' : 'secondary'} className="shadow-sm backdrop-blur-md bg-background/90 font-bold border-0">
+                          {item.status}
+                        </Badge>
+                        <Badge variant="outline" className="shadow-sm backdrop-blur-md bg-background/90 text-foreground border-0 font-bold uppercase tracking-wider text-[10px]">
+                          {item.condition}
+                        </Badge>
                       </div>
-                      <div className="text-[10px] text-emerald-500 font-semibold flex items-center gap-1 mt-0.5">
-                        <ShieldCheck className="w-3 h-3" />
-                        Verified Student
+
+                      {/* Floating Price Badge */}
+                      <div className="absolute bottom-3 right-3 bg-background/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg border border-border/50">
+                        <span className="text-lg font-black text-foreground font-heading">₹{item.price.toLocaleString()}</span>
                       </div>
+
+                      {/* Report Button */}
+                      {!isOwner && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); openReportModal(item); }}
+                          className="absolute top-3 right-3 p-2 rounded-xl bg-background/80 backdrop-blur-md text-muted-foreground hover:text-destructive hover:bg-background shadow-sm opacity-0 group-hover:opacity-100 transition-all cursor-pointer border border-border/50"
+                          title="Report this item"
+                        >
+                          <Flag className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
-                    
-                    {item.status === 'Available' ? (
-                      <>
-                        {!isOwner && (
-                          <Button
-                            variant={hasInterested ? "secondary" : "primary"}
-                            size="sm"
-                            onClick={() => handleToggleInterest(item._id, item.seller._id)}
-                          >
-                            {hasInterested ? 'Interest Sent' : 'Show Interest'}
+
+                    {/* Content Section */}
+                    <div className="p-5 flex-1 flex flex-col bg-card">
+                      <div className="mb-3">
+                        <h3 className="text-lg font-bold text-foreground font-heading leading-tight line-clamp-1 group-hover:text-primary transition-colors">{item.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-1 font-medium">{item.category}</p>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1 mb-5 flex-1 leading-relaxed">
+                        {item.description}
+                      </p>
+
+                      {/* Footer Actions */}
+                      <div className="flex items-center gap-3 mt-auto pt-4 border-t border-border/60">
+                        <div className="flex-1 min-w-0 flex items-center gap-2">
+                          <Avatar className="w-8 h-8 border border-border/50 shadow-sm">
+                            <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+                              {item.seller?.name?.charAt(0) || 'S'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="truncate">
+                            <div className="text-xs font-bold text-foreground truncate">
+                              {item.seller?.name || 'Student'}
+                            </div>
+                            <div className="text-[10px] text-success font-semibold flex items-center gap-1 mt-0.5">
+                              <ShieldCheck className="w-3 h-3" />
+                              Verified
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {item.status === 'Available' ? (
+                          <>
+                            {!isOwner && (
+                              <Button
+                                variant={hasInterested ? "secondary" : "default"}
+                                size="sm"
+                                className={cn("rounded-full px-4 text-xs font-bold", hasInterested ? "bg-muted text-muted-foreground" : "shadow-sm")}
+                                onClick={() => handleToggleInterest(item._id, item.seller._id)}
+                              >
+                                {hasInterested ? 'Requested' : 'I want this'}
+                              </Button>
+                            )}
+
+                            {isOwner && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="rounded-full px-4 text-xs font-bold border-success text-success hover:bg-success hover:text-success-foreground"
+                                onClick={() => handleMarkSold(item._id)}
+                              >
+                                Mark Sold
+                              </Button>
+                            )}
+                          </>
+                        ) : (
+                          <Button variant="secondary" size="sm" className="rounded-full px-4 text-xs font-bold opacity-50 cursor-not-allowed">
+                            Sold Out
                           </Button>
                         )}
-
-                        {isOwner && (
-                          <Button
-                            variant="emerald"
-                            size="sm"
-                            onClick={() => handleMarkSold(item._id)}
-                          >
-                            Mark Sold
-                          </Button>
-                        )}
-                      </>
-                    ) : (
-                      <Button variant="secondary" size="sm" disabled>
-                        {item.status}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </motion.div>
       )}
 
       {/* Modals */}
@@ -284,61 +357,58 @@ export default function Marketplace() {
         onClose={() => setIsRequestsModalOpen(false)}
       />
 
-      {/* Report Modal */}
-      {reportModalItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[var(--bg-card)] rounded-2xl w-full max-w-md shadow-xl border border-[var(--border-light)] overflow-hidden">
-            <div className="p-4 border-b border-[var(--border-light)] flex justify-between items-center bg-rose-50/50">
-              <div className="flex items-center gap-2 text-rose-600">
-                <AlertTriangle className="w-5 h-5" />
-                <h3 className="font-bold">Report Listing</h3>
-              </div>
-              <button onClick={() => setReportModalItem(null)} className="text-[var(--text-muted)] hover:text-slate-700">
-                <X className="w-5 h-5" />
-              </button>
+      {/* Report Dialog using shadcn */}
+      <Dialog open={isReportModalOpen} onOpenChange={setIsReportModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-destructive">
+              <AlertTriangle className="w-5 h-5" />
+              Report Listing
+            </DialogTitle>
+            <DialogDescription>
+              Help us keep the campus marketplace safe. Your report will be reviewed by administrators.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleReportSubmit} className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">Reason for reporting</label>
+              <select
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+                required
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="">Select a reason...</option>
+                <option value="SCAM">Suspicious or Scam</option>
+                <option value="INAPPROPRIATE">Inappropriate Content</option>
+                <option value="SPAM">Spam</option>
+                <option value="OTHER">Other</option>
+              </select>
             </div>
-            
-            <form onSubmit={handleReportSubmit} className="p-5 space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Reason for reporting</label>
-                <select
-                  value={reportReason}
-                  onChange={(e) => setReportReason(e.target.value)}
-                  required
-                  className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 text-[var(--text-main)] outline-none"
-                >
-                  <option value="">Select a reason...</option>
-                  <option value="SCAM">Suspicious or Scam</option>
-                  <option value="INAPPROPRIATE">Inappropriate Content</option>
-                  <option value="SPAM">Spam</option>
-                  <option value="OTHER">Other</option>
-                </select>
-              </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Additional Details</label>
-                <textarea
-                  value={reportDescription}
-                  onChange={(e) => setReportDescription(e.target.value)}
-                  required
-                  rows={3}
-                  className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-sm focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 text-[var(--text-main)] outline-none resize-none"
-                  placeholder="Please provide more details..."
-                />
-              </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">Additional Details</label>
+              <Textarea
+                value={reportDescription}
+                onChange={(e) => setReportDescription(e.target.value)}
+                required
+                rows={4}
+                placeholder="Please provide more details about why you're reporting this item..."
+              />
+            </div>
 
-              <div className="flex gap-3 pt-2">
-                <Button type="button" variant="ghost" className="flex-1" onClick={() => setReportModalItem(null)}>
-                  Cancel
-                </Button>
-                <Button type="submit" variant="primary" className="flex-1 !bg-rose-600 hover:!bg-rose-700 !text-white !border-rose-600">
-                  Submit Report
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+            <DialogFooter className="pt-4">
+              <Button type="button" variant="ghost" onClick={() => setIsReportModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="destructive">
+                Submit Report
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

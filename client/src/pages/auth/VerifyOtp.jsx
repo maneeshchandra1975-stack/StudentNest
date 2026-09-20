@@ -1,16 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { verifyOtp, resendOtp } from '../../redux/slices/authSlice';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
 import { KeyRound, RotateCw, Loader2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+import Button from '../../components/ui/Button';
+import { Alert, AlertDescription } from '../../components/ui/Alert';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '../../components/ui/InputOTP';
 
 export default function VerifyOtp() {
-  const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
+  const [otpValue, setOtpValue] = useState('');
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
-  const inputRefs = useRef([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,45 +32,9 @@ export default function VerifyOtp() {
     return () => clearInterval(interval);
   }, [timer]);
 
-  useEffect(() => {
-    if (inputRefs.current[0]) {
-      inputRefs.current[0].focus();
-    }
-  }, []);
-
-  const handleChange = (index, value) => {
-    if (!/^\d*$/.test(value)) return;
-    const newOtp = [...otpValues];
-    newOtp[index] = value.slice(-1);
-    setOtpValues(newOtp);
-
-    if (value && index < 5) {
-      inputRefs.current[index + 1].focus();
-    }
-  };
-
-  const handleKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !otpValues[index] && index > 0) {
-      inputRefs.current[index - 1].focus();
-    }
-  };
-
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').trim();
-    if (!/^\d{6}$/.test(pastedData)) {
-      toast.error('Please paste a valid 6-digit OTP code.');
-      return;
-    }
-    const digits = pastedData.split('');
-    setOtpValues(digits);
-    inputRefs.current[5].focus();
-  };
-
   const handleVerify = async (e) => {
     e.preventDefault();
-    const fullOtp = otpValues.join('');
-    if (fullOtp.length !== 6) {
+    if (otpValue.length !== 6) {
       toast.error('Please enter all 6 digits of the OTP.');
       return;
     }
@@ -77,13 +47,13 @@ export default function VerifyOtp() {
     }
 
     try {
-      const res = await dispatch(verifyOtp({ email: emailToUse, otp: fullOtp })).unwrap();
+      const res = await dispatch(verifyOtp({ email: emailToUse, otp: otpValue })).unwrap();
 
       confetti({
         particleCount: 120,
         spread: 80,
         origin: { y: 0.6 },
-        colors: ['#10b981', '#14b8a6', '#06b6d4', '#f59e0b'],
+        colors: ['#3F7D5A', '#E27D5F', '#496B8A', '#F5F3EA'],
       });
 
       toast.success(res.message || 'Email verified successfully!');
@@ -108,8 +78,7 @@ export default function VerifyOtp() {
       toast.success(res.message || 'New OTP sent to your email.');
       setTimer(60);
       setCanResend(false);
-      setOtpValues(['', '', '', '', '', '']);
-      inputRefs.current[0].focus();
+      setOtpValue('');
     } catch (err) {
       toast.error(err || 'Failed to resend OTP.');
     }
@@ -118,21 +87,21 @@ export default function VerifyOtp() {
   const displayEmail = otpEmail || sessionStorage.getItem('otpEmail') || 'your email';
 
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white mx-auto flex items-center justify-center shadow-lg shadow-orange-500/25">
-          <KeyRound className="w-7 h-7" />
+    <div className="space-y-8 w-full max-w-md mx-auto">
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary mx-auto flex items-center justify-center shadow-sm border border-primary/20">
+          <KeyRound className="w-8 h-8" />
         </div>
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-xs font-bold text-accent uppercase tracking-wider mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5" /> Step 2 of 2: OTP Verification
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[var(--text-main)] tracking-tight font-heading">
-            Verify Your <span className="text-gradient-primary">Email</span>
+          <h2 className="text-4xl font-extrabold text-foreground tracking-tight font-heading">
+            Verify Your <span className="text-primary">Email</span>
           </h2>
-          <p className="text-xs text-[var(--text-muted)] mt-1.5 max-w-xs mx-auto leading-relaxed">
+          <p className="text-sm text-muted-foreground mt-3 max-w-sm mx-auto leading-relaxed">
             We sent a 6-digit verification code to <br />
-            <span className="inline-block mt-1 px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 font-mono text-xs font-bold">
+            <span className="inline-block mt-2 px-3 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary font-mono text-sm font-bold">
               {displayEmail}
             </span>
           </p>
@@ -140,65 +109,70 @@ export default function VerifyOtp() {
       </div>
 
       {error && (
-        <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-3 text-rose-600 dark:text-rose-400 text-xs shadow-xs">
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive" className="bg-destructive/10 border-destructive/20 text-destructive">
+          <AlertCircle className="w-4 h-4" />
+          <AlertDescription className="font-semibold text-xs ml-2">
+            {error}
+          </AlertDescription>
+        </Alert>
       )}
 
-      <form onSubmit={handleVerify} className="space-y-6">
-        {/* 6 Digit Box Grid */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3" onPaste={handlePaste}>
-          {otpValues.map((digit, idx) => (
-            <input
-              key={idx}
-              ref={(el) => (inputRefs.current[idx] = el)}
-              type="text"
-              inputMode="numeric"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(idx, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(idx, e)}
-              className="w-12 h-14 sm:w-13 sm:h-15 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-2xl text-center text-2xl font-black text-orange-600 dark:text-orange-400 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all shadow-xs font-mono"
-            />
-          ))}
+      <form onSubmit={handleVerify} className="space-y-8">
+        {/* 6 Digit Box Grid Using InputOTP */}
+        <div className="flex justify-center">
+          <InputOTP
+            maxLength={6}
+            value={otpValue}
+            onChange={setOtpValue}
+            containerClassName="gap-2"
+          >
+            <InputOTPGroup className="gap-2 sm:gap-3">
+              <InputOTPSlot index={0} className="w-12 h-14 sm:w-14 sm:h-16 text-2xl font-black bg-background/50 border-border/50 shadow-inner rounded-xl ring-primary focus:ring-primary focus-visible:ring-primary" />
+              <InputOTPSlot index={1} className="w-12 h-14 sm:w-14 sm:h-16 text-2xl font-black bg-background/50 border-border/50 shadow-inner rounded-xl ring-primary focus:ring-primary focus-visible:ring-primary" />
+              <InputOTPSlot index={2} className="w-12 h-14 sm:w-14 sm:h-16 text-2xl font-black bg-background/50 border-border/50 shadow-inner rounded-xl ring-primary focus:ring-primary focus-visible:ring-primary" />
+              <InputOTPSlot index={3} className="w-12 h-14 sm:w-14 sm:h-16 text-2xl font-black bg-background/50 border-border/50 shadow-inner rounded-xl ring-primary focus:ring-primary focus-visible:ring-primary" />
+              <InputOTPSlot index={4} className="w-12 h-14 sm:w-14 sm:h-16 text-2xl font-black bg-background/50 border-border/50 shadow-inner rounded-xl ring-primary focus:ring-primary focus-visible:ring-primary" />
+              <InputOTPSlot index={5} className="w-12 h-14 sm:w-14 sm:h-16 text-2xl font-black bg-background/50 border-border/50 shadow-inner rounded-xl ring-primary focus:ring-primary focus-visible:ring-primary" />
+            </InputOTPGroup>
+          </InputOTP>
         </div>
 
-        <button
+        <Button
           type="submit"
-          disabled={isLoading || otpValues.join('').length !== 6}
-          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+          disabled={isLoading || otpValue.length !== 6}
+          className="w-full py-6 rounded-xl font-bold text-sm shadow-sm"
+          variant="default"
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Verifying Code...</span>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Verifying Code...
             </>
           ) : (
             <>
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Verify &amp; Activate Account</span>
+              <CheckCircle2 className="w-4 h-4 mr-2" />
+              Verify &amp; Activate Account
             </>
           )}
-        </button>
+        </Button>
       </form>
 
       {/* Resend Timer */}
-      <div className="pt-2 text-center text-xs text-[var(--text-muted)] space-y-2">
+      <div className="pt-4 text-center text-sm text-muted-foreground space-y-3 font-medium">
         <p>Didn't receive the email? Check spam folder or resend.</p>
         <button
           type="button"
           onClick={handleResend}
           disabled={!canResend || isLoading}
-          className="inline-flex items-center gap-1.5 font-bold text-orange-600 dark:text-orange-400 hover:underline disabled:text-slate-500 disabled:no-underline transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 font-bold text-primary hover:underline underline-offset-4 disabled:text-muted disabled:no-underline transition-colors cursor-pointer"
         >
-          <RotateCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+          <RotateCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           {canResend ? 'Resend New OTP' : `Resend OTP in ${timer}s`}
         </button>
       </div>
 
-      <div className="text-center pt-2 text-xs">
-        <Link to="/register" className="text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors">
+      <div className="text-center pt-2 text-sm font-medium">
+        <Link to="/register" className="text-muted-foreground hover:text-foreground transition-colors">
           &larr; Wrong email? Register again
         </Link>
       </div>

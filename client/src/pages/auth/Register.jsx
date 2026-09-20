@@ -15,8 +15,11 @@ import {
   AlertCircle,
   Loader2,
   Sparkles,
-  ShieldCheck,
 } from 'lucide-react';
+import Button from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { Label } from '../../components/ui/Label';
+import { Alert, AlertDescription } from '../../components/ui/Alert';
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +38,7 @@ export default function Register() {
   const passwordValue = watch('password', '');
 
   // Domain Check
-  const isVitapEmail = emailValue.endsWith('@vitapstudent.ac.in');
+  const isStudentEmail = emailValue.endsWith('@student.ac.in');
 
   // Password Requirement Checks
   const hasMinLength = passwordValue.length >= 8;
@@ -69,72 +72,74 @@ export default function Register() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 w-full max-w-md mx-auto">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider mb-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-xs font-bold text-accent uppercase tracking-wider mb-4 shadow-sm">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Step 1 of 2: Verification</span>
         </div>
-        <h2 className="text-3xl font-black text-[var(--text-main)] tracking-tight font-heading">
-          Create Student <span className="text-gradient-primary">Account</span>
+        <h2 className="text-4xl font-extrabold text-foreground tracking-tight font-heading">
+          Create Student <span className="text-primary">Account</span>
         </h2>
-        <p className="text-xs text-[var(--text-muted)] mt-1 leading-relaxed font-medium">
+        <p className="text-sm text-muted-foreground mt-2 leading-relaxed font-medium">
           Access verified student housing, roommates, and marketplace listings with your university credentials.
         </p>
       </div>
 
       {/* Global Error Banner */}
       {error && (
-        <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-3 text-rose-600 dark:text-rose-400 text-xs shadow-xs">
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive" className="bg-destructive/10 border-destructive/20 text-destructive">
+          <AlertCircle className="w-4 h-4" />
+          <AlertDescription className="font-semibold text-xs ml-2">
+            {error}
+          </AlertDescription>
+        </Alert>
       )}
 
       {/* Main Form Fields */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Full Name */}
-        <div>
-          <label className="block text-xs font-bold text-[var(--text-main)] uppercase tracking-wider mb-1.5">
+        <div className="space-y-2">
+          <Label className="text-xs font-bold text-foreground uppercase tracking-wider">
             Full Name
-          </label>
+          </Label>
           <div className="relative">
-            <User className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
+            <User className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Input
               type="text"
-              placeholder="e.g. Maneesh Chandra"
+              placeholder="e.g. John Doe"
               {...register('name', {
                 required: 'Full Name is required',
                 minLength: { value: 2, message: 'Name must be at least 2 characters' },
               })}
-              className="sn-input w-full pl-10 pr-4 py-2.5 text-xs"
+              className="pl-10 pr-4 py-6 text-sm bg-background/50 focus-visible:ring-primary shadow-inner rounded-xl"
             />
           </div>
           {errors.name && (
-            <p className="text-xs text-rose-500 mt-1.5 flex items-center gap-1 font-semibold">
+            <p className="text-xs text-destructive mt-1 flex items-center gap-1 font-semibold">
               <AlertCircle className="w-3 h-3" /> {errors.name.message}
             </p>
           )}
         </div>
 
         {/* College Email */}
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-xs font-bold text-[var(--text-main)] uppercase tracking-wider">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label className="text-xs font-bold text-foreground uppercase tracking-wider">
               College Email
-            </label>
-            {isVitapEmail && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+            </Label>
+            {isStudentEmail && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-success bg-success/10 px-2 py-0.5 rounded border border-success/20">
                 <CheckCircle2 className="w-3 h-3" /> Valid Domain
               </span>
             )}
           </div>
           <div className="relative">
-            <Mail className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
+            <Mail className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Input
               type="email"
-              placeholder="yourname@vitapstudent.ac.in"
+              placeholder="yourname@student.ac.in"
               {...register('email', {
                 required: 'Email address is required',
                 pattern: {
@@ -142,24 +147,24 @@ export default function Register() {
                   message: 'Enter a valid email address',
                 },
               })}
-              className="sn-input w-full pl-10 pr-4 py-2.5 text-xs font-mono tracking-tight"
+              className="pl-10 pr-4 py-6 text-sm font-mono tracking-tight bg-background/50 focus-visible:ring-primary shadow-inner rounded-xl"
             />
           </div>
           {errors.email && (
-            <p className="text-xs text-rose-500 mt-1.5 flex items-center gap-1 font-semibold">
+            <p className="text-xs text-destructive mt-1 flex items-center gap-1 font-semibold">
               <AlertCircle className="w-3 h-3" /> {errors.email.message}
             </p>
           )}
         </div>
 
         {/* Password */}
-        <div>
-          <label className="block text-xs font-bold text-[var(--text-main)] uppercase tracking-wider mb-1.5">
+        <div className="space-y-2">
+          <Label className="text-xs font-bold text-foreground uppercase tracking-wider">
             Password
-          </label>
+          </Label>
           <div className="relative">
-            <Lock className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
+            <Lock className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Input
               type={showPassword ? 'text' : 'password'}
               placeholder="Create a strong password"
               {...register('password', {
@@ -170,12 +175,12 @@ export default function Register() {
                   message: 'Must include 1 uppercase letter & 1 number',
                 },
               })}
-              className="sn-input w-full pl-10 pr-10 py-2.5 text-xs"
+              className="pl-10 pr-10 py-6 text-sm bg-background/50 focus-visible:ring-primary shadow-inner rounded-xl"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -183,25 +188,25 @@ export default function Register() {
 
           {/* Password Requirements Checklist */}
           {passwordValue && (
-            <div className="mt-2.5 p-3 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-light)] space-y-2">
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-[var(--text-muted)]">Strength:</span>
-                <span className="font-bold text-orange-500">{strengthScore}%</span>
+            <div className="mt-2 p-4 rounded-xl bg-muted/50 border border-border/50 space-y-3">
+              <div className="flex items-center justify-between text-xs font-medium">
+                <span className="text-muted-foreground">Strength:</span>
+                <span className="font-bold text-primary">{strengthScore}%</span>
               </div>
-              <div className="h-1.5 w-full bg-[var(--border-light)] rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-400 transition-all duration-300"
+                  className="h-full bg-primary transition-all duration-300"
                   style={{ width: `${strengthScore}%` }}
                 />
               </div>
               <div className="grid grid-cols-3 gap-1 pt-1 text-[10px]">
-                <div className={`flex items-center gap-1 font-semibold ${hasMinLength ? 'text-emerald-500' : 'text-[var(--text-muted)]'}`}>
+                <div className={`flex items-center gap-1 font-bold ${hasMinLength ? 'text-success' : 'text-muted-foreground'}`}>
                   <CheckCircle2 className="w-3 h-3" /> 8+ chars
                 </div>
-                <div className={`flex items-center gap-1 font-semibold ${hasUppercase ? 'text-emerald-500' : 'text-[var(--text-muted)]'}`}>
+                <div className={`flex items-center gap-1 font-bold ${hasUppercase ? 'text-success' : 'text-muted-foreground'}`}>
                   <CheckCircle2 className="w-3 h-3" /> 1 Uppercase
                 </div>
-                <div className={`flex items-center gap-1 font-semibold ${hasNumber ? 'text-emerald-500' : 'text-[var(--text-muted)]'}`}>
+                <div className={`flex items-center gap-1 font-bold ${hasNumber ? 'text-success' : 'text-muted-foreground'}`}>
                   <CheckCircle2 className="w-3 h-3" /> 1 Number
                 </div>
               </div>
@@ -209,60 +214,61 @@ export default function Register() {
           )}
 
           {errors.password && (
-            <p className="text-xs text-rose-500 mt-1.5 flex items-center gap-1 font-semibold">
+            <p className="text-xs text-destructive mt-1 flex items-center gap-1 font-semibold">
               <AlertCircle className="w-3 h-3" /> {errors.password.message}
             </p>
           )}
         </div>
 
         {/* Confirm Password */}
-        <div>
-          <label className="block text-xs font-bold text-[var(--text-main)] uppercase tracking-wider mb-1.5">
+        <div className="space-y-2">
+          <Label className="text-xs font-bold text-foreground uppercase tracking-wider">
             Confirm Password
-          </label>
+          </Label>
           <div className="relative">
-            <Lock className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
+            <Lock className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Input
               type="password"
               placeholder="Re-enter your password"
               {...register('confirmPassword', {
                 required: 'Please confirm your password',
                 validate: (val) => val === watch('password') || 'Passwords do not match',
               })}
-              className="sn-input w-full pl-10 pr-4 py-2.5 text-xs"
+              className="pl-10 pr-4 py-6 text-sm bg-background/50 focus-visible:ring-primary shadow-inner rounded-xl"
             />
           </div>
           {errors.confirmPassword && (
-            <p className="text-xs text-rose-500 mt-1.5 flex items-center gap-1 font-semibold">
+            <p className="text-xs text-destructive mt-1 flex items-center gap-1 font-semibold">
               <AlertCircle className="w-3 h-3" /> {errors.confirmPassword.message}
             </p>
           )}
         </div>
 
         {/* Submit CTA Button */}
-        <button
+        <Button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs sm:text-sm shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+          className="w-full mt-6 py-6 rounded-xl font-bold text-sm shadow-sm"
+          variant="default"
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Sending OTP to your email...</span>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Sending OTP to your email...
             </>
           ) : (
             <>
-              <span>Create Account &amp; Send OTP</span>
-              <ArrowRight className="w-4 h-4" />
+              Create Account &amp; Send OTP
+              <ArrowRight className="w-4 h-4 ml-2" />
             </>
           )}
-        </button>
+        </Button>
       </form>
 
       {/* Switch to Login */}
-      <div className="pt-2 text-center text-xs text-[var(--text-muted)] font-medium">
+      <div className="pt-4 text-center text-sm text-muted-foreground font-medium">
         Already registered?{' '}
-        <Link to="/login" className="text-orange-600 dark:text-orange-400 font-bold hover:underline">
+        <Link to="/login" className="text-primary font-bold hover:underline underline-offset-4">
           Sign In here
         </Link>
       </div>

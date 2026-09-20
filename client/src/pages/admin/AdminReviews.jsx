@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviews, deleteReview } from '../../redux/slices/adminSlice';
 import { Trash2, Loader2, AlertCircle, Star, Quote } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Card from '../../components/ui/Card';
+import Button from '../../components/ui/Button';
+import { Alert, AlertDescription } from '../../components/ui/Alert';
 
 export default function AdminReviews() {
   const dispatch = useDispatch();
@@ -30,7 +33,7 @@ export default function AdminReviews() {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star 
             key={star}
-            className={`w-4 h-4 ${star <= rating ? 'fill-amber-500 text-amber-500' : 'text-slate-300 dark:text-slate-700'}`} 
+            className={`w-4 h-4 ${star <= rating ? 'fill-warning text-warning' : 'text-muted-foreground/30'}`} 
           />
         ))}
       </div>
@@ -38,97 +41,103 @@ export default function AdminReviews() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto py-6 px-2">
       <div>
-        <h1 className="text-2xl font-extrabold text-[var(--text-main)] font-heading">
+        <h1 className="text-3xl font-extrabold text-foreground font-heading">
           Review Moderation
         </h1>
-        <p className="text-sm text-[var(--text-muted)] mt-1">
+        <p className="text-sm text-muted-foreground mt-2 font-medium">
           Monitor and remove fraudulent or inappropriate user reviews.
         </p>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-2xl flex items-center gap-2">
-          <AlertCircle className="w-5 h-5" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive" className="bg-destructive/10 border-destructive/20 text-destructive">
+          <AlertCircle className="w-4 h-4" />
+          <AlertDescription className="font-semibold text-xs ml-2">
+            {error}
+          </AlertDescription>
+        </Alert>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {isLoading && reviews.length === 0 ? (
-          <div className="col-span-full py-12 flex justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+          <div className="col-span-full py-16 flex justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : reviews.length === 0 ? (
-          <div className="col-span-full py-12 text-center text-[var(--text-muted)] bg-[var(--bg-card)] rounded-2xl border border-[var(--border-light)]">
-            <Star className="w-8 h-8 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
-            No reviews found.
+          <div className="col-span-full py-20 text-center text-muted-foreground bg-card/40 rounded-3xl border border-border/50 border-dashed">
+            <Star className="w-10 h-10 mx-auto mb-4 text-muted-foreground/50" />
+            <p className="font-semibold text-base">No reviews found.</p>
           </div>
         ) : (
           reviews.map((review) => (
-            <div key={review._id} className="sn-card p-5 flex flex-col relative group">
+            <Card key={review._id} className="p-6 flex flex-col relative group border-border/50 shadow-sm bg-card/60 backdrop-blur-sm">
               <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button 
                   onClick={() => handleDelete(review._id)}
-                  className="p-2 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors"
+                  className="p-2 rounded-xl bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors shadow-sm"
                   title="Delete Review"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="flex items-center gap-4 mb-4 pb-4 border-b border-[var(--border-light)]">
+              <div className="flex items-center justify-between gap-4 mb-5 pb-5 border-b border-border/50">
                 <div className="flex-1">
-                  <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-0.5">Reviewer</p>
-                  <p className="font-semibold text-[var(--text-main)] truncate">{review.reviewer?.name || 'Unknown'}</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Reviewer</p>
+                  <p className="font-extrabold text-foreground truncate">{review.reviewer?.name || 'Unknown'}</p>
                 </div>
-                <div className="text-slate-300 dark:text-slate-700">→</div>
+                <div className="text-muted-foreground/50 text-xl font-light">→</div>
                 <div className="flex-1 text-right">
-                  <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-0.5">Reviewed</p>
-                  <p className="font-semibold text-[var(--text-main)] truncate">{review.reviewee?.name || 'Unknown'}</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Reviewed</p>
+                  <p className="font-extrabold text-foreground truncate">{review.reviewee?.name || 'Unknown'}</p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-4">
                 {renderStars(review.rating)}
-                <span className="text-xs text-[var(--text-muted)] font-mono">
+                <span className="text-xs text-muted-foreground font-mono font-medium">
                   {new Date(review.createdAt).toLocaleDateString()}
                 </span>
               </div>
               
               <div className="relative">
-                <Quote className="w-6 h-6 text-slate-200 dark:text-slate-800 absolute -top-1 -left-1" />
-                <p className="text-sm text-[var(--text-main)] leading-relaxed pl-6 italic">
+                <Quote className="w-8 h-8 text-muted-foreground/20 absolute -top-2 -left-2" />
+                <p className="text-sm text-muted-foreground leading-relaxed pl-6 italic font-medium">
                   "{review.comment}"
                 </p>
               </div>
-            </div>
+            </Card>
           ))
         )}
       </div>
 
       {/* Pagination */}
       {pagination.pages > 1 && (
-        <div className="flex items-center justify-between mt-4">
-          <span className="text-xs text-[var(--text-muted)]">
+        <div className="flex items-center justify-between mt-6 p-4 bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50 shadow-sm">
+          <span className="text-xs font-medium text-muted-foreground">
             Page {pagination.currentPage} of {pagination.pages}
           </span>
           <div className="flex gap-2">
-            <button 
+            <Button 
+              variant="outline"
+              size="sm"
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border-light)] text-[var(--text-main)] bg-[var(--bg-card)] disabled:opacity-50"
+              className="h-8 px-4 text-xs font-bold"
             >
               Prev
-            </button>
-            <button 
+            </Button>
+            <Button 
+              variant="outline"
+              size="sm"
               disabled={page === pagination.pages}
               onClick={() => setPage(page + 1)}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border-light)] text-[var(--text-main)] bg-[var(--bg-card)] disabled:opacity-50"
+              className="h-8 px-4 text-xs font-bold"
             >
               Next
-            </button>
+            </Button>
           </div>
         </div>
       )}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
   Filter,
@@ -6,18 +7,16 @@ import {
   Heart,
   ShieldCheck,
   Building2,
-  SlidersHorizontal,
-  Map,
   List,
-  Check,
-  Phone,
-  MessageSquare,
+  Map,
 } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import EmptyState from '../components/ui/EmptyState';
+import { Input } from '../components/ui/Input';
 import { toast } from 'sonner';
+import { cn } from '../utils/cn';
 
 const initialProperties = [
   {
@@ -98,58 +97,60 @@ export default function Housing() {
   });
 
   return (
-    <div className="space-y-8 py-2">
+    <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-8 py-6">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-6">
-        <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-500 mb-1">
-            <Building2 className="w-4 h-4" />
-            <span>Campus Housing &amp; Accommodations</span>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6">
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }}>
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-accent mb-3 bg-accent/10 px-3 py-1.5 rounded-full border border-accent/20 shadow-sm">
+            <Building2 className="w-3.5 h-3.5" />
+            <span>Campus Accommodations</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-[var(--text-main)] font-heading">
+          <h1 className="text-4xl font-extrabold text-foreground font-heading tracking-tight">
             Student Housing &amp; PGs
           </h1>
-          <p className="text-xs text-[#64748B] mt-1">
+          <p className="text-lg text-muted-foreground mt-2">
             Verified student rooms, flatshare opportunities, and PGs near VIT-AP University.
           </p>
-        </div>
+        </motion.div>
 
         {/* View Toggle */}
-        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-[#141923] rounded-xl text-xs font-semibold">
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="flex items-center gap-1 p-1.5 bg-muted/50 rounded-2xl border border-border/50 text-sm font-bold shadow-inner">
           <button
             onClick={() => setViewMode('list')}
-            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
+            className={cn(
+              "px-4 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer",
               viewMode === 'list'
-                ? 'bg-[var(--bg-card)] text-orange-500 shadow-xs'
-                : 'text-slate-600 hover:text-[var(--text-main)]'
-            }`}
+                ? "bg-background text-primary shadow-sm border border-border/50"
+                : "text-muted-foreground hover:text-foreground"
+            )}
           >
-            <List className="w-3.5 h-3.5" /> List View
+            <List className="w-4 h-4" /> List
           </button>
           <button
             onClick={() => setViewMode('map')}
-            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
+            className={cn(
+              "px-4 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer",
               viewMode === 'map'
-                ? 'bg-[var(--bg-card)] text-orange-500 shadow-xs'
-                : 'text-slate-600 hover:text-[var(--text-main)]'
-            }`}
+                ? "bg-background text-primary shadow-sm border border-border/50"
+                : "text-muted-foreground hover:text-foreground"
+            )}
           >
-            <Map className="w-3.5 h-3.5" /> Interactive Map
+            <Map className="w-4 h-4" /> Map
           </button>
-        </div>
+        </motion.div>
       </div>
 
       {/* Filter Bar */}
-      <div className="sn-card p-4 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }} className="bg-card/50 backdrop-blur-xl border border-border rounded-2xl p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center shadow-sm">
         {/* Search */}
         <div className="sm:col-span-5 relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
+          <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
+          <Input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search location, PG name, or landmark..."
-            className="sn-input pl-10 pr-4 py-2 w-full text-xs"
+            placeholder="Search PG name, or landmark..."
+            className="w-full pl-11 rounded-xl bg-background/50 border-border/50 focus-visible:ring-primary shadow-inner"
           />
         </div>
 
@@ -158,7 +159,7 @@ export default function Housing() {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="sn-input px-3 py-2 w-full text-xs font-medium text-[var(--text-main)]"
+            className="flex h-10 w-full items-center justify-between rounded-xl border border-border/50 bg-background/50 px-3 py-2 text-sm font-semibold ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer shadow-inner"
           >
             <option value="all">All Property Types</option>
             <option value="Shared Room">Shared Room</option>
@@ -169,10 +170,10 @@ export default function Housing() {
         </div>
 
         {/* Max Rent Slider */}
-        <div className="sm:col-span-4 space-y-1 px-1">
-          <div className="flex justify-between text-xs text-[#64748B] font-semibold">
+        <div className="sm:col-span-4 space-y-2 px-2">
+          <div className="flex justify-between text-sm text-muted-foreground font-semibold">
             <span>Max Budget</span>
-            <span className="text-orange-500 font-bold">₹{maxRent.toLocaleString()} / mo</span>
+            <span className="text-primary font-bold">₹{maxRent.toLocaleString()} / mo</span>
           </div>
           <input
             type="range"
@@ -181,103 +182,135 @@ export default function Housing() {
             step="500"
             value={maxRent}
             onChange={(e) => setMaxRent(Number(e.target.value))}
-            className="w-full accent-orange-500 cursor-pointer"
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Results View */}
       {viewMode === 'map' ? (
-        <div className="sn-card p-8 text-center space-y-3 bg-[var(--bg-body)] border-dashed">
-          <MapPin className="w-8 h-8 text-orange-500 mx-auto" />
-          <h3 className="text-base font-bold text-[var(--text-main)] font-heading">
-            VIT-AP Interactive Map View
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-muted/20 border border-border/50 border-dashed rounded-3xl p-12 text-center space-y-4 shadow-sm">
+          <div className="w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto shadow-sm">
+            <MapPin className="w-8 h-8" />
+          </div>
+          <h3 className="text-2xl font-bold text-foreground font-heading">
+            Interactive Map View
           </h3>
-          <p className="text-xs text-[#64748B] max-w-md mx-auto">
+          <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
             Showing properties surrounding VIT-AP University campus within a 3km radius.
           </p>
-          <div className="h-64 rounded-2xl bg-slate-200 dark:bg-[#141923] flex items-center justify-center text-xs text-[var(--text-muted)] font-medium">
-            [ Leaflet OpenStreetMap Container — VIT-AP Coordinates: 16.4971° N, 80.5002° E ]
+          <div className="h-80 w-full rounded-2xl bg-card border border-border/50 flex flex-col items-center justify-center text-muted-foreground font-medium shadow-inner mt-8">
+            <Map className="w-8 h-8 mb-2 opacity-50" />
+            <p className="text-sm">Map Integration Placeholder</p>
+            <p className="text-xs opacity-70 mt-1">Coordinates: 16.4971° N, 80.5002° E</p>
           </div>
-        </div>
+        </motion.div>
       ) : filtered.length === 0 ? (
-        <EmptyState
-          title="No housing listings match your filter"
-          description="Try increasing your budget range or selecting 'All Property Types'."
-          actionLabel="Reset Filters"
-          onAction={() => {
-            setSearch('');
-            setSelectedType('all');
-            setMaxRent(15000);
-          }}
-        />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <EmptyState
+            title="No housing listings match your filter"
+            description="Try increasing your budget range or selecting 'All Property Types'."
+            actionLabel="Reset Filters"
+            icon={Building2}
+            onAction={() => {
+              setSearch('');
+              setSelectedType('all');
+              setMaxRent(15000);
+            }}
+          />
+        </motion.div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((prop) => (
-            <Card key={prop.id} hover className="overflow-hidden flex flex-col justify-between">
-              <div>
-                <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-[#141923]">
-                  <img
-                    src={prop.image}
-                    alt={prop.title}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <Badge variant="verified" />
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: { staggerChildren: 0.05 }
+            }
+          }}
+        >
+          <AnimatePresence mode="popLayout">
+            {filtered.map((prop) => (
+              <motion.div
+                key={prop.id}
+                layout
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: { opacity: 1, y: 0 }
+                }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4 }}
+              >
+                <Card className="overflow-hidden flex flex-col justify-between h-full group border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1">
+                  <div>
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+                      <img
+                        src={prop.image}
+                        alt={prop.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <Badge variant="verified" className="shadow-sm backdrop-blur-md bg-background/90 font-bold border-0" />
+                      </div>
+                      <button
+                        onClick={() => toggleSave(prop.id)}
+                        className="absolute top-3 right-3 p-2 rounded-full bg-background/80 backdrop-blur-md text-muted-foreground hover:text-rose-500 hover:bg-background shadow-sm transition-all cursor-pointer"
+                      >
+                        <Heart
+                          className={cn("w-4 h-4 transition-colors", savedIds.includes(prop.id) && "fill-rose-500 text-rose-500")}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="p-5 space-y-3">
+                      <div className="text-xs font-semibold text-muted-foreground flex items-center justify-between">
+                        <Badge variant="outline" className="bg-accent/10 text-accent border-accent/20">
+                          {prop.type}
+                        </Badge>
+                        <span className="flex items-center gap-1 font-bold">
+                          <MapPin className="w-3.5 h-3.5" /> {prop.distance} km
+                        </span>
+                      </div>
+
+                      <h3 className="text-base font-bold text-foreground line-clamp-2 font-heading leading-tight group-hover:text-primary transition-colors">
+                        {prop.title}
+                      </h3>
+
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {prop.amenities.map((item, idx) => (
+                          <span key={idx} className="px-2.5 py-1 rounded-md bg-muted text-[10px] text-muted-foreground font-bold border border-border/50">
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => toggleSave(prop.id)}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-[var(--bg-card)]/90 text-slate-600 hover:text-rose-500 shadow-xs transition-colors"
-                  >
-                    <Heart
-                      className={`w-4 h-4 ${savedIds.includes(prop.id) ? 'fill-rose-500 text-rose-500' : ''}`}
-                    />
-                  </button>
-                </div>
 
-                <div className="p-5 space-y-3">
-                  <div className="text-xs font-semibold text-[#64748B] flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 font-bold">
-                      {prop.type}
-                    </span>
-                    <span className="flex items-center gap-1 text-[var(--text-muted)]">
-                      <MapPin className="w-3.5 h-3.5" /> {prop.distance} km from campus
-                    </span>
+                  <div className="p-5 pt-4 border-t border-border/60 flex items-center justify-between mt-auto bg-card">
+                    <div>
+                      <div className="text-xl font-black text-foreground font-heading">
+                        ₹{prop.rent.toLocaleString()} <span className="text-xs font-normal text-muted-foreground">/ mo</span>
+                      </div>
+                      <div className="text-[11px] font-medium text-muted-foreground truncate max-w-[120px]">{prop.location}</div>
+                    </div>
+
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="rounded-full shadow-sm font-bold text-xs px-4"
+                      onClick={() => toast.success(`Connecting with owner: ${prop.owner}`)}
+                    >
+                      Contact
+                    </Button>
                   </div>
-
-                  <h3 className="text-base font-bold text-[var(--text-main)] line-clamp-2 font-heading">
-                    {prop.title}
-                  </h3>
-
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {prop.amenities.map((item, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-slate-100 text-[11px] text-[#64748B] font-medium">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-5 pt-3 border-t border-slate-100 flex items-center justify-between mt-2">
-                <div>
-                  <div className="text-lg font-extrabold text-[var(--text-main)] font-heading">
-                    ₹{prop.rent.toLocaleString()} <span className="text-xs font-normal text-slate-400">/ mo</span>
-                  </div>
-                  <div className="text-[10px] text-slate-400 truncate">{prop.location}</div>
-                </div>
-
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => toast.success(`Connecting with owner: ${prop.owner}`)}
-                >
-                  Contact Owner
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
+                </Card>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       )}
     </div>
   );
