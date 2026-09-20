@@ -4,11 +4,11 @@ const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    // Check local storage or system preference
+    // Default to 'dark' for the premium black aesthetic
     if (localStorage.getItem('theme')) {
       return localStorage.getItem('theme');
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'dark'; // Force dark mode as default base
   });
 
   useEffect(() => {

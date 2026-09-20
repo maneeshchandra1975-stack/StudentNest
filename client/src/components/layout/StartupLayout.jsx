@@ -3,11 +3,10 @@ import { Outlet } from 'react-router-dom';
 import HeaderNavbar from './HeaderNavbar';
 import Footer from './Footer';
 import { Toaster } from 'sonner';
-import { ScrollArea } from '../ui/ScrollArea';
 
 export default function StartupLayout() {
   return (
-    <div className="relative h-screen flex flex-col font-sans transition-colors duration-300 bg-background text-foreground overflow-hidden selection:bg-primary/20 selection:text-primary">
+    <div className="relative min-h-screen flex flex-col font-sans transition-colors duration-300 bg-background text-foreground selection:bg-primary/20 selection:text-primary">
       {/* ── Ambient Background Glow Effects ── */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-background">
         <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-primary/10 blur-[100px]" />
@@ -17,14 +16,12 @@ export default function StartupLayout() {
 
       <Toaster position="top-right" richColors closeButton theme="system" />
       
-      <div className="relative z-10 flex flex-col h-full">
+      <div className="relative z-10 flex flex-col min-h-screen">
         <HeaderNavbar />
-        <ScrollArea className="flex-1 w-full" type="always">
-          <main className="w-full">
-            <Outlet />
-          </main>
-          <Footer />
-        </ScrollArea>
+        <main className="flex-1 w-full flex flex-col">
+          <Outlet />
+        </main>
+        <Footer />
       </div>
     </div>
   );

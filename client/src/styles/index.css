@@ -12,7 +12,6 @@
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary-hover: var(--primary-hover);
 
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -48,127 +47,123 @@
   --font-sans: 'Inter', 'Geist', system-ui, -apple-system, sans-serif;
   --font-heading: 'Inter', 'Geist', system-ui, sans-serif;
 
-  /* Core Semantic Tokens (Light) */
-  --background: #F7F5EF;
-  --foreground: #17211B;
+  /* Standard Shadcn UI (Zinc/Neutral) Light Theme */
+  --background: #ffffff;
+  --foreground: #09090b;
 
-  --card: #FFFDF8;
-  --card-foreground: #17211B;
+  --card: #ffffff;
+  --card-foreground: #09090b;
 
-  --popover: #FFFDF8;
-  --popover-foreground: #17211B;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
 
-  --primary: #1F5C45;
-  --primary-hover: #174A38;
-  --primary-foreground: #FFFFFF;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
 
-  --secondary: #496B8A;
-  --secondary-foreground: #FFFFFF;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
 
-  --muted: #ECEAE2;
-  --muted-foreground: #667067;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
 
-  --accent: #E27D5F;
-  --accent-foreground: #FFFFFF;
-  --accent-soft: #F2D8CF;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
 
-  --destructive: #C95A52;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
 
-  --warning: #C88A2B;
-  --warning-foreground: #FFFFFF;
+  --warning: #f59e0b;
+  --warning-foreground: #fafafa;
 
-  --success: #3F7D5A;
-  --success-foreground: #FFFFFF;
+  --success: #22c55e;
+  --success-foreground: #fafafa;
 
-  --border: #DCDDD5;
-  --input: #DCDDD5;
-  --ring: #1F5C45;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #18181b;
 
   --radius: 0.75rem;
 
-  /* Backward Compatibility Aliases for Existing App Views */
+  /* Backward Compatibility Aliases */
   --bg-body: var(--background);
   --bg-card: var(--card);
   --bg-card-subtle: var(--muted);
-  --bg-glass: rgba(255, 253, 248, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.85);
   --text-main: var(--foreground);
   --text-muted: var(--muted-foreground);
   --border-light: var(--border);
   --border-hover: var(--ring);
   --border-glass: var(--border);
 
-  --input-bg: var(--card);
+  --input-bg: var(--background);
   --input-border: var(--input);
   --input-placeholder: var(--muted-foreground);
 
-  --scrollbar-track: #F7F5EF;
-  --scrollbar-thumb: #DCDDD5;
-  --scrollbar-thumb-hover: #1F5C45;
+  --scrollbar-track: #fafafa;
+  --scrollbar-thumb: #e4e4e7;
+  --scrollbar-thumb-hover: #a1a1aa;
 
-  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-  --card-shadow-hover: 0 10px 15px -3px rgba(31, 92, 69, 0.08), 0 4px 6px -4px rgba(31, 92, 69, 0.04);
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
 }
 
 .dark {
-  /* Core Semantic Tokens (Dark) */
-  --background: #151A17;
-  --foreground: #F5F3EA;
+  /* Standard Shadcn UI (Zinc/Neutral) Dark Theme */
+  --background: #09090b;
+  --foreground: #fafafa;
 
-  --card: #1D241F;
-  --card-foreground: #F5F3EA;
+  --card: #09090b;
+  --card-foreground: #fafafa;
 
-  --popover: #1D241F;
-  --popover-foreground: #F5F3EA;
+  --popover: #09090b;
+  --popover-foreground: #fafafa;
 
-  --primary: #5FA982;
-  --primary-hover: #76BB98;
-  --primary-foreground: #151A17;
+  --primary: #fafafa;
+  --primary-foreground: #18181b;
 
-  --secondary: #7896B3;
-  --secondary-foreground: #151A17;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
 
-  --muted: #252D28;
-  --muted-foreground: #A8B0A9;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
 
-  --accent: #E88B70;
-  --accent-foreground: #151A17;
-  --accent-soft: #252D28;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
 
-  --destructive: #D8756C;
-  --destructive-foreground: #151A17;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fafafa;
 
-  --warning: #D7A34A;
-  --warning-foreground: #151A17;
+  --warning: #92400e;
+  --warning-foreground: #fafafa;
 
-  --success: #71B58B;
-  --success-foreground: #151A17;
+  --success: #14532d;
+  --success-foreground: #fafafa;
 
-  --border: #343C36;
-  --input: #343C36;
-  --ring: #5FA982;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #d4d4d8;
 
-  /* Backward Compatibility Aliases for Existing App Views (Dark) */
+  /* Backward Compatibility Aliases */
   --bg-body: var(--background);
   --bg-card: var(--card);
   --bg-card-subtle: var(--muted);
-  --bg-glass: rgba(29, 36, 31, 0.85);
+  --bg-glass: rgba(9, 9, 11, 0.85);
   --text-main: var(--foreground);
   --text-muted: var(--muted-foreground);
   --border-light: var(--border);
   --border-hover: var(--ring);
   --border-glass: var(--border);
 
-  --input-bg: var(--card);
+  --input-bg: var(--background);
   --input-border: var(--input);
   --input-placeholder: var(--muted-foreground);
 
-  --scrollbar-track: #151A17;
-  --scrollbar-thumb: #343C36;
-  --scrollbar-thumb-hover: #5FA982;
+  --scrollbar-track: #09090b;
+  --scrollbar-thumb: #27272a;
+  --scrollbar-thumb-hover: #52525b;
 
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-  --card-shadow-hover: 0 12px 24px -4px rgba(95, 169, 130, 0.15), 0 0 1px 1px rgba(95, 169, 130, 0.3);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --card-shadow-hover: 0 12px 24px -4px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 /* ── Base Smooth Scroll & Global Styles ──────────────────────── */
@@ -247,18 +242,18 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .sn-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(95, 169, 130, 0.2);
+  box-shadow: 0 0 0 3px rgba(161, 161, 170, 0.2);
 }
 
 /* ── Clean Gradient Text Utilities ───────────────────────────── */
 .text-gradient-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--muted-foreground) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-teal {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--success) 100%);
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--success) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
