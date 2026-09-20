@@ -116,7 +116,7 @@ export default function HeaderNavbar() {
             variant="default"
             size="sm"
             icon={Plus}
-            onClick={() => navigate(isAuthenticated ? '/housing' : '/login')}
+            onClick={() => navigate(isAuthenticated ? '/roommates' : '/login')}
             className="hidden sm:inline-flex rounded-full px-4 shadow-sm"
           >
             Post
@@ -148,7 +148,7 @@ export default function HeaderNavbar() {
                 {user?.role === 'admin' && (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link to="/admin/dashboard" className="cursor-pointer flex items-center gap-2.5 px-2.5 py-2 text-sm font-bold text-emerald-600 focus:bg-emerald-50 focus:text-emerald-700 dark:text-emerald-500 dark:focus:bg-emerald-500/10">
+                      <Link to="/admin/dashboard" className="cursor-pointer flex items-center gap-2.5 px-2.5 py-2 text-sm font-bold text-primary focus:bg-primary/10 focus:text-primary">
                         <ShieldCheck className="w-4 h-4" />
                         Admin Dashboard
                       </Link>
@@ -240,7 +240,7 @@ export default function HeaderNavbar() {
                   <Link
                     to="/admin/dashboard"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-400 mt-2"
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-primary bg-primary/10 mt-2"
                   >
                     <ShieldCheck className="w-4 h-4" />
                     Admin Dashboard

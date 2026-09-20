@@ -76,34 +76,34 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[var(--bg-card)]/95 rounded-3xl border border-[var(--border-light)] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] backdrop-blur-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl bg-card rounded-3xl border border-border shadow-2xl overflow-hidden flex flex-col max-h-[85vh] backdrop-blur-2xl">
         {/* Header */}
-        <div className="p-6 border-b border-[var(--border-light)] flex items-center justify-between">
+        <div className="p-6 border-b border-border flex items-center justify-between">
           <div>
-            <h3 className="text-xl font-black text-[var(--text-main)] font-heading">
-              Interest Requests <span className="text-gradient-primary">Manager</span>
+            <h3 className="text-xl font-black text-foreground font-heading">
+              Interest Requests <span className="text-primary">Manager</span>
             </h3>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5 font-medium">
+            <p className="text-xs text-muted-foreground mt-0.5 font-medium">
               Accept requests to reserve items or confirm roommates, and unlock direct peer chat.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)] transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Switcher */}
-        <div className="p-2 border-b border-[var(--border-light)] bg-[var(--bg-card-subtle)]/50 flex gap-2 text-xs font-bold">
+        <div className="p-2 border-b border-border bg-muted/30 flex gap-2 text-xs font-bold">
           <button
             onClick={() => setActiveTab('received')}
             className={`flex-1 py-2.5 rounded-xl text-center transition-all cursor-pointer ${
               activeTab === 'received'
-                ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/20'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
+                ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             }`}
           >
             Received Requests ({receivedRequests.length})
@@ -112,8 +112,8 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
             onClick={() => setActiveTab('sent')}
             className={`flex-1 py-2.5 rounded-xl text-center transition-all cursor-pointer ${
               activeTab === 'sent'
-                ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/20'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)]'
+                ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             }`}
           >
             Sent Requests ({sentRequests.length})
@@ -121,27 +121,27 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
         </div>
 
         {/* Content Feed */}
-        <div className="p-6 overflow-y-auto space-y-3 flex-1 bg-[var(--bg-body)]/40">
+        <div className="p-6 overflow-y-auto space-y-3 flex-1 bg-background/50">
           {loading ? (
-            <div className="p-8 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+            <div className="p-8 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin text-primary" />
               <span>Loading interest requests...</span>
             </div>
           ) : activeTab === 'received' ? (
             receivedRequests.length === 0 ? (
-              <div className="py-8 text-center text-xs text-slate-400">
+              <div className="py-8 text-center text-xs text-muted-foreground">
                 No received interest requests yet.
               </div>
             ) : (
               receivedRequests.map((req) => (
                 <div
                   key={req._id}
-                  className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] space-y-3 shadow-2xs"
+                  className="p-4 rounded-xl bg-card border border-border space-y-3 shadow-sm"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary">
                           {req.listingType}
                         </span>
                         <Badge
@@ -155,24 +155,24 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                           label={req.status}
                         />
                       </div>
-                      <h4 className="text-xs font-bold text-[var(--text-main)]">{getItemTitle(req)}</h4>
+                      <h4 className="text-xs font-bold text-foreground">{getItemTitle(req)}</h4>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-medium">
+                    <span className="text-[10px] text-muted-foreground font-medium">
                       {new Date(req.createdAt).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-[var(--bg-body)] border border-[var(--border-light)] flex items-center justify-between text-xs">
+                  <div className="p-2.5 rounded-lg bg-background border border-border flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 font-bold flex items-center justify-center text-xs">
+                      <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs">
                         {req.sender?.name ? req.sender.name.charAt(0).toUpperCase() : 'S'}
                       </div>
                       <div>
-                        <div className="font-bold text-[var(--text-main)] flex items-center gap-1">
+                        <div className="font-bold text-foreground flex items-center gap-1">
                           <span>{req.sender?.name || 'Student'}</span>
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                          <ShieldCheck className="w-3.5 h-3.5 text-success" />
                         </div>
-                        <div className="text-[10px] text-slate-400 font-mono">{req.sender?.email}</div>
+                        <div className="text-[10px] text-muted-foreground font-mono">{req.sender?.email}</div>
                       </div>
                     </div>
 
@@ -192,7 +192,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                         <Button
                           variant="secondary"
                           size="sm"
-                          className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                          className="border-success/20 text-success hover:bg-success/10"
                           onClick={async () => {
                             try {
                               await api.patch(`/interests/${req._id}/complete`);
@@ -225,7 +225,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                         Accept &amp; Unlock Chat
                       </Button>
                       <Button
-                        variant="danger"
+                        variant="destructive"
                         size="sm"
                         className="flex-1"
                         icon={XCircle}
@@ -239,23 +239,23 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
               ))
             )
           ) : sentRequests.length === 0 ? (
-            <div className="py-8 text-center text-xs text-slate-400">
+            <div className="py-8 text-center text-xs text-muted-foreground">
               No sent interest requests yet.
             </div>
           ) : (
             sentRequests.map((req) => (
               <div
                 key={req._id}
-                className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] space-y-3 shadow-2xs"
+                className="p-4 rounded-xl bg-card border border-border space-y-3 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary">
                       {req.listingType}
                     </span>
-                    <h4 className="text-xs font-bold text-[var(--text-main)] mt-1">{getItemTitle(req)}</h4>
-                    <div className="text-xs text-[var(--text-muted)]">
-                      Listing Owner: <span className="font-bold text-[var(--text-main)]">{req.recipient?.name}</span>
+                    <h4 className="text-xs font-bold text-foreground mt-1">{getItemTitle(req)}</h4>
+                    <div className="text-xs text-muted-foreground">
+                      Listing Owner: <span className="font-bold text-foreground">{req.recipient?.name}</span>
                     </div>
                   </div>
 
@@ -271,8 +271,8 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                   />
                 </div>
 
-                <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
-                  <span className="text-[11px] text-slate-400">
+                <div className="flex items-center justify-between pt-1 border-t border-border text-xs">
+                  <span className="text-[11px] text-muted-foreground">
                     {new Date(req.createdAt).toLocaleDateString()}
                   </span>
                   {req.status === 'Accepted' && (
@@ -305,7 +305,7 @@ export default function InterestRequestsModal({ isOpen, onClose }) {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-rose-600 hover:bg-rose-50"
+                      className="text-destructive hover:bg-destructive/10"
                       onClick={() => handleCancelSent(req._id)}
                     >
                       Cancel Interest

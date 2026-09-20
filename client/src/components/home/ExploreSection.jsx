@@ -14,7 +14,7 @@ export default function ExploreSection() {
       desc: 'Find flats, PGs, and room vacancies near VIT-AP campus.',
       icon: Home,
       path: '/roommates',
-      color: 'bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400',
+      color: 'bg-success/10 text-success',
     },
     {
       title: 'Textbooks & Notes',

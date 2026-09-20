@@ -171,9 +171,9 @@ export default function CreateListingModal({ onClose }) {
             form="create-listing-form" 
             type="submit" 
             disabled={isCreating}
-            className="py-2.5 px-5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs shadow-lg shadow-orange-500/25 transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+            className="py-2.5 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-black text-xs shadow-lg shadow-primary/25 transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
           >
-            {isCreating ? 'Publishing Listing...' : 'Publish Item Listing'}
+            {isCreating ? 'Publishing...' : 'Publish Market Listing'}
           </button>
         </div>
 

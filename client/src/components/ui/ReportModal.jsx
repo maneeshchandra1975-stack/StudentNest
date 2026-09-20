@@ -49,10 +49,10 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
-      <div className="bg-[var(--bg-card)]/95 border border-[var(--border-light)] rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 backdrop-blur-2xl">
-        <div className="p-5 border-b border-[var(--border-light)] flex items-center justify-between bg-rose-500/10">
-          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md">
+      <div className="bg-card border border-border rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 backdrop-blur-2xl">
+        <div className="p-5 border-b border-border flex items-center justify-between bg-destructive/10">
+          <div className="flex items-center gap-2 text-destructive">
             <ShieldAlert className="w-5 h-5" />
             <h2 className="text-base font-black font-heading">
               Report this {targetType === 'MarketplaceItem' ? 'Item' : targetType === 'RoommatePost' ? 'Post' : targetType}
@@ -60,7 +60,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-subtle)] rounded-xl transition-colors cursor-pointer"
+            className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -68,8 +68,8 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]">
-              Reason for Report <span className="text-rose-500">*</span>
+            <label className="text-xs font-bold uppercase tracking-wider text-foreground">
+              Reason for Report <span className="text-destructive">*</span>
             </label>
             <select
               value={reason}
@@ -85,7 +85,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]">
+            <label className="text-xs font-bold uppercase tracking-wider text-foreground">
               Additional Details (Optional)
             </label>
             <textarea
@@ -102,7 +102,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
             <button
               type="submit"
               disabled={loading || !reason}
-              className="w-full py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-lg shadow-rose-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+              className="w-full py-3 px-4 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-black text-xs shadow-lg shadow-destructive/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <>
@@ -116,7 +116,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId }) {
                 </>
               )}
             </button>
-            <p className="text-[10px] text-center text-[var(--text-muted)] mt-3">
+            <p className="text-[10px] text-center text-muted-foreground mt-3">
               Protected by StudentNest Trust &amp; Safety. False reports may affect campus account standing.
             </p>
           </div>

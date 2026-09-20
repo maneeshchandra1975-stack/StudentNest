@@ -21,7 +21,7 @@ export default function HeroSection() {
           className="space-y-8 relative z-10"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-tight">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
             <span>Verified Campus Network</span>
           </div>
           

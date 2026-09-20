@@ -103,7 +103,7 @@ export default function ReviewModal({ isOpen, onClose, interestRequestId, review
             <button
               type="submit"
               disabled={loading || rating === 0}
-              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 text-white font-black text-xs shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer hover:scale-[1.01] active:scale-[0.98]"
+              className="w-full py-3 px-4 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-black text-xs shadow-lg shadow-primary/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer hover:scale-[1.01] active:scale-[0.98]"
             >
               {loading ? (
                 <>
